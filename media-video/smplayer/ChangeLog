@@ -1,0 +1,11 @@
+# ChangeLog for media-video/smplayer
+# Copyright 1999-2009 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*smplayer-9999 (09 Nov 2009)
+
+  09 Nov 2009; Ben de Groot <yngwin@gentoo.org>
+  +files/smplayer-0.6.8-quit.patch, +smplayer-9999.ebuild, +metadata.xml:
+  Initial import. Ebuild from berkano overlay brought up to date with latest
+  portage changes.
+
