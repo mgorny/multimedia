@@ -38,7 +38,7 @@ src_prepare() {
 	cd "${S}"
 
 	# Force Ctrl+Q as default quit shortcut
-	epatch "${FILESDIR}/${P}-quit.patch"
+	epatch "${FILESDIR}/${PN}-0.6.8-quit.patch"
 
 	# Upstream Makefile sucks
 	sed -i -e "/^PREFIX=/s:/usr/local:/usr:" \
