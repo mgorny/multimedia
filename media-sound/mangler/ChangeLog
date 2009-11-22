@@ -1,0 +1,11 @@
+# ChangeLog for media-sound/mangler
+# Copyright 1999-2009 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*mangler-9999 (22 Nov 2009)
+
+  22 Nov 2009; Ben de Groot <yngwin@gentoo.org> +mangler-9999.ebuild,
+  +metadata.xml:
+  Initial import, ebuild based on the one by Naib in
+  https://forums.gentoo.org/viewtopic-t-802965-highlight-.html
+
