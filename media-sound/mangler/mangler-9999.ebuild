@@ -1,4 +1,4 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -12,14 +12,19 @@ HOMEPAGE="http://www.mangler.org/"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE=""
+IUSE="alsa pulseaudio"
 
 RDEPEND="dev-cpp/gtkmm:2.4
 	media-libs/speex
 	media-sound/gsm
-	media-sound/pulseaudio"
+	alsa? ( media-libs/alsa-lib )
+	pulseaudio? ( media-sound/pulseaudio )"
 DEPEND="${DEPEND}
 	dev-util/pkgconfig"
+
+src_configure() {
+	econf $(use_with alsa) $(use_with pulseaudio)
+}
 
 src_install() {
 	emake DESTDIR="${D}" install || die
