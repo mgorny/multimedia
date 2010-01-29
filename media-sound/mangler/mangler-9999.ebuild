@@ -15,6 +15,7 @@ KEYWORDS=""
 IUSE="alsa pulseaudio"
 
 RDEPEND="dev-cpp/gtkmm:2.4
+	gnome-base/librsvg
 	media-libs/speex
 	media-sound/gsm
 	alsa? ( media-libs/alsa-lib )
