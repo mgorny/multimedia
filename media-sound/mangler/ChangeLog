@@ -3,6 +3,9 @@
 # $Header: $
 
   29 Jan 2010; Ben de Groot <yngwin@gentoo.org> mangler-9999.ebuild:
+  Add eautoreconf to prevent issues with maintainer mode
+
+  29 Jan 2010; Ben de Groot <yngwin@gentoo.org> mangler-9999.ebuild:
   Add librsvg dep.
 
   17 Jan 2010; Ben de Groot <yngwin@gentoo.org> mangler-9999.ebuild:
