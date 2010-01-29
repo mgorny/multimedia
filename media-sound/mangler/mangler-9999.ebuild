@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI="2"
-inherit subversion
+inherit autotools subversion
 
 ESVN_REPO_URI="http://svn.mangler.org/mangler/trunk"
 DESCRIPTION="Open source VOIP client capable of connecting to Ventrilo 3.x servers"
@@ -22,6 +22,10 @@ RDEPEND="dev-cpp/gtkmm:2.4
 	pulseaudio? ( media-sound/pulseaudio )"
 DEPEND="${DEPEND}
 	dev-util/pkgconfig"
+
+src_prepare() {
+	eautoreconf
+}
 
 src_configure() {
 	econf $(use_with alsa) $(use_with pulseaudio)
