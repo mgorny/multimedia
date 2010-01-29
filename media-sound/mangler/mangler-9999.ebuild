@@ -20,8 +20,9 @@ RDEPEND="dev-cpp/gtkmm:2.4
 	media-sound/gsm
 	alsa? ( media-libs/alsa-lib )
 	pulseaudio? ( media-sound/pulseaudio )"
-DEPEND="${DEPEND}
-	dev-util/pkgconfig"
+DEPEND="${RDEPEND}
+	dev-util/pkgconfig
+	>=sys-devel/autoconf-2.65"
 
 src_prepare() {
 	eautoreconf
