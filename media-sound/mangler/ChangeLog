@@ -2,6 +2,10 @@
 # Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  08 Mar 2010; Ben de Groot <yngwin@gentoo.org> mangler-9999.ebuild:
+  Add useflags for celt, gsm, speex codecs, and for mpd, nowplaying and xosd
+  support.
+
   29 Jan 2010; Ben de Groot <yngwin@gentoo.org> mangler-9999.ebuild:
   Specify autoconf-2.65 as a workaround
 
