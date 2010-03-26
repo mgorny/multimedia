@@ -1,9 +1,13 @@
-# Copyright 1999-2009 Gentoo Foundation
+# Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
 EAPI="2"
-inherit eutils qt4 subversion
+LANGS="bg ca cs de en_US es et eu fi fr gl hu it ja ka ko ku mk nl pl pt_BR
+pt_PT sk sr sv tr zh_CN zh_TW"
+LANGSLONG="ar_SY el_GR ro_RO ru_RU sl_SI uk_UA vi_VN"
+
+inherit eutils qt4-r2 subversion
 
 DESCRIPTION="Great Qt4 GUI front-end for mplayer"
 HOMEPAGE="http://smplayer.sourceforge.net"
@@ -17,17 +21,6 @@ IUSE="debug"
 DEPEND="x11-libs/qt-gui:4"
 RDEPEND="${DEPEND}
 	media-video/mplayer[ass,png]"
-
-LANGS="bg ca cs de en_US es et eu fi fr gl hu it ja ka ko ku mk nl pl pt_BR
-pt_PT sk sr sv tr zh_CN zh_TW"
-# langs with long notation in pkg, but no long notation in portage:
-NOLONGLANGS="ar_SY el_GR ro_RO ru_RU sl_SI uk_UA vi_VN"
-for X in ${LANGS}; do
-	IUSE="${IUSE} linguas_${X}"
-done
-for X in ${NOLONGLANGS}; do
-	IUSE="${IUSE} linguas_${X%_*}"
-done
 
 src_prepare() {
 	# For Version Branding
@@ -66,7 +59,7 @@ gen_translation() {
 }
 
 src_compile() {
-	emake || die "emake failed"
+	emake || die
 
 	# Generate translations
 	cd "${S}"/src/translations
@@ -75,8 +68,8 @@ src_compile() {
 		if has ${lang} ${LANGS}; then
 			gen_translation ${lang}
 			continue
-		elif [[ " ${NOLONGLANGS} " == *" ${lang}_"* ]]; then
-			for x in ${NOLONGLANGS}; do
+		elif [[ " ${LANGSLONG} " == *" ${lang}_"* ]]; then
+			for x in ${LANGSLONG}; do
 				if [[ "${lang}" == "${x%_*}" ]]; then
 					gen_translation ${x}
 					continue 2
@@ -98,6 +91,6 @@ src_install() {
 	# remove windows-only files
 	rm "${S}"/*.bat
 
-	emake DESTDIR="${D}" install || die "emake install failed"
+	emake DESTDIR="${D}" install || die
 	prepalldocs
 }

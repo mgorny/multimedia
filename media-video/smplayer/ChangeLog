@@ -1,6 +1,9 @@
 # ChangeLog for media-video/smplayer
-# Copyright 1999-2009 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+  26 Mar 2010; Ben de Groot <yngwin@gentoo.org> smplayer-9999.ebuild:
+  Migrate to qt4-r2.eclass usage
 
 *smplayer-9999 (09 Nov 2009)
 
