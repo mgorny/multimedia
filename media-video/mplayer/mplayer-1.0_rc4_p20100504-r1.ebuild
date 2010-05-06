@@ -483,12 +483,13 @@ src_configure() {
 	# internal
 	use real || myconf+=" --disable-real"
 
+	if ! use bindist; then
+		myconf+=" $(use_enable win32codecs win32dll)"
+	fi
+
 	# Real binary codec support only available on x86, amd64
-	if use real; then
-		use x86 && myconf+=" --codecsdir=/opt/RealPlayer/codecs"
-		use amd64 && myconf+=" --codecsdir=/usr/$(get_libdir)/codecs"
-	elif ! use bindist; then
-			myconf+=" $(use_enable win32codecs win32dll)"
+	if [ use real -o use win32codecs ]; then
+		myconf+=" --codecsdir=/usr/$(get_libdir)/codecs"
 	fi
 
 	################
