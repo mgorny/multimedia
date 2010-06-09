@@ -16,7 +16,7 @@ SRC_URI="http://www.makemkv.com/download/makemkv_v${PV}_beta_oss.tar.gz
 
 LICENSE="makemkv-EULA"
 SLOT="0"
-KEYWORDS="amd64 ~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND="x11-libs/qt-gui:4
