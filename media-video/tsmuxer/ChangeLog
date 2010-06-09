@@ -1,0 +1,10 @@
+# ChangeLog for media-video/tsmuxer
+# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*tsmuxer-1.10.6 (09 Jun 2010)
+
+  09 Jun 2010; Steve Dibb <beandog@gentoo.org> +tsmuxer-1.10.6.ebuild,
+  +metadata.xml:
+  Initial commit; ebuild based off rion overlay, by A.Vinogradov
+
