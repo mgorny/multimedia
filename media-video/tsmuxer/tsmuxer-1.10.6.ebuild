@@ -7,7 +7,7 @@ MY_PN="tsMuxeR"
 
 inherit base qt4-r2
 
-RESTRICT="mirror strip"
+RESTRICT="mirror"
 
 DESCRIPTION="TS/M2TS/BD video muxer/demuxer"
 HOMEPAGE="http://www.smlabs.net/tsmuxer_en.html"
@@ -32,7 +32,6 @@ src_prepare() {
 
 src_install() {
 	into /opt
-	dobin ${MY_PN}
-	dobin tsMuxerGUI
-	dodoc readme.rus.txt licence.txt
+	dobin ${MY_PN} tsMuxerGUI || die
+	dodoc readme.rus.txt licence.txt || die
 }
