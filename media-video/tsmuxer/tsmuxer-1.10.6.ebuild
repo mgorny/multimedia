@@ -34,4 +34,6 @@ src_install() {
 	into /opt
 	dobin ${MY_PN} tsMuxerGUI || die
 	dodoc readme.rus.txt licence.txt || die
+
+	make_desktop_entry tsMuxerGUI "${MY_PN}" ${PN} "Qt;AudioVideo;Video"
 }

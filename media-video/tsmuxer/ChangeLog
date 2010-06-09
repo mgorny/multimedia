@@ -3,6 +3,9 @@
 # $Header: $
 
   09 Jun 2010; Steve Dibb <beandog@gentoo.org> tsmuxer-1.10.6.ebuild:
+  Add desktop entry
+
+  09 Jun 2010; Steve Dibb <beandog@gentoo.org> tsmuxer-1.10.6.ebuild:
   Unpack binaries with upx; install license; install binaries to /opt
 
 *tsmuxer-1.10.6 (09 Jun 2010)
