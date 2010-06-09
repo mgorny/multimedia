@@ -18,15 +18,21 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
-DEPEND=""
+DEPEND="app-arch/upx"
 RDEPEND="x11-libs/qt-core:4
 	x11-libs/qt-gui:4
 	amd64? ( >=app-emulation/emul-linux-x86-qtlibs-20081109 )"
 
 S="${WORKDIR}"
 
+src_prepare() {
+	upx -d ${MY_PN} tsMuxerGUI || die
+}
+
+
 src_install() {
-	newbin "${S}/${MY_PN}" ${PN} || die
-	newbin "${S}"/tsMuxerGUI ${PN}-gui || die
-	dodoc readme.rus.txt
+	into /opt
+	dobin ${MY_PN}
+	dobin tsMuxerGUI
+	dodoc readme.rus.txt licence.txt
 }
