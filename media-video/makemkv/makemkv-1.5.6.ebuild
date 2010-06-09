@@ -49,3 +49,11 @@ src_install() {
 		dobin amd64/makemkvcon
 	fi
 }
+
+pkg_postinst() {
+	elog "While MakeMKV is in beta mode, upstream has provided a license"
+	elog "to use if you do not want to purchase one."
+	elog ""
+	elog "See this forum thread for more information, including the key:"
+	elog "http://www.makemkv.com/forum2/viewtopic.php?f=5&t=1053"
+}
