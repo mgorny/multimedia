@@ -5,4 +5,8 @@
 <email>beandog@gentoo.org</email>
 <name>Steve Dibb</name>
 </maintainer>
+<maintainer>
+<email>nikoli@lavabit.com</email>
+<name>Nikoli</name>
+</maintainer>
 </pkgmetadata>
