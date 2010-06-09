@@ -4,6 +4,8 @@
 
 EAPI=2
 
+RESTRICT="mirror"
+
 inherit multilib eutils
 
 MY_P="makemkv_v${PV}_beta_oss"
