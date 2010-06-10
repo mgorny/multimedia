@@ -155,7 +155,7 @@ RDEPEND+="
 		schroedinger? ( media-libs/schroedinger )
 		vpx? ( media-libs/libvpx )
 	)
-	symlink? ( !<=media-video/mplayer-9999 )
+	symlink? ( !media-video/mplayer )
 "
 
 X_DEPS="
