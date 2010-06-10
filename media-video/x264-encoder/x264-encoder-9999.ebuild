@@ -4,7 +4,7 @@
 
 EAPI="2"
 
-inherit eutils multilib toolchain-funcs git
+inherit base toolchain-funcs git
 
 DESCRIPTION="A free commandline encoder for X264/AVC streams"
 HOMEPAGE="http://www.videolan.org/developers/x264.html"
@@ -57,8 +57,4 @@ src_configure() {
 		--extra-ldflags="${LDFLAGS}" \
 		--host="${CHOST}" \
 		${myconf} || die
-}
-
-src_install() {
-	emake DESTDIR="${D}" install || die
 }
