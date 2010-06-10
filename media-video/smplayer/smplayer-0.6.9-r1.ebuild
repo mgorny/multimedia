@@ -1,21 +1,31 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/media-video/smplayer/smplayer-0.6.9.ebuild,v 1.7 2010/04/18 17:08:54 nixnut Exp $
 
 EAPI="2"
 LANGS="bg ca cs de en_US es et eu fi fr gl hu it ja ka ko ku mk nl pl pt_BR
-pt_PT sk sr sv tr zh_CN zh_TW"
+pt sk sr sv tr zh_CN zh_TW"
 LANGSLONG="ar_SY el_GR ro_RO ru_RU sl_SI uk_UA vi_VN"
 
-inherit eutils qt4-r2 subversion
+inherit eutils qt4-r2
+
+MY_PV=${PV##*_p}
+if [[ "${MY_PV}" != "${PV}" ]]; then
+	# svn snapshot
+	MY_PV=r${MY_PV}
+	MY_P=${PN}-${MY_PV}
+	S="${WORKDIR}/${MY_P}"
+	SRC_URI="mirror://gentoo/${MY_P}.tar.bz2"
+else
+	# regular upstream release
+	SRC_URI="mirror://sourceforge/${PN}/${P}.tar.bz2"
+fi
 
 DESCRIPTION="Great Qt4 GUI front-end for mplayer"
-HOMEPAGE="http://smplayer.sourceforge.net"
-ESVN_REPO_URI="https://smplayer.svn.sourceforge.net/svnroot/smplayer/smplayer/trunk"
-
+HOMEPAGE="http://smplayer.berlios.de/"
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 IUSE="debug"
 
 DEPEND="x11-libs/qt-gui:4"
@@ -24,13 +34,6 @@ RDEPEND="${DEPEND}
 	|| ( media-video/mplayer${MPLAYER_USE} media-video/mplayer-uau${MPLAYER_USE} )"
 
 src_prepare() {
-	# For Version Branding
-	cd "${ESVN_STORE_DIR}/${ESVN_CO_DIR}/${ESVN_PROJECT}/${ESVN_REPO_URI##*/}"
-	./get_svn_revision.sh
-	mv src/svn_revision.h "${S}"/src/
-	mv svn_revision "${S}"/
-	cd "${S}"
-
 	# Force Ctrl+Q as default quit shortcut
 	epatch "${FILESDIR}/${PN}-0.6.8-quit.patch"
 
@@ -50,6 +53,7 @@ src_prepare() {
 
 src_configure() {
 	cd "${S}"/src
+	echo "#define SVN_REVISION \"SVN-${MY_PV} (Gentoo)\"" > svn_revision.h
 	eqmake4
 }
 

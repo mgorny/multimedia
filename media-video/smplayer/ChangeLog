@@ -1,0 +1,10 @@
+# ChangeLog for media-video/smplayer
+# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*smplayer-0.6.9-r1 (10 Jun 2010)
+
+  10 Jun 2010; Nikoli <nikoli@lavabit.com> +smplayer-0.6.9-r1.ebuild,
+  smplayer-9999.ebuild:
+  Added mplayer-uau support
+
