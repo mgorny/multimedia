@@ -53,12 +53,11 @@ src_configure() {
 	# linguas
 	local langs
 	for x in ${LANGS}; do
-		use linguas_${x} && langs+=" ${x}"
+		use linguas_${x} && langs+="${x} "
 	done
-	sed -e "/LANGUAGES /s/\${LANGUAGES}$/${langs}/" \
-		-i src/CMakeLists.txt || die "sed failed"
 
 	mycmakeargs=(
+		-DLINGUAS="${langs}"
 		-DBUNDLE_PROJECTM_PRESETS=OFF
 		$(cmake-utils_use projectm ENABLE_VISUALISATIONS)
 		$(cmake-utils_use gstreamer ENGINE_GSTREAMER_ENABLED)
