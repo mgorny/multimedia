@@ -839,8 +839,8 @@ _EOF_
 
 	if [[ "${namesuf}" != "" ]] && use symlink; then
 		dosym "mplayer${namesuf}" /usr/bin/mplayer
-		dosym "mencoder${namesuf}" /usr/bin/mencoder
 		dosym "midentify${namesuf}" /usr/bin/midentify
+		use encode && dosym "mencoder${namesuf}" /usr/bin/mencoder
 	fi
 }
 
