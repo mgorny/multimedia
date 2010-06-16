@@ -144,7 +144,7 @@ RDEPEND+="
 	vorbis? ( media-libs/libvorbis )
 	xanim? ( media-video/xanim )
 	external-ffmpeg? (
-		>=media-video/ffmpeg-9999[amr?,dirac?,gsm?,hardcoded-tables?,jpeg2k?,schroedinger?,vpx?]
+		>=media-video/ffmpeg-0.6[amr?,dirac?,gsm?,hardcoded-tables?,jpeg2k?,schroedinger?,vpx?]
 		encode? ( media-video/ffmpeg[faac?,mp3?,vorbis?,theora?,x264?,xvid?] )
 	)
 	!external-ffmpeg? (
