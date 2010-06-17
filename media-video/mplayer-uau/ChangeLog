@@ -2,6 +2,9 @@
 # Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  17 Jun 2010; Nikoli <nikoli@lavabit.com> mplayer-uau-9999.ebuild:
+  fixed src_unpack, configure; added USE threads, cosmetics
+
   16 Jun 2010; Nikoli <nikoli@lavabit.com> mplayer-uau-9999.ebuild:
   USE="external-ffmpeg" now builds with >=ffmpeg-0.6
 

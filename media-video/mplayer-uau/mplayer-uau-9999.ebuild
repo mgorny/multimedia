@@ -4,8 +4,6 @@
 
 EAPI="2"
 
-EGIT_REPO_URI="git://repo.or.cz/mplayer-build.git"
-EGIT_HAS_SUBMODULES="true"
 [[ ${PV} = *9999* ]] && VCS_ECLASS="git" || VCS_ECLASS=""
 
 inherit eutils flag-o-matic multilib base ${VCS_ECLASS}
@@ -20,9 +18,9 @@ doc +dts +dv dvb +dvd +dvdnav dxr3 +enca +encode esd +faac +faad fbcon ftp
 gif ggi gsm +iconv ipv6 jack joystick jpeg jpeg2k kernel_linux ladspa
 libcaca lirc +live lzo mad md5sum +mmx mmxext mng +mp3 nas +network nut
 amr +opengl +osdmenu oss png pnm pulseaudio pvr +quicktime radio +rar +real +rtc
-samba +shm +schroedinger +hardcoded-tables sdl +speex sse sse2 ssse3 svga tga +theora +tremor
-+truetype +toolame +twolame +unicode v4l v4l2 vdpau vidix vpx +vorbis win32codecs
-+X +x264 xanim xinerama +xscreensaver +xv +xvid xvmc zoran
+samba +shm +schroedinger +hardcoded-tables sdl +speex sse sse2 ssse3 svga tga +theora threads +tremor
++truetype +toolame +twolame +unicode v4l v4l2 vdpau vidix +vorbis vpx
+win32codecs +X +x264 xanim xinerama +xscreensaver +xv +xvid xvmc zoran
 +ffmpeg-mt -external-ffmpeg symlink"
 
 VIDEO_CARDS="s3virge mga tdfx vesa"
@@ -39,6 +37,8 @@ FONT_URI="
 	mirror://mplayer/releases/fonts/font-arial-cp1250.tar.bz2
 "
 if [[ ${PV} == *9999* ]]; then
+	EGIT_REPO_URI="git://repo.or.cz/mplayer-build.git"
+	EGIT_PROJECT="mplayer-build"
 	RELEASE_URI=""
 else
 	RELEASE_URI="mirror://gentoo/${P}.tar.lzma"
@@ -144,7 +144,7 @@ RDEPEND+="
 	vorbis? ( media-libs/libvorbis )
 	xanim? ( media-video/xanim )
 	external-ffmpeg? (
-		>=media-video/ffmpeg-0.6[amr?,dirac?,gsm?,hardcoded-tables?,jpeg2k?,schroedinger?,vpx?]
+		>=media-video/ffmpeg-0.6[amr?,dirac?,gsm?,hardcoded-tables?,jpeg2k?,schroedinger?,threads?,vpx?]
 		encode? ( media-video/ffmpeg[faac?,mp3?,vorbis?,theora?,x264?,xvid?] )
 	)
 	!external-ffmpeg? (
@@ -202,13 +202,13 @@ pkg_setup() {
 
 	if use cpudetection; then
 		ewarn ""
-		ewarn "You've enabled the cpudetection flag.  This feature is"
+		ewarn "You've enabled the cpudetection flag. This feature is"
 		ewarn "included mainly for people who want to use the same"
 		ewarn "binary on another system with a different CPU architecture."
 		ewarn "MPlayer will already detect your CPU settings by default at"
 		ewarn "buildtime; this flag is used for runtime detection."
 		ewarn "You won't need this turned on if you are only building"
-		ewarn "mplayer for this system.  Also, if your compile fails, try"
+		ewarn "mplayer for this system. Also, if your compile fails, try"
 		ewarn "disabling this use flag."
 	fi
 
@@ -220,7 +220,7 @@ pkg_setup() {
 		ewarn ""
 		ewarn "Most desktop users won't need this functionality, but it"
 		ewarn "is included for corner cases like cross-compiling and"
-		ewarn "certain profiles.  If unsure, disable this flag and MPlayer"
+		ewarn "certain profiles. If unsure, disable this flag and MPlayer"
 		ewarn "will automatically detect and use your available CPU"
 		ewarn "optimizations."
 		ewarn ""
@@ -238,18 +238,36 @@ src_unpack() {
 	if [[ ${PV} = *9999* ]]; then
 		git_src_unpack
 
+		EGIT_REPO_URI="git://repo.or.cz/mplayer.git"
+		EGIT_PROJECT="mplayer"
+		S+="/${EGIT_PROJECT}"
+		git_fetch
+		S="${WORKDIR}/${P}"
+
 		if ! use external-ffmpeg; then
-			use ffmpeg-mt && x="-mt"|| x=""
+			if use ffmpeg-mt; then
+				x="-mt"
+				EGIT_BRANCH="mt"
+			else
+				x=""
+			fi
+			EGIT_REPO_URI="git://repo.or.cz/FFMpeg-mirror/mplayer-patches.git"
+			EGIT_PROJECT="ffmpeg${x}"
+			S+="/${EGIT_PROJECT}"
+			git_fetch
+			unset EGIT_BRANCH
+
 			EGIT_REPO_URI="git://git.mplayerhq.hu/libswscale"
 			EGIT_PROJECT="libswscale"
-			S+="/ffmpeg${x}/libswscale"
+			S+="/${EGIT_PROJECT}"
 			git_fetch
+
 			S="${WORKDIR}/${P}"
 		fi
 
 		cd "${WORKDIR}"
 	else
-		 unpack ${A}
+		unpack ${A}
 	fi
 
 	if ! use truetype; then
@@ -265,10 +283,10 @@ src_prepare() {
 	if [[ ${PV} = *9999* ]]; then
 		git_src_prepare
 		# Set GIT version manually
-		cd "${S}/mplayer"
+		pushd mplayer
 		echo "GIT-r$(git rev-list HEAD|wc -l)-$(git describe --always)" \
 			> VERSION || die "set vesrion failed"
-		cd "${S}"
+		popd
 
 		# remove internal libs and use system:
 		sed -e '/^mplayer: /s/libass//' -i Makefile || die "sed failed"
@@ -282,17 +300,22 @@ src_prepare() {
 	if use external-ffmpeg; then
 		sed -e '/^mplayer: /s/ffmpeg//' -i Makefile || die "sed failed"
 	else
-			if use ffmpeg-mt;then
-				touch ffmpeg-mt-enabled || die "enable-mt failed"
-				rm -rf ffmpeg || die
-			else
-				rm -rf ffmpeg-mt || die
-			fi
+		if use ffmpeg-mt; then
+			touch ffmpeg-mt-enabled || die "enable-mt failed"
+			rm -rf ffmpeg || die
+		else
+			rm -rf ffmpeg-mt || die
+		fi
+		sed -i \
+			-e "/'--cpu=host',/d" \
+			-e "/'--disable-debug',/d" \
+			-e "/'--enable-pthreads',/d" \
+			script/ffmpeg-config || die "sed failed"
 	fi
 
 	# We want mplayer${namesuf}
 	if [[ "${namesuf}" != "" ]]; then
-		cd mplayer
+		pushd mplayer
 		sed -e "/elif linux ; then/a\  _exesuf=\"${namesuf}\"" \
 			-i configure || die "sed configure failed"
 		sed -e "/ -m 644 DOCS\/man\/en\/mplayer/i\	mv DOCS\/man\/en\/mplayer.1 DOCS\/man\/en\/mplayer${namesuf}.1" \
@@ -301,7 +324,7 @@ src_prepare() {
 			-i Makefile || die "sed Makefile failed"
 		sed -e "s/mplayer/mplayer${namesuf}/" \
 			-i TOOLS/midentify.sh || die "sed midentify failed"
-		cd "${S}"
+		popd
 	fi
 
 	if use svga; then
@@ -325,7 +348,7 @@ src_configure() {
 	[[ -n $LINGUAS ]] && LINGUAS="${LINGUAS/da/dk}"
 
 	# mplayer ebuild uses "use foo || --disable-foo" to forcibly disable
-	# compilation in almost every situation.  The reason for this is
+	# compilation in almost every situation. The reason for this is
 	# because if --enable is used, it will force the build of that option,
 	# regardless of whether the dependency is available or not.
 
@@ -415,7 +438,7 @@ src_configure() {
 	if { use dvb || use v4l || use v4l2 || use pvr || use radio; }; then
 		use dvb || myconf+=" --disable-dvb"
 		use pvr || myconf+=" --disable-pvr"
-		use v4l	|| myconf+=" --disable-tv-v4l1"
+		use v4l || myconf+=" --disable-tv-v4l1"
 		use v4l2 || myconf+=" --disable-tv-v4l2"
 		if use radio && { use dvb || use v4l || use v4l2; }; then
 			myconf+="
@@ -567,7 +590,7 @@ src_configure() {
 
 	# Turning off CPU optimizations usually will break the build.
 	# However, this use flag, if enabled, will allow users to completely
-	# specify which ones to use.  If disabled, mplayer will automatically
+	# specify which ones to use. If disabled, mplayer will automatically
 	# enable all CPU optimizations that the host build supports.
 	if use custom-cpuopts; then
 		uses="3dnow 3dnowext altivec mmx mmxext shm sse sse2 ssse3"
@@ -643,19 +666,23 @@ src_configure() {
 		--cc=$(tc-getCC)
 		--host-cc=$(tc-getBUILD_CC)
 	"
-	myconf="
-		--prefix=/usr \
-		--confdir=/etc/mplayer \
-		--datadir=/usr/share/mplayer${namesuf} \
-		--libdir=/usr/$(get_libdir) \
-		${myconf}"
+	myconf+="
+		--prefix=/usr
+		--confdir=/etc/mplayer
+		--datadir=/usr/share/mplayer${namesuf}
+		--libdir=/usr/$(get_libdir)
+		"
 
 	echo "${common_options}" > common_options
 	echo "${myconf}" > mplayer_options
 
 	if ! use external-ffmpeg; then
-		local ffconf="--enable-gpl --enable-version3 --enable-postproc
-			--disable-stripping"
+		local ffconf="
+			--enable-gpl
+			--enable-version3
+			--enable-postproc
+			--disable-stripping
+			"
 
 		# enabled by default
 		use debug || ffconf+=" --disable-debug"
@@ -663,6 +690,9 @@ src_configure() {
 
 		use custom-cflags && ffconf+=" --disable-optimizations"
 		use cpudetection && ffconf+=" --enable-runtime-cpudetect"
+
+		# Threads; we only support pthread for now but ffmpeg supports more
+		use threads && ffconf+=" --enable-pthreads"
 
 		# ffmpeg encoders
 		if use encode; then
@@ -682,8 +712,7 @@ src_configure() {
 		fi
 
 		# ffmpeg decoders
-		use amr && ffconf+=" --enable-libopencore-amrwb
-			--enable-libopencore-amrnb"
+		use amr && ffconf+=" --enable-libopencore-amrwb --enable-libopencore-amrnb"
 		for i in gsm faad dirac schroedinger speex vpx; do
 			use ${i} && ffconf+=" --enable-lib${i}"
 		done
@@ -691,7 +720,7 @@ src_configure() {
 
 		# CPU features
 		for i in mmx ssse3 altivec ; do
-			use ${i} ||  ffconf+=" --disable-${i}"
+			use ${i} || ffconf+=" --disable-${i}"
 		done
 		use mmxext || ffconf+=" --disable-mmx2"
 		use 3dnow || ffconf+=" --disable-amd3dnow"
@@ -736,15 +765,18 @@ src_configure() {
 		echo "${ffconf}" > ffmpeg_options
 	fi
 
-	sed -e 's/ --/\n--/g' \
-		-i *_options || die "sed *_options failed"
+	sed -i \
+		-e 's/\t//g' \
+		-e 's/ --/\n--/g' \
+		-e '/^$/d' \
+		*_options || die "sed *_options failed"
 }
 
 src_compile() {
 	base_src_compile
 	# Build only user-requested docs if they're available.
 	if use doc ; then
-		cd mplayer
+		pushd mplayer
 		# select available languages from $LINGUAS
 		LINGUAS=${LINGUAS/zh/zh_CN}
 		local ALLOWED_LINGUAS="cs de en es fr hu it pl ru zh_CN"
