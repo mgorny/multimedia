@@ -9,11 +9,11 @@ inherit cmake-utils qt4-r2
 
 DESCRIPTION="Simple small audio player written in C++ using Qt."
 HOMEPAGE="http://www.tepsonic.org"
-SRC_URI="http://www.tepsonic.org/files/${P}-src.tar.gz"
+SRC_URI="http://www.${P}.org/files/${P}-src.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE="lastfm mysql +sqlite"
 
 DEPEND="
@@ -23,8 +23,6 @@ DEPEND="
 	media-libs/taglib
 "
 RDEPEND="${DEPEND}"
-
-S="${WORKDIR}/${PN}-${PN}"
 
 CMAKE_IN_SOURCE_BUILD="1"
 
