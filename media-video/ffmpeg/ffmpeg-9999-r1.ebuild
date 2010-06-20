@@ -31,7 +31,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
 IUSE="+3dnow +3dnowext alsa altivec amr bindist +bzip2 cpudetection custom-cflags
-debug dirac doc +encode faac faad gsm +hardcoded-tables ieee1394 jack jpeg2k
+debug dirac doc +encode faac gsm +hardcoded-tables ieee1394 jack jpeg2k
 +mmx +mmxext mp3 network oss pic rtmp schroedinger sdl speex +ssse3 static-libs test theora
 threads +tools v4l v4l2 vaapi vdpau vorbis vpx X x264 xvid +zlib"
 
@@ -54,7 +54,6 @@ RDEPEND="
 		x264? ( >=media-libs/x264-0.0.20100605 )
 		xvid? ( >=media-libs/xvid-1.1.0 )
 	)
-	faad? ( >=media-libs/faad2-2.6.1 )
 	gsm? ( >=media-sound/gsm-1.0.12-r1 )
 	ieee1394? ( media-libs/libdc1394 sys-libs/libraw1394 )
 	jack? ( media-sound/jack-audio-connection-kit )
@@ -153,7 +152,7 @@ src_configure() {
 
 	# Decoders
 	use amr && myconf="${myconf} --enable-libopencore-amrwb --enable-libopencore-amrnb"
-	for i in gsm faad dirac rtmp schroedinger speex vpx; do
+	for i in gsm dirac rtmp schroedinger speex vpx; do
 		use ${i} && myconf="${myconf} --enable-lib${i}"
 	done
 	use jpeg2k && myconf="${myconf} --enable-libopenjpeg"
