@@ -2,6 +2,11 @@
 # Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*clementine-0.3.99 (25 Jun 2010)
+
+  25 Jun 2010; Nikoli <nikoli@lavabit.com> +clementine-0.3.99.ebuild:
+  add 0.4 RC1
+
   25 Jun 2010; Nikoli <nikoli@lavabit.com> clementine-9999.ebuild:
   gstreamer is default, fixed vlc and phonon deps, cosmetics
 
