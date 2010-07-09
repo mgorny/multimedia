@@ -13,16 +13,27 @@ HOMEPAGE="http://www.videolan.org/ http://git.videolan.org/?p=libbluray.git;a=su
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="aacs"
+IUSE="aacs java examples"
 
 RDEPEND="aacs? ( media-video/aacskeys )"
-DEPEND=""
+DEPEND="java? ( virtual/jdk )"
 
 src_prepare() {
+	use java && export JDK_HOME="$(java-config -g JAVA_HOME)"
 	eautoreconf
+}
+
+src_configure() {
+	local myconf=""
+	use java && myconf="--with-jdk=${JDK_HOME}"
+	econf $myconf
 }
 
 src_install() {
 	emake DESTDIR="${D}" install || die
-	dodoc doc/README TODO.txt || die
+	dodoc doc/README README.txt TODO.txt
+	cd "${S}"/src/examples/
+	dobin clpi_dump index_dump mobj_dump mpls_dump sound_dump
+	cd "${S}"/src/examples/.libs/
+	dobin bdsplice libbluray_test list_titles
 }
