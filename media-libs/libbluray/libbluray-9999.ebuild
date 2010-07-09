@@ -13,7 +13,7 @@ HOMEPAGE="http://www.videolan.org/ http://git.videolan.org/?p=libbluray.git;a=su
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="aacs java examples"
+IUSE="aacs java"
 
 RDEPEND="aacs? ( media-video/aacskeys )"
 DEPEND="java? ( virtual/jdk )"
