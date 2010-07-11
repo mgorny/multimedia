@@ -51,13 +51,12 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-libs/boost-1.39
 	dev-util/pkgconfig
 "
-
 DOCS="Changelog TODO"
 
 pkg_setup() {
 	if use phonon || use vlc || use xine; then
 		ewarn "Only GStreamer engine is officially supported."
-		ewarn "_Now_ phonon, vlc, xine USE flags are useless, we keep it here only for testing purposes."
+		ewarn "Other engines are unstable and lacking features."
 	fi
 }
 
@@ -65,7 +64,7 @@ src_configure() {
 	# linguas
 	local langs
 	for x in ${LANGS}; do
-		use linguas_${x} && langs+="${x} "
+		use linguas_${x} && langs+=" ${x}"
 	done
 
 	mycmakeargs=(

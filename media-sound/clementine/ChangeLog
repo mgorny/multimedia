@@ -2,6 +2,9 @@
 # Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  11 Jul 2010; Nikoli <nikoli@lavabit.com> clementine-9999.ebuild:
+  building without gstreamer is fixed, cosmetics
+
   11 Jul 2010; Nikoli <nikoli@lavabit.com> -clementine-0.3.99.ebuild:
   remove 0.4 RC
 
