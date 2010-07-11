@@ -39,6 +39,7 @@ COMMON_DEPEND="
 	vlc? ( <=media-video/vlc-1.0.9999 )
 	xine? ( media-libs/xine-lib )
 	!phonon? ( !vlc? ( !xine? ( ${GST_COMMON_DEPEND} ) ) )
+	projectm? ( media-libs/glew )
 "
 # now only presets are used, libprojectm is internal
 # http://code.google.com/p/clementine-player/source/browse/#svn/trunk/3rdparty/libprojectm/patches

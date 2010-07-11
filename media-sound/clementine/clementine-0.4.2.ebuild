@@ -27,6 +27,7 @@ COMMON_DEPEND="
 	dev-libs/glib:2
 	>=media-libs/gstreamer-0.10
 	>=media-libs/gst-plugins-base-0.10
+	projectm? ( media-libs/glew )
 "
 # now only presets are used, libprojectm is internal
 # http://code.google.com/p/clementine-player/source/browse/#svn/trunk/3rdparty/libprojectm/patches
