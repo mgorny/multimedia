@@ -22,6 +22,7 @@ DEPEND="
 	>=x11-libs/qt-gui-4.5.1:4
 	>=x11-libs/qt-svg-4.5.1:4
 	>=media-video/vlc-1.1.0_pre
+	media-plugins/frei0r-plugins
 	"
 RDEPEND="${DEPEND}"
 
