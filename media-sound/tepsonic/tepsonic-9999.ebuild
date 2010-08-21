@@ -22,6 +22,7 @@ DEPEND="
 	>=x11-libs/qt-sql-4.5.0:4[mysql?,sqlite?]
 	|| ( >=x11-libs/qt-phonon-4.5.0:4 media-sound/phonon )
 	media-libs/taglib
+	lastfm? ( media-libs/lastfmlib )
 "
 RDEPEND="${DEPEND}"
 
