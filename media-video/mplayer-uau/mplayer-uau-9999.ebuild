@@ -8,7 +8,7 @@ EAPI="2"
 
 inherit eutils flag-o-matic multilib base ${VCS_ECLASS}
 
-[[ ${PV} != *9999* ]] && MPLAYER_REVISION="GIT-r31871"
+[[ ${PV} != *9999* ]] && MPLAYER_REVISION="GIT-r31969-7a669a6"
 
 namesuf="${PN/mplayer/}"
 
@@ -18,7 +18,7 @@ doc +dts +dv dvb +dvd +dvdnav dxr3 +enca +encode esd +faac +faad fbcon ftp
 gif ggi gsm +iconv ipv6 jack joystick jpeg jpeg2k kernel_linux ladspa
 libcaca lirc +live lzo mad md5sum +mmx mmxext mng +mp3 nas +network nut
 amr +opengl +osdmenu oss png pnm pulseaudio pvr +quicktime radio +rar +real +rtc
-samba +shm +schroedinger +hardcoded-tables sdl +speex sse sse2 ssse3 svga tga +theora threads +tremor
+samba +shm +schroedinger +hardcoded-tables sdl +speex sse sse2 ssse3 tga +theora threads +tremor
 +truetype +toolame +twolame +unicode v4l v4l2 vdpau vidix +vorbis vpx
 win32codecs +X +x264 xanim xinerama +xscreensaver +xv +xvid xvmc zoran
 +ffmpeg-mt -external-ffmpeg symlink"
@@ -38,14 +38,14 @@ FONT_URI="
 "
 if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="git://repo.or.cz/mplayer-build.git"
-	EGIT_PROJECT="mplayer-build"
+	EGIT_PROJECT="${PN}-build"
 	RELEASE_URI=""
 else
 	RELEASE_URI="mirror://gentoo/${P}.tar.lzma"
 fi
 SRC_URI="${RELEASE_URI}
 	!truetype? ( ${FONT_URI} )
-	svga? (	mirror://gentoo/svgalib_helper-${SVGV}-mplayer.tar.gz )"
+"
 
 DESCRIPTION="Media Player for Linux, Uoti Urpala's fork"
 HOMEPAGE="http://www.mplayerhq.hu/"
@@ -138,7 +138,6 @@ RDEPEND+="
 	samba? ( net-fs/samba )
 	sdl? ( media-libs/libsdl )
 	speex? ( media-libs/speex )
-	svga? ( media-libs/svgalib )
 	theora? ( media-libs/libtheora[encode?] )
 	truetype? ( ${FONT_RDEPS} )
 	vorbis? ( media-libs/libvorbis )
@@ -174,8 +173,10 @@ DEPEND="${RDEPEND}
 		xscreensaver? ( x11-proto/scrnsaverproto )
 	)
 	amd64? ( ${ASM_DEP} )
-	doc? ( dev-libs/libxslt
-		app-text/docbook-xsl-stylesheets )
+	doc? (
+		dev-libs/libxslt app-text/docbook-xml-dtd
+		app-text/docbook-xsl-stylesheets
+	)
 	x86? ( ${ASM_DEP} )
 	x86-fbsd? ( ${ASM_DEP} )
 "
@@ -195,7 +196,7 @@ pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then
 		elog ""
 		elog "This is a live ebuild which installs the latest from upstream's"
-		elog "git repository, and is unsupported by Gentoo."
+		elog "${VCS_ECLASS} repository, and is unsupported by Gentoo."
 		elog "Everything but bugs in the ebuild itself will be ignored."
 		elog ""
 	fi
@@ -239,23 +240,24 @@ src_unpack() {
 		git_src_unpack
 
 		EGIT_REPO_URI="git://repo.or.cz/mplayer.git"
-		EGIT_PROJECT="mplayer"
-		S+="/${EGIT_PROJECT}"
+		EGIT_PROJECT="${PN}"
+		S+="/mplayer"
 		git_fetch
 		S="${WORKDIR}/${P}"
 
 		if ! use external-ffmpeg; then
 			if use ffmpeg-mt; then
-				x="-mt"
 				EGIT_BRANCH="mt"
+				EGIT_COMMIT="mt"
+				S+="/ffmpeg-mt"
 			else
-				x=""
+				S+="/ffmpeg"
 			fi
 			EGIT_REPO_URI="git://repo.or.cz/FFMpeg-mirror/mplayer-patches.git"
-			EGIT_PROJECT="ffmpeg${x}"
-			S+="/${EGIT_PROJECT}"
+			EGIT_PROJECT="${PN}-ffmpeg"
 			git_fetch
-			unset EGIT_BRANCH
+			EGIT_BRANCH="master"
+			unset EGIT_COMMIT
 
 			EGIT_REPO_URI="git://git.mplayerhq.hu/libswscale"
 			EGIT_PROJECT="libswscale"
@@ -275,8 +277,6 @@ src_unpack() {
 			font-arial-iso-8859-2.tar.bz2 \
 			font-arial-cp1250.tar.bz2
 	fi
-
-	use svga && unpack "svgalib_helper-${SVGV}-mplayer.tar.gz"
 }
 
 src_prepare() {
@@ -327,16 +327,6 @@ src_prepare() {
 		popd
 	fi
 
-	if use svga; then
-		echo
-		einfo "Enabling vidix non-root mode."
-		einfo "(You need a proper svgalib_helper.o module for your kernel"
-		einfo "to actually use this)"
-		echo
-
-		mv "${WORKDIR}/svgalib_helper" "${S}/libdha"
-	fi
-
 	base_src_prepare
 }
 
@@ -356,6 +346,7 @@ src_configure() {
 	#Optional features#
 	###################
 	myconf+="
+		--disable-svga --enable-svgalib_helper
 		--disable-arts
 		--disable-kai
 		$(use_enable network)
@@ -497,8 +488,7 @@ src_configure() {
 		done
 		if use bindist
 		then
-			use faac && ewarn "faac is nonfree and cannot be distributed;
-			disabling faac support."
+			use faac && ewarn "faac is nonfree and cannot be distributed; disabling faac support."
 			myconf+=" --disable-faac"
 		fi
 	else
@@ -601,7 +591,7 @@ src_configure() {
 
 	use debug && myconf+=" --enable-debug=3"
 
-	if use x86; then
+	if use x86 && gcc-specs-pie; then
 		filter-flags -fPIC -fPIE
 		append-ldflags -nopie
 	fi
@@ -692,7 +682,7 @@ src_configure() {
 		use cpudetection && ffconf+=" --enable-runtime-cpudetect"
 
 		# Threads; we only support pthread for now but ffmpeg supports more
-		use threads && ffconf+=" --enable-pthreads"
+		use threads || ffconf+=" --disable-pthreads"
 
 		# ffmpeg encoders
 		if use encode; then
@@ -713,7 +703,7 @@ src_configure() {
 
 		# ffmpeg decoders
 		use amr && ffconf+=" --enable-libopencore-amrwb --enable-libopencore-amrnb"
-		for i in gsm faad dirac schroedinger speex vpx; do
+		for i in gsm dirac schroedinger speex vpx; do
 			use ${i} && ffconf+=" --enable-lib${i}"
 		done
 		use jpeg2k && ffconf+=" --enable-libopenjpeg"
