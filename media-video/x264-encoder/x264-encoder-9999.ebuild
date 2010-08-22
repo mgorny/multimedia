@@ -49,6 +49,7 @@ src_configure() {
 		--disable-avs \
 		--disable-ffms \
 		$(use_enable ffmpeg lavf) \
+		$(use_enable ffmpeg swscale) \
 		$(use_enable mp4 gpac) \
 		$(use_enable threads pthread) \
 		$(use_enable visualize) \

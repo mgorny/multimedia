@@ -4,6 +4,9 @@
 
 x264-encoder-9999 (10 Jun 2010)
 
+  22 Aug 2010; Nikoli <nikoli@lavabit.com> x264-encoder-9999.ebuild:
+  fix ffmpeg automagick
+
   10 Jun 2010; Nikoli <nikoli@lavabit.com> x264-encoder-9999.ebuild:
   Removed src_install, base.eclass has same
 
