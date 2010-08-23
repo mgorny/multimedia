@@ -1,0 +1,9 @@
+# ChangeLog for media-video/makemkv
+# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*makemkv-1.5.8 (23 Aug 2010)
+
+  23 Aug 2010; Steve Dibb <beandog@gentoo.org> +makemkv-1.5.8.ebuild:
+  Version bump
+
