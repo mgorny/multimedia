@@ -4,15 +4,15 @@
 
 EAPI="2"
 
-inherit qt4-r2
+inherit qt4-r2 git
 
 DESCRIPTION="Qt4 music player."
 HOMEPAGE="http://flavio.tordini.org/minitunes"
-SRC_URI="http://flavio.tordini.org/files/${PN}/${P}.tar.gz"
+EGIT_REPO_URI="git://gitorious.org/${PN}/${PN}.git"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE=""
 
 DEPEND="
