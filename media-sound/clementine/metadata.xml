@@ -3,8 +3,12 @@
 <pkgmetadata>
   <herd>sound</herd>
   <use>
+    <flag name="iphone">Enable support for iPod Touch, iPhone, iPad</flag>
     <flag name="phonon">Enable support for Phonon engine</flag>
     <flag name='projectm'>Build with ProjectM visualization</flag>
+    <flag name='system-sqlite'>Use the system-wide <pkg>dev-db/sqlite</pkg>
+                installation</flag>
     <flag name="vlc">Enable support for VLC engine</flag>
+    <flag name="wiimote">Enable support for Wii remote</flag>
   </use>
 </pkgmetadata>
