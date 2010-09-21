@@ -16,7 +16,7 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
 IUSE="+gstreamer -phonon projectm -vlc -xine"
-IUSE+=" ${LANGS// / linguas_}"
+IUSE+="${LANGS// / linguas_}"
 
 GST_COMMON_DEPEND="
 	>=media-libs/gstreamer-0.10
@@ -28,12 +28,13 @@ GST_RDEPEND="
 	>=media-plugins/gst-plugins-soup-0.10
 "
 COMMON_DEPEND="
-	x11-libs/qt-gui:4
+	x11-libs/qt-gui:4[dbus]
 	x11-libs/qt-opengl:4
 	x11-libs/qt-sql:4[sqlite]
 	>=media-libs/taglib-1.6
 	media-libs/liblastfm
-	dev-libs/glib:2
+	>=dev-libs/glib-2.10:2
+	dev-libs/libxml2
 	gstreamer? ( ${GST_COMMON_DEPEND} )
 	phonon? ( x11-libs/qt-phonon:4 )
 	vlc? ( <=media-video/vlc-1.0.9999 )
@@ -51,6 +52,8 @@ RDEPEND="${COMMON_DEPEND}
 DEPEND="${COMMON_DEPEND}
 	>=dev-libs/boost-1.39
 	dev-util/pkgconfig
+	sys-devel/gettext
+	x11-libs/qt-test:4
 "
 DOCS="Changelog TODO"
 

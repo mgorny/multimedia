@@ -16,15 +16,16 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="projectm"
-IUSE+=" ${LANGS// / linguas_}"
+IUSE+="${LANGS// / linguas_}"
 
 COMMON_DEPEND="
-	x11-libs/qt-gui:4
+	x11-libs/qt-gui:4[dbus]
 	x11-libs/qt-opengl:4
 	x11-libs/qt-sql:4[sqlite]
 	>=media-libs/taglib-1.6
 	media-libs/liblastfm
 	dev-libs/glib:2
+	dev-libs/libxml2
 	>=media-libs/gstreamer-0.10
 	>=media-libs/gst-plugins-base-0.10
 	projectm? ( media-libs/glew )
@@ -40,6 +41,8 @@ RDEPEND="${COMMON_DEPEND}
 DEPEND="${COMMON_DEPEND}
 	>=dev-libs/boost-1.39
 	dev-util/pkgconfig
+	sys-devel/gettext
+	x11-libs/qt-test:4
 "
 DOCS="Changelog TODO"
 
