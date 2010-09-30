@@ -2,9 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI=2
 
-LANGS=" ar cs da de el en_CA en_GB es fi fr gl it kk nb oc pl pt_BR pt ro ru sk sv tr uk zh_CN zh_TW"
+LANGS=" ar bg ca cs da de el en_CA en_GB es fi fr gl hu it kk lt nb nl oc pl pt_BR pt ro ru sk sl sr sv tr uk zh_CN zh_TW"
 
 inherit cmake-utils gnome2-utils subversion
 
@@ -15,7 +15,7 @@ ESVN_REPO_URI="http://clementine-player.googlecode.com/svn/trunk"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="+gstreamer -phonon projectm -vlc -xine"
+IUSE="+gstreamer iphone ipod mtp -phonon projectm system-sqlite -vlc wiimote -xine"
 IUSE+="${LANGS// / linguas_}"
 
 GST_COMMON_DEPEND="
@@ -40,10 +40,24 @@ COMMON_DEPEND="
 	vlc? ( <=media-video/vlc-1.0.9999 )
 	xine? ( media-libs/xine-lib )
 	!phonon? ( !vlc? ( !xine? ( ${GST_COMMON_DEPEND} ) ) )
+	ipod? (
+		>=media-libs/libgpod-0.7.92
+		iphone? (
+			app-pda/libplist
+			>=app-pda/libimobiledevice-1.0
+			app-pda/usbmuxd
+		)
+	)
+	mtp? ( media-libs/libmtp )
 	projectm? ( media-libs/glew )
+	system-sqlite? (
+		dev-db/sqlite[fts3]
+		!>=x11-libs/qt-sql-4.7:4
+	)
 "
 # now only presets are used, libprojectm is internal
 # http://code.google.com/p/clementine-player/source/browse/#svn/trunk/3rdparty/libprojectm/patches
+# r1966 "Compile with a static sqlite by default, since Qt 4.7 doesn't seem to expose the symbols we need to use FTS"
 RDEPEND="${COMMON_DEPEND}
 	projectm? ( >=media-libs/libprojectm-1.2.0 )
 	gstreamer? ( ${GST_RDEPEND} )
@@ -66,15 +80,21 @@ pkg_setup() {
 
 src_configure() {
 	# linguas
-	local langs
+	local langs x
 	for x in ${LANGS}; do
 		use linguas_${x} && langs+=" ${x}"
 	done
 
-	mycmakeargs=(
+	local mycmakeargs=(
 		-DLINGUAS="${langs}"
 		"-DBUNDLE_PROJECTM_PRESETS=OFF"
+		$(cmake-utils_use ipod ENABLE_LIBGPOD)
+		$(cmake-utils_use iphone ENABLE_IMOBILEDEVICE)
+		$(cmake-utils_use mtp ENABLE_LIBMTP)
+		"-DENABLE_GIO=ON"
+		$(cmake-utils_use wiimote ENABLE_WIIMOTEDEV)
 		$(cmake-utils_use projectm ENABLE_VISUALISATIONS)
+		$(cmake-utils_use !system-sqlite STATIC_SQLITE)
 		$(cmake-utils_use gstreamer ENGINE_GSTREAMER_ENABLED)
 		$(cmake-utils_use phonon ENGINE_QT_PHONON_ENABLED)
 		$(cmake-utils_use vlc ENGINE_LIBVLC_ENABLED)
