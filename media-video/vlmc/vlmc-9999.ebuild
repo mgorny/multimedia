@@ -4,8 +4,8 @@
 
 EAPI="2"
 
-LANGSLONG="ca_ES cs_CZ es_ES fr_FR gl_ES it_IT ja_JP pl_PL ro_RO ru_RU sk_SK ta_TA uk_UA"
-LANGS=" nl pt_BR sv zh_CN"
+LANGSLONG="ca_ES cs_CZ de_DE es_ES fr_FR gl_ES it_IT ja_JP pl_PL ro_RO ru_RU sk_SK ta_TA tr_TR uk_UA"
+LANGS="nl pt_BR sv zh_CN"
 
 inherit cmake-utils qt4-r2 git
 
@@ -19,9 +19,8 @@ KEYWORDS=""
 IUSE=""
 
 DEPEND="
-	>=x11-libs/qt-gui-4.5.1:4
-	>=x11-libs/qt-svg-4.5.1:4
-	>=media-video/vlc-1.1.0_pre
+	>=x11-libs/qt-gui-4.6:4
+	>=media-video/vlc-1.1
 	media-plugins/frei0r-plugins
 	"
 RDEPEND="${DEPEND}"
