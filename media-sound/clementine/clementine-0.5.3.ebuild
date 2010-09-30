@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI=2
 
 LANGS=" ar bg ca cs da de el en_CA en_GB es fi fr gl hu it kk lt nb nl oc pl pt_BR pt ro ru sk sl sr sv tr uk zh_CN zh_TW"
 
@@ -60,17 +60,17 @@ DEPEND="${COMMON_DEPEND}
 "
 DOCS="Changelog TODO"
 
-PATCHES=( "${FILESDIR}"/${P}_automagic.patch )
+PATCHES=( "${FILESDIR}"/${P}-automagic.patch )
 
 src_configure() {
 	# linguas
-	local langs
+	local langs x
 	for x in ${LANGS}; do
 		use linguas_${x} && langs+=" ${x}"
 	done
 
 	# Upstream supports only gstreamer engine, other engines are unstable and lacking features.
-	mycmakeargs=(
+	local mycmakeargs=(
 		-DLINGUAS="${langs}"
 		"-DBUNDLE_PROJECTM_PRESETS=OFF"
 		$(cmake-utils_use ipod ENABLE_LIBGPOD)
