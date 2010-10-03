@@ -9,7 +9,7 @@ inherit cmake-utils qt4-r2
 
 DESCRIPTION="Simple small audio player written in C++ using Qt."
 HOMEPAGE="http://www.tepsonic.org"
-SRC_URI="http://www.${P}.org/files/${P}-src.tar.gz"
+SRC_URI="http://www.tepsonic.org/files/${P}-src.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -21,6 +21,7 @@ DEPEND="
 	>=x11-libs/qt-sql-4.5.0:4[mysql?,sqlite?]
 	|| ( >=x11-libs/qt-phonon-4.5.0:4 media-sound/phonon )
 	media-libs/taglib
+	lastfm? ( media-libs/lastfmlib )
 "
 RDEPEND="${DEPEND}"
 
