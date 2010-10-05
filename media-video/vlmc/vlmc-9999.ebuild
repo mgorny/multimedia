@@ -4,8 +4,7 @@
 
 EAPI="2"
 
-LANGSLONG="ca_ES cs_CZ de_DE es_ES fr_FR gl_ES it_IT ja_JP pl_PL ro_RO ru_RU sk_SK ta_TA tr_TR uk_UA"
-LANGS="nl pt_BR sv zh_CN"
+LANGS="ca cs de es fr gl it ja nl pl pt ro ru sk sv ta tr uk zh"
 
 inherit cmake-utils qt4-r2 git
 
@@ -31,24 +30,21 @@ DOCS="AUTHORS NEWS README TRANSLATORS"
 
 src_prepare() {
 	# we use dodoc
-	sed -e '/INSTALL (FILES AUTHORS COPYING INSTALL NEWS README TRANSLATORS/d' \
+	sed -e '/INSTALL (FILES AUTHORS COPYING INSTALL NEWS README THANKS TRANSLATORS/d' \
 		-e '/DESTINATION ${VLMC_DOC_DIR})/d' \
 		-i CMakeLists.txt || die "sed failed"
 }
 
 src_configure() {
-	for lang in ${LANGS}; do
-		if ! use linguas_${lang}; then
-			rm -f "ts/vlmc_${lang}.ts"
-		fi
-	done
-	for lang in ${LANGSLONG}; do
-		if ! use linguas_${lang%_*}; then
-			rm -f "ts/vlmc_${lang}.ts"
-		fi
+	# linguas
+	local langs x
+	for x in ${LANGS}; do
+		use linguas_${x} && langs+=" ${x}"
 	done
 
-	mycmakeargs="${mycmakeargs} -DVLMC_LIB_SUBDIR=$(get_libdir)"
-
+	local mycmakeargs=(
+		-DLANGS="${langs}"
+		-DVLMC_LIB_SUBDIR="$(get_libdir)"
+	)
 	cmake-utils_src_configure
 }

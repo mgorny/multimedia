@@ -2,6 +2,9 @@
 # Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  05 Oct 2010; Nikoli <nikoli@lavabit.com> vlmc-9999.ebuild:
+  update linguas, sed
+
   30 Sep 2010; Nikoli <nikoli@lavabit.com> vlmc-9999.ebuild:
   update deps and linguas
 
