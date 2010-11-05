@@ -1,22 +1,21 @@
---- Makefile.orig	2010-05-14 15:57:32.119717779 +0400
-+++ Makefile	2010-05-14 16:28:46.186342031 +0400
-@@ -127,8 +127,8 @@
+Index: x264-snapshot-20101029-2245/Makefile
+===================================================================
+--- x264-snapshot-20101029-2245.orig/Makefile
++++ x264-snapshot-20101029-2245/Makefile
+@@ -135,8 +135,8 @@ libx264.a: .depend $(OBJS) $(OBJASM)
  $(SONAME): .depend $(OBJS) $(OBJASM) $(OBJSO)
  	$(CC) -shared -o $@ $(OBJS) $(OBJASM) $(OBJSO) $(SOFLAGS) $(LDFLAGS)
  
 -x264$(EXE): $(OBJCLI) libx264.a
--	$(CC) -o $@ $+ $(LDFLAGS) $(LDFLAGSCLI)
+-	$(CC) -o $@ $+ $(LDFLAGSCLI) $(LDFLAGS)
 +x264$(EXE): $(OBJCLI)
-+	$(CC) -o $@ $+ $(LDFLAGS) $(LDFLAGSCLI) `pkg-config --libs x264`
++	$(CC) -o $@ $+ $(LDFLAGSCLI) $(LDFLAGS) `pkg-config --libs x264`
  
  checkasm: tools/checkasm.o libx264.a
  	$(CC) -o $@ $+ $(LDFLAGS)
-@@ -193,23 +193,9 @@
- 	rm -f config.mak config.h config.log x264.pc
- 	rm -rf test/
+@@ -203,21 +203,7 @@ distclean: clean
  
--install: x264$(EXE) $(SONAME)
-+install: x264$(EXE)
+ install: x264$(EXE) $(SONAME)
  	install -d $(DESTDIR)$(bindir)
 -	install -d $(DESTDIR)$(includedir)
 -	install -d $(DESTDIR)$(libdir)

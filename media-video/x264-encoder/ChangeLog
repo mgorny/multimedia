@@ -4,6 +4,13 @@
 
 x264-encoder-9999 (10 Jun 2010)
 
+  03 Nov 2010; Nikoli <nikoli@lavabit.com> x264-encoder-9999.ebuild,
+  -files/x264-encoder-nolib-20100610.patch,
+  -files/x264-encoder-nolib-static-20100610.patch,
+  +files/x264-encoder-nolib-20101029.patch,
+  +files/x264-encoder-nolib-static-20101029.patch:
+  simplified version bumping
+
   22 Aug 2010; Nikoli <nikoli@lavabit.com> x264-encoder-9999.ebuild:
   fix ffmpeg automagick
 
