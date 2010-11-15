@@ -252,6 +252,7 @@ src_unpack() {
 			EGIT_BRANCH="master"
 			unset EGIT_COMMIT
 
+			cd "${S}"
 			EGIT_REPO_URI="git://git.mplayerhq.hu/libswscale"
 			EGIT_PROJECT="libswscale"
 			EGIT_COMMIT="$(git submodule status -- libswscale|sed -e 's/^-\(.*\) .*/\1/')"
