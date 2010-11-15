@@ -1,13 +1,13 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999-r1.ebuild,v 1.42 2010/06/18 06:57:00 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999.ebuild,v 1.26 2010/11/07 20:36:13 aballier Exp $
 
 EAPI="2"
 
 SCM=""
 if [ "${PV#9999}" != "${PV}" ] ; then
-	SCM="subversion"
-	ESVN_REPO_URI="svn://svn.ffmpeg.org/ffmpeg/trunk"
+	SCM="git"
+	EGIT_REPO_URI="git://git.ffmpeg.org/ffmpeg"
 fi
 
 inherit eutils flag-o-matic multilib toolchain-funcs ${SCM}
@@ -25,15 +25,10 @@ FFMPEG_REVISION="${PV#*_p}"
 
 LICENSE="GPL-3"
 SLOT="0"
-if [ "${PV#9999}" != "${PV}" ] ; then
-	KEYWORDS=""
-else
+if [ "${PV#9999}" = "${PV}" ] ; then
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
-IUSE="+3dnow +3dnowext alsa altivec amr bindist +bzip2 cpudetection custom-cflags
-debug dirac doc +encode faac gsm +hardcoded-tables ieee1394 jack jpeg2k
-+mmx +mmxext mp3 network oss pic rtmp schroedinger sdl speex +ssse3 static-libs test theora
-threads +tools v4l v4l2 vaapi vdpau vorbis vpx X x264 xvid +zlib"
+IUSE="+3dnow +3dnowext alsa altivec amr bindist +bzip2 cpudetection custom-cflags debug dirac doc +encode faac ffmpeg-mt frei0r gsm +hardcoded-tables ieee1394 jack jpeg2k +mmx +mmxext mp3 network oss pic qt-faststart rtmp schroedinger sdl speex +ssse3 static-libs test theora threads +tools v4l v4l2 vaapi vdpau vorbis vpx X x264 xvid +zlib"
 
 VIDEO_CARDS="nvidia"
 
@@ -48,12 +43,13 @@ RDEPEND="
 	dirac? ( media-video/dirac )
 	encode? (
 		faac? ( media-libs/faac )
-		mp3? ( media-sound/lame )
+		mp3? ( >=media-sound/lame-3.98.3 )
 		theora? ( >=media-libs/libtheora-1.1.1[encode] media-libs/libogg )
 		vorbis? ( media-libs/libvorbis media-libs/libogg )
-		x264? ( >=media-libs/x264-0.0.20100605 )
+		x264? ( >=media-libs/x264-0.0.20101029 )
 		xvid? ( >=media-libs/xvid-1.1.0 )
 	)
+	frei0r? ( media-plugins/frei0r-plugins )
 	gsm? ( >=media-sound/gsm-1.0.12-r1 )
 	ieee1394? ( media-libs/libdc1394 sys-libs/libraw1394 )
 	jack? ( media-sound/jack-audio-connection-kit )
@@ -61,12 +57,13 @@ RDEPEND="
 	rtmp? ( media-video/rtmpdump )
 	schroedinger? ( media-libs/schroedinger )
 	speex? ( >=media-libs/speex-1.2_beta3 )
-	tools? ( sdl? ( >=media-libs/libsdl-1.2.10[audio,alsa?,oss?,video,X] ) )
+	tools? ( sdl? ( >=media-libs/libsdl-1.2.13-r1[audio,alsa?,oss?,video,X] ) )
 	vaapi? ( x11-libs/libva[video_cards_nvidia?] )
 	video_cards_nvidia? ( vdpau? ( x11-libs/libvdpau ) )
 	vpx? ( media-libs/libvpx )
 	X? ( x11-libs/libX11 x11-libs/libXext )
 	zlib? ( sys-libs/zlib )
+	!media-video/qt-faststart
 "
 
 DEPEND="${RDEPEND}
@@ -81,13 +78,39 @@ DEPEND="${RDEPEND}
 	v4l2? ( sys-kernel/linux-headers )
 "
 
-src_prepare() {
+src_unpack() {
 	if [ "${PV#9999}" != "${PV}" ] ; then
-		# Set SVN version manually
-		subversion_wc_info
-		sed -i -e "s/UNKNOWN/SVN-r${ESVN_WC_REVISION}/" "${S}/version.sh" || die
-	elif [ "${PV%_p*}" != "${PV}" ] ; then # Snapshot
-		sed -i -e "s/UNKNOWN/SVN-r${FFMPEG_REVISION}/" "${S}/version.sh" || die
+		if use ffmpeg-mt; then
+			EGIT_REPO_URI="git://gitorious.org/ffmpeg/ffmpeg-mt"
+			EGIT_PROJECT="ffmpeg-mt"
+		fi
+		git_src_unpack
+
+		if use ffmpeg-mt; then
+			cd "${S}"
+			EGIT_COMMIT="$(git submodule status -- libswscale|sed -e 's/^-\(.*\) .*/\1/')"
+		fi
+		EGIT_REPO_URI="git://git.ffmpeg.org/libswscale"
+		EGIT_PROJECT="${PN}-libswscale"
+		S+="/libswscale"
+		git_fetch
+		S="${WORKDIR}/${P}"
+
+		cd "${WORKDIR}"
+	else
+		unpack ${A}
+	fi
+}
+
+src_prepare() {
+	# Snapshot
+	if [ "${PV%_p*}" != "${PV}" ] ; then
+		sed -e "s/UNKNOWN/git-svn-r${FFMPEG_REVISION}/" \
+			-i version.sh || die
+	fi
+
+	if [ "${PV#9999}" = "${PV}" ] && use ffmpeg-mt ; then
+		epatch "${DISTDIR}/${P}-ffmpeg-mt.patch"
 	fi
 }
 
@@ -146,6 +169,8 @@ src_configure() {
 	for i in alsa oss ; do
 		use ${i} || myconf="${myconf} --disable-outdev=${i}"
 	done
+	# libavfilter options
+	use frei0r && myconf="${myconf} --enable-frei0r"
 
 	# Threads; we only support pthread for now but ffmpeg supports more
 	use threads && myconf="${myconf} --enable-pthreads"
@@ -165,8 +190,8 @@ src_configure() {
 	use 3dnow || myconf="${myconf} --disable-amd3dnow"
 	use 3dnowext || myconf="${myconf} --disable-amd3dnowext"
 	# disable mmx accelerated code if PIC is required
-	# as the provided asm decidedly is not PIC.
-	if gcc-specs-pie ; then
+	# as the provided asm decidedly is not PIC for x86.
+	if use pic && use x86 ; then
 		myconf="${myconf} --disable-mmx --disable-mmx2"
 	fi
 
@@ -191,7 +216,6 @@ src_configure() {
 		--enable-version3
 		--enable-postproc
 		--enable-avfilter
-		--enable-avfilter-lavf
 		--disable-stripping
 		${myconf}"
 
@@ -235,19 +259,24 @@ src_configure() {
 		--libdir=/usr/$(get_libdir) \
 		--shlibdir=/usr/$(get_libdir) \
 		--mandir=/usr/share/man \
-		--enable-static --enable-shared \
+		--enable-shared \
 		--cc="$(tc-getCC)" \
-		${myconf} || die "configure failed"
+		${myconf} || die
 }
 
 src_compile() {
 	emake version.h || die #252269
-	emake || die "make failed"
+	emake || die
+
+	if use qt-faststart; then
+		tc-export CC
+		emake -C tools qt-faststart || die
+	fi
 }
 
 src_install() {
 	use tools && Tman+="install-man" || Tman=""
-	emake DESTDIR="${D}" install ${Tman} || die "emake install failed"
+	emake DESTDIR="${D}" install ${Tman} || die
 
 	# until fixed upstream
 	if use tools && { use !encode || use !x264; } ; then
@@ -257,12 +286,16 @@ src_install() {
 
 	dodoc Changelog README INSTALL
 	dodoc doc/*
+
+	if use qt-faststart; then
+		dobin tools/qt-faststart || die
+	fi
 }
 
 src_test() {
 	if use encode ; then
 		for t in codectest lavftest seektest ; do
-			LD_LIBRARY_PATH="${S}/libpostproc:${S}/libswscale:${S}/libavcodec:${S}/libavdevice:${S}/libavfilter:${S}/libavformat:${S}/libavutil" \
+			LD_LIBRARY_PATH="${S}/libavcore:${S}/libpostproc:${S}/libswscale:${S}/libavcodec:${S}/libavdevice:${S}/libavfilter:${S}/libavformat:${S}/libavutil" \
 				emake ${t} || die "Some tests in ${t} failed"
 		done
 	else
