@@ -2,6 +2,10 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
   <herd>sound</herd>
+  <maintainer>
+    <email>nikoli@lavabit.com</email>
+    <name>Nikoli</name>
+  </maintainer>
   <use>
     <flag name="iphone">Enable support for iPod Touch, iPhone, iPad</flag>
     <flag name="phonon">Enable support for Phonon engine</flag>

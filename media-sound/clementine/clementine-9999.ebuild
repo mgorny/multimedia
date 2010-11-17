@@ -9,7 +9,7 @@ LANGS=" ar bg ca cs da de el en_CA en_GB es fi fr gl hu it kk lt nb nl oc pl pt_
 inherit cmake-utils gnome2-utils subversion
 
 DESCRIPTION="A modern music player and library organizer based on Amarok 1.4 and Qt4"
-HOMEPAGE="http://code.google.com/p/clementine-player/"
+HOMEPAGE="http://www.clementine-player.org/ http://code.google.com/p/clementine-player/"
 ESVN_REPO_URI="http://clementine-player.googlecode.com/svn/trunk"
 
 LICENSE="GPL-3"
@@ -33,7 +33,7 @@ COMMON_DEPEND="
 	x11-libs/qt-sql:4[sqlite]
 	>=media-libs/taglib-1.6
 	media-libs/liblastfm
-	>=dev-libs/glib-2.10:2
+	>=dev-libs/glib-2.24.1-r1:2
 	dev-libs/libxml2
 	gstreamer? ( ${GST_COMMON_DEPEND} )
 	phonon? ( x11-libs/qt-phonon:4 )
@@ -59,6 +59,7 @@ COMMON_DEPEND="
 # http://code.google.com/p/clementine-player/source/browse/#svn/trunk/3rdparty/libprojectm/patches
 # r1966 "Compile with a static sqlite by default, since Qt 4.7 doesn't seem to expose the symbols we need to use FTS"
 RDEPEND="${COMMON_DEPEND}
+	mtp? ( gnome-base/gvfs )
 	projectm? ( >=media-libs/libprojectm-1.2.0 )
 	gstreamer? ( ${GST_RDEPEND} )
 	!phonon? ( !vlc? ( !xine? ( ${GST_RDEPEND} ) ) )
@@ -70,6 +71,8 @@ DEPEND="${COMMON_DEPEND}
 	x11-libs/qt-test:4
 "
 DOCS="Changelog TODO"
+
+MAKEOPTS="${MAKEOPTS} -j1"
 
 pkg_setup() {
 	if use phonon || use vlc || use xine; then
