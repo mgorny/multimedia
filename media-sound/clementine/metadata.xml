@@ -10,6 +10,7 @@
     <flag name="iphone">Enable support for iPod Touch, iPhone, iPad</flag>
     <flag name="phonon">Enable support for Phonon engine</flag>
     <flag name='projectm'>Build with ProjectM visualization</flag>
+    <flag name='soundmenu'>Enable support for the sound menu</flag>
     <flag name='system-sqlite'>Use the system-wide <pkg>dev-db/sqlite</pkg>
                 installation</flag>
     <flag name="vlc">Enable support for VLC engine</flag>

@@ -6,40 +6,30 @@ EAPI=2
 
 LANGS=" ar be bg br ca cs cy da de el en_CA en_GB eo es et eu fi fr gl he hi hu it ja kk lt nb nl oc pl pt_BR pt ro ru sk sl sr sv tr uk zh_CN zh_TW"
 
-inherit cmake-utils gnome2-utils subversion
+inherit cmake-utils gnome2-utils
 
+MY_PV="0.5.90"
 DESCRIPTION="A modern music player and library organizer based on Amarok 1.4 and Qt4"
 HOMEPAGE="http://www.clementine-player.org/ http://code.google.com/p/clementine-player/"
-ESVN_REPO_URI="http://clementine-player.googlecode.com/svn/trunk"
+SRC_URI="http://clementine-player.googlecode.com/files/${P/_/}-1.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
-IUSE="+gstreamer iphone ipod mtp -phonon projectm soundmenu system-sqlite -vlc wiimote -xine"
+KEYWORDS="~amd64 ~x86"
+IUSE="iphone ipod mtp projectm soundmenu wiimote"
 IUSE+="${LANGS// / linguas_}"
 
-GST_COMMON_DEPEND="
-	>=media-libs/gstreamer-0.10
-	>=media-libs/gst-plugins-base-0.10
-"
-GST_RDEPEND="
-	>=media-plugins/gst-plugins-meta-0.10
-	>=media-plugins/gst-plugins-gio-0.10
-	>=media-plugins/gst-plugins-soup-0.10
-"
 COMMON_DEPEND="
 	>=x11-libs/qt-gui-4.5:4[dbus]
 	>=x11-libs/qt-opengl-4.5:4
 	>=x11-libs/qt-sql-4.5:4[sqlite]
+	dev-db/sqlite[fts3]
 	>=media-libs/taglib-1.6
 	media-libs/liblastfm
 	>=dev-libs/glib-2.24.1-r1:2
 	dev-libs/libxml2
-	gstreamer? ( ${GST_COMMON_DEPEND} )
-	phonon? ( x11-libs/qt-phonon:4 )
-	vlc? ( <=media-video/vlc-1.0.9999 )
-	xine? ( media-libs/xine-lib )
-	!phonon? ( !vlc? ( !xine? ( ${GST_COMMON_DEPEND} ) ) )
+	>=media-libs/gstreamer-0.10
+	>=media-libs/gst-plugins-base-0.10
 	ipod? (
 		>=media-libs/libgpod-0.7.92
 		iphone? (
@@ -51,10 +41,6 @@ COMMON_DEPEND="
 	mtp? ( >=media-libs/libmtp-1.0.0 )
 	projectm? ( media-libs/glew )
 	soundmenu? ( dev-libs/libindicate-qt )
-	system-sqlite? (
-		dev-db/sqlite[fts3]
-		!>=x11-libs/qt-sql-4.7:4
-	)
 "
 # now only presets are used, libprojectm is internal
 # http://code.google.com/p/clementine-player/source/browse/#svn/trunk/3rdparty/libprojectm/patches
@@ -62,8 +48,9 @@ COMMON_DEPEND="
 RDEPEND="${COMMON_DEPEND}
 	mtp? ( gnome-base/gvfs )
 	projectm? ( >=media-libs/libprojectm-1.2.0 )
-	gstreamer? ( ${GST_RDEPEND} )
-	!phonon? ( !vlc? ( !xine? ( ${GST_RDEPEND} ) ) )
+	>=media-plugins/gst-plugins-meta-0.10
+	>=media-plugins/gst-plugins-gio-0.10
+	>=media-plugins/gst-plugins-soup-0.10
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-libs/boost-1.39
@@ -75,12 +62,7 @@ DOCS="Changelog TODO"
 
 MAKEOPTS="${MAKEOPTS} -j1"
 
-pkg_setup() {
-	if use phonon || use vlc || use xine; then
-		ewarn "Only GStreamer engine is officially supported."
-		ewarn "Other engines are unstable and lacking features."
-	fi
-}
+S="${WORKDIR}/${PN}-${MY_PV}"
 
 src_configure() {
 	# linguas
@@ -89,6 +71,7 @@ src_configure() {
 		use linguas_${x} && langs+=" ${x}"
 	done
 
+	# Upstream supports only gstreamer engine, other engines are unstable and lacking features.
 	local mycmakeargs=(
 		-DLINGUAS="${langs}"
 		"-DBUNDLE_PROJECTM_PRESETS=OFF"
@@ -99,18 +82,12 @@ src_configure() {
 		$(cmake-utils_use wiimote ENABLE_WIIMOTEDEV)
 		$(cmake-utils_use projectm ENABLE_VISUALISATIONS)
 		$(cmake-utils_use soundmenu ENABLE_SOUNDMENU)
-		$(cmake-utils_use !system-sqlite STATIC_SQLITE)
-		$(cmake-utils_use gstreamer ENGINE_GSTREAMER_ENABLED)
-		$(cmake-utils_use phonon ENGINE_QT_PHONON_ENABLED)
-		$(cmake-utils_use vlc ENGINE_LIBVLC_ENABLED)
-		$(cmake-utils_use xine ENGINE_LIBXINE_ENABLED)
+		"-DSTATIC_SQLITE=OFF"
+		"-DENGINE_GSTREAMER_ENABLED=ON"
+		"-DENGINE_QT_PHONON_ENABLED=OFF"
+		"-DENGINE_LIBVLC_ENABLED=OFF"
+		"-DENGINE_LIBXINE_ENABLED=OFF"
 		)
-
-	if use !phonon && use !vlc && use !xine; then
-		mycmakeargs+=(
-			"-DENGINE_GSTREAMER_ENABLED=ON"
-			)
-	fi
 
 	cmake-utils_src_configure
 }

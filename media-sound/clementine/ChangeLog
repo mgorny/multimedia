@@ -2,6 +2,12 @@
 # Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*clementine-0.6_rc1 (07 Dec 2010)
+
+  07 Dec 2010; Nikoli <nikoli@lavabit.com> +clementine-0.6_rc1.ebuild,
+  clementine-9999.ebuild, metadata.xml:
+  version bump, update live ebuild
+
   17 Nov 2010; Nikoli <nikoli@lavabit.com> -clementine-0.4.2.ebuild,
   -clementine-0.5.3.ebuild, -files/clementine-0.5.3-automagic.patch,
   clementine-9999.ebuild, metadata.xml:
