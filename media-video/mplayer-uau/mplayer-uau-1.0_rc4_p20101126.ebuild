@@ -699,7 +699,9 @@ src_configure() {
 		use threads || ffconf+=" --disable-pthreads"
 
 		# ffmpeg encoders
-		ffconf+=" --disable-encoders"
+		for i in faac mp3lame theora vorbis x264 xvid; do
+			ffconf+=" --disable-lib${i}"
+		done
 
 		# ffmpeg decoders
 		use amr && ffconf+=" --enable-libopencore-amrwb --enable-libopencore-amrnb"
