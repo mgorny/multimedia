@@ -2,6 +2,10 @@
 # Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  14 Dec 2010; Nikoli <nikoli@lavabit.com> libbluray-9999.ebuild,
+  metadata.xml:
+  fix java USE, src_install, add utils USE
+
 *libbluray-9999 (09 Jul 2010)
 
   09 Jul 2010; Steve Dibb <beandog@gentoo.org> +libbluray-9999.ebuild,
