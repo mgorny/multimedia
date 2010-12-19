@@ -1,32 +1,23 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/clementine/clementine-0.6.ebuild,v 1.1 2010/12/18 21:05:19 ssuominen Exp $
 
 EAPI=2
 
 LANGS=" ar be bg br ca cs cy da de el en_CA en_GB eo es et eu fi fr gl he hi hu it ja kk lt nb nl oc pl pt_BR pt ro ru sk sl sr sv tr uk zh_CN zh_TW"
 
-inherit cmake-utils gnome2-utils subversion
+inherit cmake-utils gnome2-utils
 
 DESCRIPTION="A modern music player and library organizer based on Amarok 1.4 and Qt4"
 HOMEPAGE="http://www.clementine-player.org/ http://code.google.com/p/clementine-player/"
-ESVN_REPO_URI="http://clementine-player.googlecode.com/svn/trunk"
+SRC_URI="http://clementine-player.googlecode.com/files/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
-IUSE="ayatana +gstreamer iphone ipod +lastfm mtp -phonon projectm -vlc wiimote -xine"
+KEYWORDS="~amd64 ~x86"
+IUSE="ayatana iphone ipod +lastfm mtp projectm wiimote"
 IUSE+="${LANGS// / linguas_}"
 
-GST_COMMON_DEPEND="
-	>=media-libs/gstreamer-0.10
-	>=media-libs/gst-plugins-base-0.10
-"
-GST_RDEPEND="
-	>=media-plugins/gst-plugins-meta-0.10
-	>=media-plugins/gst-plugins-gio-0.10
-	>=media-plugins/gst-plugins-soup-0.10
-"
 COMMON_DEPEND="
 	>=x11-libs/qt-gui-4.5:4[dbus]
 	>=x11-libs/qt-opengl-4.5:4
@@ -35,12 +26,9 @@ COMMON_DEPEND="
 	>=media-libs/taglib-1.6
 	>=dev-libs/glib-2.24.1-r1:2
 	dev-libs/libxml2
+	>=media-libs/gstreamer-0.10
+	>=media-libs/gst-plugins-base-0.10
 	ayatana? ( dev-libs/libindicate-qt )
-	gstreamer? ( ${GST_COMMON_DEPEND} )
-	phonon? ( x11-libs/qt-phonon:4 )
-	vlc? ( <=media-video/vlc-1.0.9999 )
-	xine? ( media-libs/xine-lib )
-	!phonon? ( !vlc? ( !xine? ( ${GST_COMMON_DEPEND} ) ) )
 	ipod? (
 		>=media-libs/libgpod-0.7.92
 		iphone? (
@@ -59,8 +47,9 @@ COMMON_DEPEND="
 RDEPEND="${COMMON_DEPEND}
 	mtp? ( gnome-base/gvfs )
 	projectm? ( >=media-libs/libprojectm-1.2.0 )
-	gstreamer? ( ${GST_RDEPEND} )
-	!phonon? ( !vlc? ( !xine? ( ${GST_RDEPEND} ) ) )
+	>=media-plugins/gst-plugins-meta-0.10
+	>=media-plugins/gst-plugins-gio-0.10
+	>=media-plugins/gst-plugins-soup-0.10
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-libs/boost-1.39
@@ -72,12 +61,7 @@ DOCS="Changelog TODO"
 
 MAKEOPTS="${MAKEOPTS} -j1"
 
-pkg_setup() {
-	if use phonon || use vlc || use xine; then
-		ewarn "Only GStreamer engine is officially supported."
-		ewarn "Other engines are unstable and lacking features."
-	fi
-}
+PATCHES=( "${FILESDIR}"/${P}-optional-liblastfm.patch )
 
 src_configure() {
 	# linguas
@@ -86,6 +70,7 @@ src_configure() {
 		use linguas_${x} && langs+=" ${x}"
 	done
 
+	# Upstream supports only gstreamer engine, other engines are unstable and lacking features.
 	mycmakeargs=(
 		-DLINGUAS="${langs}"
 		-DBUNDLE_PROJECTM_PRESETS=OFF
@@ -98,17 +83,11 @@ src_configure() {
 		$(cmake-utils_use projectm ENABLE_VISUALISATIONS)
 		$(cmake-utils_use ayatana ENABLE_SOUNDMENU)
 		-DSTATIC_SQLITE=OFF
-		$(cmake-utils_use gstreamer ENGINE_GSTREAMER_ENABLED)
-		$(cmake-utils_use phonon ENGINE_QT_PHONON_ENABLED)
-		$(cmake-utils_use vlc ENGINE_LIBVLC_ENABLED)
-		$(cmake-utils_use xine ENGINE_LIBXINE_ENABLED)
+		-DENGINE_GSTREAMER_ENABLED=ON
+		-DENGINE_QT_PHONON_ENABLED=OFF
+		-DENGINE_LIBVLC_ENABLED=OFF
+		-DENGINE_LIBXINE_ENABLED=OFF
 		)
-
-	if use !phonon && use !vlc && use !xine; then
-		mycmakeargs+=(
-			-DENGINE_GSTREAMER_ENABLED=ON
-			)
-	fi
 
 	cmake-utils_src_configure
 }
