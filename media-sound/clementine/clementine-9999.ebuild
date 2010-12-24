@@ -15,7 +15,7 @@ ESVN_REPO_URI="http://clementine-player.googlecode.com/svn/trunk"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="+gstreamer iphone ipod mtp -phonon projectm soundmenu system-sqlite -vlc wiimote -xine"
+IUSE="ayatana +gstreamer iphone ipod +lastfm mtp -phonon projectm -vlc wiimote -xine"
 IUSE+="${LANGS// / linguas_}"
 
 GST_COMMON_DEPEND="
@@ -31,10 +31,11 @@ COMMON_DEPEND="
 	>=x11-libs/qt-gui-4.5:4[dbus]
 	>=x11-libs/qt-opengl-4.5:4
 	>=x11-libs/qt-sql-4.5:4[sqlite]
+	dev-db/sqlite[fts3]
 	>=media-libs/taglib-1.6
-	media-libs/liblastfm
 	>=dev-libs/glib-2.24.1-r1:2
 	dev-libs/libxml2
+	ayatana? ( dev-libs/libindicate-qt )
 	gstreamer? ( ${GST_COMMON_DEPEND} )
 	phonon? ( x11-libs/qt-phonon:4 )
 	vlc? ( <=media-video/vlc-1.0.9999 )
@@ -48,13 +49,9 @@ COMMON_DEPEND="
 			app-pda/usbmuxd
 		)
 	)
+	lastfm? ( media-libs/liblastfm )
 	mtp? ( >=media-libs/libmtp-1.0.0 )
 	projectm? ( media-libs/glew )
-	soundmenu? ( dev-libs/libindicate-qt )
-	system-sqlite? (
-		dev-db/sqlite[fts3]
-		!>=x11-libs/qt-sql-4.7:4
-	)
 "
 # now only presets are used, libprojectm is internal
 # http://code.google.com/p/clementine-player/source/browse/#svn/trunk/3rdparty/libprojectm/patches
@@ -89,17 +86,18 @@ src_configure() {
 		use linguas_${x} && langs+=" ${x}"
 	done
 
-	local mycmakeargs=(
+	mycmakeargs=(
 		-DLINGUAS="${langs}"
-		"-DBUNDLE_PROJECTM_PRESETS=OFF"
+		-DBUNDLE_PROJECTM_PRESETS=OFF
 		$(cmake-utils_use ipod ENABLE_LIBGPOD)
 		$(cmake-utils_use iphone ENABLE_IMOBILEDEVICE)
+		$(cmake-utils_use lastfm ENABLE_LIBLASTFM)
 		$(cmake-utils_use mtp ENABLE_LIBMTP)
-		"-DENABLE_GIO=ON"
+		-DENABLE_GIO=ON
 		$(cmake-utils_use wiimote ENABLE_WIIMOTEDEV)
 		$(cmake-utils_use projectm ENABLE_VISUALISATIONS)
-		$(cmake-utils_use soundmenu ENABLE_SOUNDMENU)
-		$(cmake-utils_use !system-sqlite STATIC_SQLITE)
+		$(cmake-utils_use ayatana ENABLE_SOUNDMENU)
+		-DSTATIC_SQLITE=OFF
 		$(cmake-utils_use gstreamer ENGINE_GSTREAMER_ENABLED)
 		$(cmake-utils_use phonon ENGINE_QT_PHONON_ENABLED)
 		$(cmake-utils_use vlc ENGINE_LIBVLC_ENABLED)
@@ -108,7 +106,7 @@ src_configure() {
 
 	if use !phonon && use !vlc && use !xine; then
 		mycmakeargs+=(
-			"-DENGINE_GSTREAMER_ENABLED=ON"
+			-DENGINE_GSTREAMER_ENABLED=ON
 			)
 	fi
 

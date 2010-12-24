@@ -7,12 +7,11 @@
     <name>Nikoli</name>
   </maintainer>
   <use>
+    <flag name="ayatana">Build in support for Ayatana notification using the libindicate-qt plugin.</flag>
     <flag name="iphone">Enable support for iPod Touch, iPhone, iPad</flag>
+    <flag name="lastfm">Use liblastfm for fetching song info, scrobbling and radio streams</flag>
     <flag name="phonon">Enable support for Phonon engine</flag>
     <flag name='projectm'>Build with ProjectM visualization</flag>
-    <flag name='soundmenu'>Enable support for the sound menu</flag>
-    <flag name='system-sqlite'>Use the system-wide <pkg>dev-db/sqlite</pkg>
-                installation</flag>
     <flag name="vlc">Enable support for VLC engine</flag>
     <flag name="wiimote">Enable support for Wii remote</flag>
   </use>

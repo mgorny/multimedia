@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/clementine/clementine-0.6.ebuild,v 1.1 2010/12/18 21:05:19 ssuominen Exp $
 
 EAPI=2
 
@@ -8,15 +8,14 @@ LANGS=" ar be bg br ca cs cy da de el en_CA en_GB eo es et eu fi fr gl he hi hu 
 
 inherit cmake-utils gnome2-utils
 
-MY_PV="0.5.90"
 DESCRIPTION="A modern music player and library organizer based on Amarok 1.4 and Qt4"
 HOMEPAGE="http://www.clementine-player.org/ http://code.google.com/p/clementine-player/"
-SRC_URI="http://clementine-player.googlecode.com/files/${P/_/}-1.tar.gz"
+SRC_URI="http://clementine-player.googlecode.com/files/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="iphone ipod mtp projectm soundmenu wiimote"
+IUSE="ayatana iphone ipod +lastfm mtp projectm wiimote"
 IUSE+="${LANGS// / linguas_}"
 
 COMMON_DEPEND="
@@ -25,11 +24,11 @@ COMMON_DEPEND="
 	>=x11-libs/qt-sql-4.5:4[sqlite]
 	dev-db/sqlite[fts3]
 	>=media-libs/taglib-1.6
-	media-libs/liblastfm
 	>=dev-libs/glib-2.24.1-r1:2
 	dev-libs/libxml2
 	>=media-libs/gstreamer-0.10
 	>=media-libs/gst-plugins-base-0.10
+	ayatana? ( dev-libs/libindicate-qt )
 	ipod? (
 		>=media-libs/libgpod-0.7.92
 		iphone? (
@@ -38,9 +37,9 @@ COMMON_DEPEND="
 			app-pda/usbmuxd
 		)
 	)
+	lastfm? ( media-libs/liblastfm )
 	mtp? ( >=media-libs/libmtp-1.0.0 )
 	projectm? ( media-libs/glew )
-	soundmenu? ( dev-libs/libindicate-qt )
 "
 # now only presets are used, libprojectm is internal
 # http://code.google.com/p/clementine-player/source/browse/#svn/trunk/3rdparty/libprojectm/patches
@@ -62,7 +61,7 @@ DOCS="Changelog TODO"
 
 MAKEOPTS="${MAKEOPTS} -j1"
 
-S="${WORKDIR}/${PN}-${MY_PV}"
+PATCHES=( "${FILESDIR}"/${P}-optional-liblastfm.patch )
 
 src_configure() {
 	# linguas
@@ -72,21 +71,22 @@ src_configure() {
 	done
 
 	# Upstream supports only gstreamer engine, other engines are unstable and lacking features.
-	local mycmakeargs=(
+	mycmakeargs=(
 		-DLINGUAS="${langs}"
-		"-DBUNDLE_PROJECTM_PRESETS=OFF"
+		-DBUNDLE_PROJECTM_PRESETS=OFF
 		$(cmake-utils_use ipod ENABLE_LIBGPOD)
 		$(cmake-utils_use iphone ENABLE_IMOBILEDEVICE)
+		$(cmake-utils_use lastfm ENABLE_LIBLASTFM)
 		$(cmake-utils_use mtp ENABLE_LIBMTP)
-		"-DENABLE_GIO=ON"
+		-DENABLE_GIO=ON
 		$(cmake-utils_use wiimote ENABLE_WIIMOTEDEV)
 		$(cmake-utils_use projectm ENABLE_VISUALISATIONS)
-		$(cmake-utils_use soundmenu ENABLE_SOUNDMENU)
-		"-DSTATIC_SQLITE=OFF"
-		"-DENGINE_GSTREAMER_ENABLED=ON"
-		"-DENGINE_QT_PHONON_ENABLED=OFF"
-		"-DENGINE_LIBVLC_ENABLED=OFF"
-		"-DENGINE_LIBXINE_ENABLED=OFF"
+		$(cmake-utils_use ayatana ENABLE_SOUNDMENU)
+		-DSTATIC_SQLITE=OFF
+		-DENGINE_GSTREAMER_ENABLED=ON
+		-DENGINE_QT_PHONON_ENABLED=OFF
+		-DENGINE_LIBVLC_ENABLED=OFF
+		-DENGINE_LIBXINE_ENABLED=OFF
 		)
 
 	cmake-utils_src_configure
