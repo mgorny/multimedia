@@ -2,6 +2,12 @@
 # Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*mplayer-uau-1.0_rc4_p20101220 (25 Dec 2010)
+
+  25 Dec 2010; Nikoli <nikoli@lavabit.com>
+  +mplayer-uau-1.0_rc4_p20101220.ebuild:
+  new snapshot
+
   25 Dec 2010; Nikoli <nikoli@lavabit.com> mplayer-uau-9999.ebuild:
   set version in archive
 
