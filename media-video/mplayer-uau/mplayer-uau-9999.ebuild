@@ -8,9 +8,6 @@ EAPI=3
 
 inherit toolchain-funcs eutils flag-o-matic multilib base ${VCS_ECLASS}
 
-# BUMP ME PLZ, NO COOKIES OTHERWISE
-[[ ${PV} != *9999* ]] && MPLAYER_REVISION="GIT-r32518-fe3c481"
-
 namesuf="${PN/mplayer/}"
 
 IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +ass bidi bindist bl bluray
@@ -290,10 +287,6 @@ src_prepare() {
 			mplayer/libfaad2 \
 			mplayer/libdvdcss \
 		|| die
-	else
-		# Set version #
-		echo "${MPLAYER_REVISION}" \
-			> mplayer/VERSION || die "set vesrion failed"
 	fi
 
 	if use external-ffmpeg; then
