@@ -29,7 +29,6 @@ for x in ${VIDEO_CARDS}; do
 	IUSE+=" video_cards_${x}"
 done
 
-RESTRICT="nomirror"
 FONT_URI="
 	mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
 	mirror://mplayer/releases/fonts/font-arial-iso-8859-2.tar.bz2

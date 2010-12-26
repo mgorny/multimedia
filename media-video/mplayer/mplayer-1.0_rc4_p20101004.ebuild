@@ -29,7 +29,6 @@ done
 
 BLUV="1.7"
 SVGV="1.9.17"
-RESTRICT="nomirror"
 AMR_URI="http://www.3gpp.org/ftp/Specs/archive"
 FONT_URI="
 	mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
