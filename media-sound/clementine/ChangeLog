@@ -2,6 +2,11 @@
 # Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  26 Dec 2010; Nikoli <nikoli@lavabit.com> clementine-0.6-r2.ebuild,
+  files/clementine-0.6-optional-dbus-devicekit.patch,
+  clementine-9999.ebuild, metadata.xml:
+  upstream accepted dbus patch, removed other engines
+
 *clementine-0.6-r2 (25 Dec 2010)
 
   25 Dec 2010; Nikoli <nikoli@lavabit.com> +clementine-0.6-r2.ebuild,

@@ -15,32 +15,20 @@ ESVN_REPO_URI="http://clementine-player.googlecode.com/svn/trunk"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="ayatana +gstreamer iphone ipod +lastfm mtp -phonon projectm -vlc wiimote -xine"
+IUSE="ayatana +dbus iphone ipod +lastfm mtp projectm +udev wiimote"
 IUSE+="${LANGS// / linguas_}"
 
-GST_COMMON_DEPEND="
-	>=media-libs/gstreamer-0.10
-	>=media-libs/gst-plugins-base-0.10
-"
-GST_RDEPEND="
-	>=media-plugins/gst-plugins-meta-0.10
-	>=media-plugins/gst-plugins-gio-0.10
-	>=media-plugins/gst-plugins-soup-0.10
-"
 COMMON_DEPEND="
-	>=x11-libs/qt-gui-4.5:4[dbus]
+	>=x11-libs/qt-gui-4.5:4[dbus?]
 	>=x11-libs/qt-opengl-4.5:4
 	>=x11-libs/qt-sql-4.5:4[sqlite]
 	dev-db/sqlite[fts3]
 	>=media-libs/taglib-1.6
 	>=dev-libs/glib-2.24.1-r1:2
 	dev-libs/libxml2
+	>=media-libs/gstreamer-0.10
+	>=media-libs/gst-plugins-base-0.10
 	ayatana? ( dev-libs/libindicate-qt )
-	gstreamer? ( ${GST_COMMON_DEPEND} )
-	phonon? ( x11-libs/qt-phonon:4 )
-	vlc? ( <=media-video/vlc-1.0.9999 )
-	xine? ( media-libs/xine-lib )
-	!phonon? ( !vlc? ( !xine? ( ${GST_COMMON_DEPEND} ) ) )
 	ipod? (
 		>=media-libs/libgpod-0.7.92
 		iphone? (
@@ -57,10 +45,12 @@ COMMON_DEPEND="
 # http://code.google.com/p/clementine-player/source/browse/#svn/trunk/3rdparty/libprojectm/patches
 # r1966 "Compile with a static sqlite by default, since Qt 4.7 doesn't seem to expose the symbols we need to use FTS"
 RDEPEND="${COMMON_DEPEND}
+	dbus? ( udev? ( sys-fs/udisks ) )
 	mtp? ( gnome-base/gvfs )
 	projectm? ( >=media-libs/libprojectm-1.2.0 )
-	gstreamer? ( ${GST_RDEPEND} )
-	!phonon? ( !vlc? ( !xine? ( ${GST_RDEPEND} ) ) )
+	>=media-plugins/gst-plugins-meta-0.10
+	>=media-plugins/gst-plugins-gio-0.10
+	>=media-plugins/gst-plugins-soup-0.10
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-libs/boost-1.39
@@ -72,13 +62,6 @@ DOCS="Changelog TODO"
 
 MAKEOPTS="${MAKEOPTS} -j1"
 
-pkg_setup() {
-	if use phonon || use vlc || use xine; then
-		ewarn "Only GStreamer engine is officially supported."
-		ewarn "Other engines are unstable and lacking features."
-	fi
-}
-
 src_configure() {
 	# linguas
 	local langs x
@@ -89,6 +72,8 @@ src_configure() {
 	mycmakeargs=(
 		-DLINGUAS="${langs}"
 		-DBUNDLE_PROJECTM_PRESETS=OFF
+		$(cmake-utils_use dbus ENABLE_DBUS)
+		$(cmake-utils_use udev ENABLE_DEVICEKIT)
 		$(cmake-utils_use ipod ENABLE_LIBGPOD)
 		$(cmake-utils_use iphone ENABLE_IMOBILEDEVICE)
 		$(cmake-utils_use lastfm ENABLE_LIBLASTFM)
@@ -98,17 +83,7 @@ src_configure() {
 		$(cmake-utils_use projectm ENABLE_VISUALISATIONS)
 		$(cmake-utils_use ayatana ENABLE_SOUNDMENU)
 		-DSTATIC_SQLITE=OFF
-		$(cmake-utils_use gstreamer ENGINE_GSTREAMER_ENABLED)
-		$(cmake-utils_use phonon ENGINE_QT_PHONON_ENABLED)
-		$(cmake-utils_use vlc ENGINE_LIBVLC_ENABLED)
-		$(cmake-utils_use xine ENGINE_LIBXINE_ENABLED)
 		)
-
-	if use !phonon && use !vlc && use !xine; then
-		mycmakeargs+=(
-			-DENGINE_GSTREAMER_ENABLED=ON
-			)
-	fi
 
 	cmake-utils_src_configure
 }

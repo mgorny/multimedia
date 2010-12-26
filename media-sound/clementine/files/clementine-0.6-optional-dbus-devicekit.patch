@@ -47,7 +47,7 @@ index 34f6951..b5b38e9 100644
  summary_add("Wiimote support" ENABLE_WIIMOTEDEV)
  summary_add("Visualisations" ENABLE_VISUALISATIONS)
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 530ff23..e327701 100644
+index 530ff23..ac20130 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
 @@ -557,7 +557,7 @@ else(APPLE)
@@ -63,13 +63,19 @@ index 530ff23..e327701 100644
        dbus/notification)
  
    # DeviceKit DBUS interfaces
+-  qt4_add_dbus_interface(SOURCES
+-      dbus/org.freedesktop.UDisks.xml
+-      dbus/udisks)
+-  qt4_add_dbus_interface(SOURCES
+-      dbus/org.freedesktop.UDisks.Device.xml
+-      dbus/udisksdevice)
 +  if(HAVE_DEVICEKIT)
-   qt4_add_dbus_interface(SOURCES
-       dbus/org.freedesktop.UDisks.xml
-       dbus/udisks)
-   qt4_add_dbus_interface(SOURCES
-       dbus/org.freedesktop.UDisks.Device.xml
-       dbus/udisksdevice)
++    qt4_add_dbus_interface(SOURCES
++        dbus/org.freedesktop.UDisks.xml
++        dbus/udisks)
++    qt4_add_dbus_interface(SOURCES
++        dbus/org.freedesktop.UDisks.Device.xml
++        dbus/udisksdevice)
 +  endif(HAVE_DEVICEKIT)
  
    # MPRIS source
@@ -78,9 +84,11 @@ index 530ff23..e327701 100644
    endif(ENABLE_WIIMOTEDEV)
  
    # DeviceKit lister source
+-  list(APPEND SOURCES devices/devicekitlister.cpp)
+-  list(APPEND HEADERS devices/devicekitlister.h)
 +  if(HAVE_DEVICEKIT)
-   list(APPEND SOURCES devices/devicekitlister.cpp)
-   list(APPEND HEADERS devices/devicekitlister.h)
++    list(APPEND SOURCES devices/devicekitlister.cpp)
++    list(APPEND HEADERS devices/devicekitlister.h)
 +  endif(HAVE_DEVICEKIT)
  
    # Gnome Screensaver DBus interface
@@ -205,10 +213,10 @@ index 7e25d1a..e899c63 100644
    uint notification_id_;
    QDateTime last_notification_time_;
 diff --git a/src/widgets/osd_x11.cpp b/src/widgets/osd_x11.cpp
-index b87e0ad..d1d26d6 100644
+index b87e0ad..6ea482b 100644
 --- a/src/widgets/osd_x11.cpp
 +++ b/src/widgets/osd_x11.cpp
-@@ -16,11 +16,13 @@
+@@ -16,10 +16,12 @@
  */
  
  #include "osd.h"
@@ -216,23 +224,21 @@ index b87e0ad..d1d26d6 100644
  
 -#include <QCoreApplication>
  #include <QtDebug>
--#include <QTextDocument>
 +
 +#ifdef HAVE_DBUS
-+  #include "dbus/notification.h"
-+  #include <QCoreApplication>
-+  #include <QTextDocument>
++#include "dbus/notification.h"
++#include <QCoreApplication>
+ #include <QTextDocument>
  
  using boost::scoped_ptr;
- 
 @@ -52,8 +54,10 @@ const QDBusArgument& operator>> (const QDBusArgument& arg, QImage& image) {
    Q_ASSERT(0);
    return arg;
  }
-+#endif
++#endif // HAVE_DBUS
  
  void OSD::Init() {
-+  #ifdef HAVE_DBUS
++#ifdef HAVE_DBUS
    interface_.reset(new OrgFreedesktopNotificationsInterface(
        OrgFreedesktopNotificationsInterface::staticInterfaceName(),
        "/org/freedesktop/Notifications",
@@ -240,15 +246,15 @@ index b87e0ad..d1d26d6 100644
    }
  
    notification_id_ = 0;
-+  #endif
++#endif // HAVE_DBUS
  }
  
  bool OSD::SupportsNativeNotifications() {
-+  #ifdef HAVE_DBUS
++#ifdef HAVE_DBUS
    return true;
-+  #else
++#else
 +  return false;
-+  #endif
++#endif
  }
  
  bool OSD::SupportsTrayPopups() {
@@ -256,7 +262,7 @@ index b87e0ad..d1d26d6 100644
  
  void OSD::ShowMessageNative(const QString& summary, const QString& message,
                              const QString& icon, const QImage& image) {
-+  #ifdef HAVE_DBUS
++#ifdef HAVE_DBUS
    QVariantMap hints;
    if (!image.isNull()) {
      hints["image_data"] = QVariant(image);
@@ -264,9 +270,9 @@ index b87e0ad..d1d26d6 100644
    QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher(reply, this);
    connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
        SLOT(CallFinished(QDBusPendingCallWatcher*)));
-+  #else
-+    qWarning() << __PRETTY_FUNCTION__ << ": NOT IMPLEMENTED";
-+  #endif
++#else // HAVE_DBUS
++  qWarning() << __PRETTY_FUNCTION__ << ": NOT IMPLEMENTED";
++#endif // HAVE_DBUS
  }
  
 +#ifdef HAVE_DBUS
