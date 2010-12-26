@@ -25,7 +25,6 @@
 		<flag name="rtmp">Enable Real Time Messaging Protocol using librtmp</flag>
 		<flag name="schroedinger">Enable Dirac video support (an advanced royalty-free video compression format) via libschroedinger (high-speed implementation in C of the Dirac codec).</flag>
 		<flag name="ssse3">faster floating point optimization for SSSE3 capable chips (Intel Core 2 and later chips)</flag>
-		<flag name="tools">Enable tools (ffmpeg, ffplay, ffprobe, ffserver)</flag>
 		<flag name="vaapi">Enables VAAPI (Video Acceleration API) for hardware decoding</flag>
 		<flag name="vdpau">Enables VDPAU decoders (requires nVidia video cards to offload CPU processing to video card</flag>
 		<flag name="vpx">Enables vp8 codec support using libvpx</flag>
