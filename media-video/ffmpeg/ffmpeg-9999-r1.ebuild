@@ -1,6 +1,6 @@
 # Copyright 1999-2010 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999.ebuild,v 1.26 2010/11/07 20:36:13 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999.ebuild,v 1.27 2010/11/19 16:48:47 aballier Exp $
 
 EAPI="2"
 
@@ -28,7 +28,7 @@ SLOT="0"
 if [ "${PV#9999}" = "${PV}" ] ; then
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
-IUSE="+3dnow +3dnowext alsa altivec amr bindist +bzip2 cpudetection custom-cflags debug dirac doc +encode faac ffmpeg-mt frei0r gsm +hardcoded-tables ieee1394 jack jpeg2k +mmx +mmxext mp3 network oss pic qt-faststart rtmp schroedinger sdl speex +ssse3 static-libs test theora threads +tools v4l v4l2 vaapi vdpau vorbis vpx X x264 xvid +zlib"
+IUSE="+3dnow +3dnowext alsa altivec amr bindist +bzip2 cpudetection custom-cflags debug dirac doc +encode faac ffmpeg-mt frei0r gsm +hardcoded-tables ieee1394 jack jpeg2k +mmx +mmxext mp3 network oss pic qt-faststart rtmp schroedinger sdl speex +ssse3 static-libs test theora threads v4l v4l2 vaapi vdpau vorbis vpx X x264 xvid +zlib"
 
 VIDEO_CARDS="nvidia"
 
@@ -54,10 +54,10 @@ RDEPEND="
 	ieee1394? ( media-libs/libdc1394 sys-libs/libraw1394 )
 	jack? ( media-sound/jack-audio-connection-kit )
 	jpeg2k? ( >=media-libs/openjpeg-1.3-r2 )
-	rtmp? ( media-video/rtmpdump )
+	rtmp? ( >=media-video/rtmpdump-2.2f )
+	sdl? ( >=media-libs/libsdl-1.2.13-r1[audio,alsa?,oss?,video,X] )
 	schroedinger? ( media-libs/schroedinger )
 	speex? ( >=media-libs/speex-1.2_beta3 )
-	tools? ( sdl? ( >=media-libs/libsdl-1.2.13-r1[audio,alsa?,oss?,video,X] ) )
 	vaapi? ( x11-libs/libva[video_cards_nvidia?] )
 	video_cards_nvidia? ( vdpau? ( x11-libs/libvdpau ) )
 	vpx? ( media-libs/libvpx )
@@ -124,12 +124,6 @@ src_configure() {
 	use bzip2 || myconf="${myconf} --disable-bzlib"
 	use sdl || myconf="${myconf} --disable-ffplay"
 	use static-libs || myconf="${myconf} --disable-static"
-	use tools || myconf="${myconf}
-		--disable-ffmpeg
-		--disable-ffplay
-		--disable-ffprobe
-		--disable-ffserver
-		"
 
 	use custom-cflags && myconf="${myconf} --disable-optimizations"
 	use cpudetection && myconf="${myconf} --enable-runtime-cpudetect"
@@ -275,11 +269,10 @@ src_compile() {
 }
 
 src_install() {
-	use tools && Tman+="install-man" || Tman=""
-	emake DESTDIR="${D}" install ${Tman} || die
+	emake DESTDIR="${D}" install install-man || die
 
 	# until fixed upstream
-	if use tools && { use !encode || use !x264; } ; then
+	if use !encode || use !x264; then
 		rm -f "${D}"/usr/share/ffmpeg/libx264*.ffpreset
 		rmdir "${D}"/usr/share/ffmpeg
 	fi
