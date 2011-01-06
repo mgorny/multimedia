@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -11,7 +11,7 @@ else
 	V_ECLASS="versionator"
 fi
 
-inherit base eutils multilib toolchain-funcs ${V_ECLASS}
+inherit eutils multilib toolchain-funcs ${V_ECLASS}
 
 if [ "${PV#9999}" = "${PV}" ] ; then
 	MY_P="x264-snapshot-$(get_version_component_range 3)-2245"
@@ -50,11 +50,13 @@ if [ "${PV#9999}" = "${PV}" ] ; then
 fi
 
 src_prepare() {
-	local patch_static
-	use static && patch_static="static-"
+	epatch "${FILESDIR}"/${PN}-nostrip.patch
 
-	epatch "${FILESDIR}"/${PN}-nostrip.patch \
-		"${FILESDIR}"/${PN}-nolib-${patch_static}20101029.patch
+	if use static; then
+		epatch "${FILESDIR}/${PN}-nolib-static-20101130.patch"
+	else
+		epatch "${FILESDIR}/${PN}-nolib-20101130.patch"
+	fi
 }
 
 src_configure() {
@@ -71,7 +73,7 @@ src_configure() {
 		$(use_enable ffmpeg lavf) \
 		$(use_enable ffmpeg swscale) \
 		$(use_enable mp4 gpac) \
-		$(use_enable threads pthread) \
+		$(use_enable threads thread) \
 		$(use_enable visualize) \
 		--extra-asflags="${ASFLAGS}" \
 		--extra-cflags="${CFLAGS}" \
@@ -79,4 +81,8 @@ src_configure() {
 		--host="${CHOST}" \
 		${myconf} \
 		|| die
+}
+
+src_install() {
+	emake DESTDIR="${D}" install || die
 }

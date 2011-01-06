@@ -1,19 +1,8 @@
-Index: x264-snapshot-20101029-2245/Makefile
-===================================================================
---- x264-snapshot-20101029-2245.orig/Makefile
-+++ x264-snapshot-20101029-2245/Makefile
-@@ -135,8 +135,8 @@ libx264.a: .depend $(OBJS) $(OBJASM)
- $(SONAME): .depend $(OBJS) $(OBJASM) $(OBJSO)
- 	$(CC) -shared -o $@ $(OBJS) $(OBJASM) $(OBJSO) $(SOFLAGS) $(LDFLAGS)
- 
--x264$(EXE): $(OBJCLI) libx264.a
--	$(CC) -o $@ $+ $(LDFLAGSCLI) $(LDFLAGS)
-+x264$(EXE): $(OBJCLI)
-+	$(CC) -o $@ $+ $(LDFLAGSCLI) $(LDFLAGS) `pkg-config --libs x264`
- 
- checkasm: tools/checkasm.o libx264.a
- 	$(CC) -o $@ $+ $(LDFLAGS)
-@@ -203,21 +203,7 @@ distclean: clean
+diff --git a/Makefile b/Makefile
+index a66a9ee..cbae19b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -214,22 +214,7 @@ distclean: clean
  
  install: x264$(EXE) $(SONAME)
  	install -d $(DESTDIR)$(bindir)
@@ -21,6 +10,7 @@ Index: x264-snapshot-20101029-2245/Makefile
 -	install -d $(DESTDIR)$(libdir)
 -	install -d $(DESTDIR)$(libdir)/pkgconfig
 -	install -m 644 x264.h $(DESTDIR)$(includedir)
+-	install -m 644 x264_config.h $(DESTDIR)$(includedir)
 -	install -m 644 libx264.a $(DESTDIR)$(libdir)
 -	install -m 644 x264.pc $(DESTDIR)$(libdir)/pkgconfig
  	install x264$(EXE) $(DESTDIR)$(bindir)
@@ -34,4 +24,4 @@ Index: x264-snapshot-20101029-2245/Makefile
 -	$(if $(IMPLIBNAME), install -m 644 $(IMPLIBNAME) $(DESTDIR)$(libdir))
  
  uninstall:
- 	rm -f $(DESTDIR)$(includedir)/x264.h $(DESTDIR)$(libdir)/libx264.a
+ 	rm -f $(DESTDIR)$(includedir)/x264.h $(DESTDIR)$(includedir)/x264_config.h $(DESTDIR)$(libdir)/libx264.a
