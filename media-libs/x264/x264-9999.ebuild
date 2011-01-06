@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -65,7 +65,7 @@ src_configure() {
 		--disable-swscale \
 		--disable-ffms \
 		--disable-gpac \
-		$(use_enable threads pthread) \
+		$(use_enable threads thread) \
 		--enable-pic \
 		--enable-shared \
 		--extra-asflags="${ASFLAGS}" \

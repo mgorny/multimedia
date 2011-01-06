@@ -1,8 +1,11 @@
 # ChangeLog for media-libs/x264
-# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
 x264-9999 (10 Jun 2010)
+
+  06 Jan 2011; Nikoli <nikoli@lavabit.com> x264-9999.ebuild:
+  fix USE threads
 
   03 Nov 2010; Nikoli <nikoli@lavabit.com> x264-9999.ebuild:
   simplified version bumping
