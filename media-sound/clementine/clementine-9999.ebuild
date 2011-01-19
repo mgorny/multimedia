@@ -1,10 +1,10 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=2
+EAPI=3
 
-LANGS=" ar be bg br ca cs cy da de el en_CA en_GB eo es et eu fi fr gl he hi hu it ja kk lt nb nl oc pl pt_BR pt ro ru sk sl sr sv tr uk zh_CN zh_TW"
+LANGS=" ar be bg br ca cs cy da de el en_CA en_GB eo es et eu fi fr gl he hi hr hu it ja kk lt nb nl oc pl pt pt_BR ro ru sk sl sr sv tr uk zh_CN zh_TW"
 
 inherit cmake-utils gnome2-utils subversion
 
@@ -15,7 +15,7 @@ ESVN_REPO_URI="http://clementine-player.googlecode.com/svn/trunk"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="ayatana +dbus iphone ipod +lastfm mtp projectm +udev wiimote"
+IUSE="archive ayatana +dbus iphone ipod +lastfm mtp musicbrainz projectm python remote +udev wiimote"
 IUSE+="${LANGS// / linguas_}"
 
 COMMON_DEPEND="
@@ -28,6 +28,7 @@ COMMON_DEPEND="
 	dev-libs/libxml2
 	>=media-libs/gstreamer-0.10
 	>=media-libs/gst-plugins-base-0.10
+	archive? ( >=app-arch/libarchive-2.8.3 )
 	ayatana? ( dev-libs/libindicate-qt )
 	ipod? (
 		>=media-libs/libgpod-0.7.92
@@ -39,7 +40,10 @@ COMMON_DEPEND="
 	)
 	lastfm? ( media-libs/liblastfm )
 	mtp? ( >=media-libs/libmtp-1.0.0 )
+	musicbrainz? ( >=media-libs/tunepimp-0.5 )
 	projectm? ( media-libs/glew )
+	python? ( dev-python/PyQt4 )
+	remote? ( dev-libs/qjson )
 "
 # now only presets are used, libprojectm is internal
 # http://code.google.com/p/clementine-player/source/browse/#svn/trunk/3rdparty/libprojectm/patches
@@ -77,12 +81,17 @@ src_configure() {
 		$(cmake-utils_use ipod ENABLE_LIBGPOD)
 		$(cmake-utils_use iphone ENABLE_IMOBILEDEVICE)
 		$(cmake-utils_use lastfm ENABLE_LIBLASTFM)
+		$(cmake-utils_use archive ENABLE_SCRIPTING_ARCHIVES)
 		$(cmake-utils_use mtp ENABLE_LIBMTP)
+		$(cmake-utils_use musicbrainz ENABLE_LIBTUNEPIMP)
 		-DENABLE_GIO=ON
 		$(cmake-utils_use wiimote ENABLE_WIIMOTEDEV)
 		$(cmake-utils_use projectm ENABLE_VISUALISATIONS)
+		$(cmake-utils_use python ENABLE_SCRIPTING_PYTHON)
+		$(cmake-utils_use remote ENABLE_REMOTE)
 		$(cmake-utils_use ayatana ENABLE_SOUNDMENU)
 		-DSTATIC_SQLITE=OFF
+		-DPYQT_SIP_DIR="${EPREFIX}/usr/share/sip"
 		)
 
 	cmake-utils_src_configure
