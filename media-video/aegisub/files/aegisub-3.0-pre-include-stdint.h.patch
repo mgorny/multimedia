@@ -1,0 +1,14 @@
+Index: reporter/upload.cpp
+===================================================================
+--- reporter/upload.cpp	(revision 5002)
++++ reporter/upload.cpp	(revision 5003)
+@@ -19,7 +19,9 @@
+ /// @ingroup base io
+ 
+ #ifndef R_PRECOMP
++#include <stdint.h>
+ #include <stdlib.h>
++
+ #include <wx/file.h>
+ #endif
+ 
