@@ -1,6 +1,9 @@
 # ChangeLog for media-libs/libbluray
-# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+  31 Jan 2011; Nikoli <nikoli@lavabit.com> libbluray-9999.ebuild:
+  update deps
 
 *libbluray-0.0.1_pre20101214 (14 Dec 2010)
 

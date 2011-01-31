@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-libs/libbluray/libbluray-9999.ebuild,v 1.1 2010/07/17 02:55:14 beandog Exp $
 
@@ -16,9 +16,15 @@ SLOT="0"
 KEYWORDS=""
 IUSE="aacs java static-libs utils"
 
-DEPEND="java? ( virtual/jdk )"
-RDEPEND="${DEPEND}
+COMMON_DEPEND="
+	dev-libs/libxml2
+	java? ( virtual/jdk )
+"
+RDEPEND="${COMMON_DEPEND}
 	aacs? ( media-video/aacskeys )
+"
+DEPEND="${COMMON_DEPEND}
+	dev-util/pkgconfig
 "
 
 src_prepare() {
