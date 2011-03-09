@@ -1,0 +1,10 @@
+# ChangeLog for dev-libs/libechonest
+# Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+*libechonest-1.1.1 (09 Mar 2011)
+
+  09 Mar 2011; Nikoli <nikoli@lavabit.com> +libechonest-1.1.1.ebuild,
+  +metadata.xml:
+  initial ebuild
+
