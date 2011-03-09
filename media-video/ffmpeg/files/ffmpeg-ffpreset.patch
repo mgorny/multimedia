@@ -1,0 +1,35 @@
+From db4587e8f54fa5231bafe194465585e117a1ca5b Mon Sep 17 00:00:00 2001
+From: Nikoli <nikoli@lavabit.com>
+Date: Sun, 26 Dec 2010 20:43:04 +0300
+Subject: [PATCH] install libx264-*.ffpreset only when x264 is enabled
+
+---
+ Makefile |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 41240bc..18a7c98 100644
+--- a/Makefile
++++ b/Makefile
+@@ -34,7 +34,7 @@ FFLIBS-$(CONFIG_AVCORE)   += avcore
+ 
+ FFLIBS := avutil
+ 
+-DATA_FILES := $(wildcard $(SRC_DIR)/ffpresets/*.ffpreset)
++DATA_FILES := $(wildcard $(SRC_DIR)/ffpresets/libx264-*.ffpreset)
+ 
+ SKIPHEADERS = cmdutils_common_opts.h
+ 
+@@ -47,7 +47,8 @@ FF_DEP_LIBS  := $(DEP_LIBS)
+ ALL_TARGETS-$(CONFIG_DOC)       += documentation
+ 
+ ifdef PROGS
+-INSTALL_TARGETS-yes             += install-progs install-data
++INSTALL_TARGETS-yes             += install-progs
++INSTALL_TARGETS-$(CONFIG_LIBX264)   += install-data
+ INSTALL_TARGETS-$(CONFIG_DOC)   += install-man
+ endif
+ INSTALL_PROGS_TARGETS-$(CONFIG_SHARED) = install-libs
+-- 
+1.7.3.4
+

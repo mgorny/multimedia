@@ -1,13 +1,13 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999.ebuild,v 1.27 2010/11/19 16:48:47 aballier Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/ffmpeg/ffmpeg-9999.ebuild,v 1.30 2011/01/29 20:03:52 aballier Exp $
 
 EAPI="2"
 
 SCM=""
 if [ "${PV#9999}" != "${PV}" ] ; then
 	SCM="git"
-	EGIT_REPO_URI="git://git.ffmpeg.org/ffmpeg"
+	EGIT_REPO_URI="git://git.ffmpeg.org/ffmpeg.git"
 fi
 
 inherit eutils flag-o-matic multilib toolchain-funcs ${SCM}
@@ -89,11 +89,11 @@ src_unpack() {
 		if use ffmpeg-mt; then
 			cd "${S}"
 			EGIT_COMMIT="$(git submodule status -- libswscale|sed -e 's/^-\(.*\) .*/\1/')"
+			EGIT_REPO_URI="git://git.ffmpeg.org/libswscale"
+			EGIT_PROJECT="${PN}-libswscale"
+			S+="/libswscale"
+			git_fetch
 		fi
-		EGIT_REPO_URI="git://git.ffmpeg.org/libswscale"
-		EGIT_PROJECT="${PN}-libswscale"
-		S+="/libswscale"
-		git_fetch
 		S="${WORKDIR}/${P}"
 
 		cd "${WORKDIR}"
@@ -105,13 +105,15 @@ src_unpack() {
 src_prepare() {
 	# Snapshot
 	if [ "${PV%_p*}" != "${PV}" ] ; then
-		sed -e "s/UNKNOWN/git-svn-r${FFMPEG_REVISION}/" \
+		sed -e "s/UNKNOWN/git-r${FFMPEG_REVISION}/" \
 			-i version.sh || die
 	fi
 
 	if [ "${PV#9999}" = "${PV}" ] && use ffmpeg-mt ; then
 		epatch "${DISTDIR}/${P}-ffmpeg-mt.patch"
 	fi
+
+	epatch "${FILESDIR}"/${PN}-ffpreset.patch
 }
 
 src_configure() {
@@ -270,12 +272,6 @@ src_compile() {
 
 src_install() {
 	emake DESTDIR="${D}" install install-man || die
-
-	# until fixed upstream
-	if use !encode || use !x264; then
-		rm -f "${D}"/usr/share/ffmpeg/libx264*.ffpreset
-		rmdir "${D}"/usr/share/ffmpeg
-	fi
 
 	dodoc Changelog README INSTALL
 	dodoc doc/*
