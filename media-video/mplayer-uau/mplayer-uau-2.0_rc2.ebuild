@@ -20,7 +20,7 @@ radio +rar +real +rtc rtmp samba +shm +schroedinger +hardcoded-tables sdl +speex
 tga +theora threads +truetype +unicode v4l v4l2 vdpau
 +vorbis vpx win32codecs +X xanim xinerama +xscreensaver +xv xvmc
 "
-IUSE+=" +ffmpeg-mt -system-ffmpeg symlink"
+IUSE+=" system-ffmpeg symlink"
 
 VIDEO_CARDS="s3virge mga tdfx vesa"
 for x in ${VIDEO_CARDS}; do
@@ -37,7 +37,7 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_PROJECT="${PN}-build"
 	RELEASE_URI=""
 else
-	RELEASE_URI="mirror://gentoo/${P}.tar.xz"
+	RELEASE_URI="http://ftp.mplayer2.org/pub/release/mplayer2-build-${PV/_/-}.tar.xz"
 fi
 SRC_URI="${RELEASE_URI}
 	!truetype? ( ${FONT_URI} )
@@ -175,6 +175,7 @@ SLOT="0"
 LICENSE="GPL-2"
 if [[ ${PV} != *9999* ]]; then
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x86-solaris ~x64-macos"
+	S="${WORKDIR}/mplayer2"
 else
 	KEYWORDS=""
 fi
@@ -220,8 +221,11 @@ pkg_setup() {
 		ewarn "3dnowext mmx mmxext sse sse2 ssse3) are properly set."
 	fi
 
-	if use ffmpeg-mt && use system-ffmpeg; then
-		ewarn "USE flags ffmpeg-mt and system-ffmpeg are not compatible, system-ffmpeg will be used."
+	if use system-ffmpeg; then
+		ewarn "System ffmpeg will be used. If you want ffmpeg-mt, disable"
+		ewarn "\"system-ffmpeg\" or use ffmpeg package with \"ffmpeg-mt\" enabled."
+	else
+		ewarn "Internal ffmpeg-mt will be used. If you don't want it, enable \"system-ffmpeg\"."
 	fi
 }
 
@@ -236,13 +240,9 @@ src_unpack() {
 		S="${WORKDIR}/${P}"
 
 		if ! use system-ffmpeg; then
-			if use ffmpeg-mt; then
-				EGIT_BRANCH="mt"
-				EGIT_COMMIT="mt"
-				S+="/ffmpeg-mt"
-			else
-				S+="/ffmpeg"
-			fi
+			EGIT_BRANCH="mt"
+			EGIT_COMMIT="mt"
+			S+="/ffmpeg-mt"
 			EGIT_REPO_URI="git://repo.or.cz/FFMpeg-mirror/mplayer-patches.git"
 			EGIT_PROJECT="${PN}-ffmpeg"
 			git_fetch
@@ -291,14 +291,8 @@ src_prepare() {
 	if use system-ffmpeg; then
 		sed -e '/^mplayer: /s/ffmpeg//' \
 			-i Makefile || die
-		rm -rf ffmpeg ffmpeg-mt || die
+		rm -rf ffmpeg-mt || die
 	else
-		if use ffmpeg-mt; then
-			touch ffmpeg-mt-enabled || die "enable-mt failed"
-			rm -rf ffmpeg || die
-		else
-			rm -rf ffmpeg-mt || die
-		fi
 		sed -i \
 			-e "/'--cpu=host',/d" \
 			-e "/'--disable-debug',/d" \
