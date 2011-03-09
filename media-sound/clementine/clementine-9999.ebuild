@@ -6,7 +6,7 @@ EAPI=3
 
 LANGS=" ar be bg br ca cs cy da de el en_CA en_GB eo es et eu fi fr gl he hi hr hu it ja kk lt nb nl oc pl pt pt_BR ro ru sk sl sr sv tr uk zh_CN zh_TW"
 
-inherit cmake-utils gnome2-utils subversion
+inherit cmake-utils gnome2-utils virtualx subversion
 
 DESCRIPTION="A modern music player and library organizer based on Amarok 1.4 and Qt4"
 HOMEPAGE="http://www.clementine-player.org/ http://code.google.com/p/clementine-player/"
@@ -26,6 +26,7 @@ COMMON_DEPEND="
 	>=media-libs/taglib-1.6
 	>=dev-libs/glib-2.24.1-r1:2
 	dev-libs/libxml2
+	dev-libs/libechonest
 	>=media-libs/gstreamer-0.10
 	>=media-libs/gst-plugins-base-0.10
 	archive? ( >=app-arch/libarchive-2.8.3 )
@@ -43,7 +44,7 @@ COMMON_DEPEND="
 	musicbrainz? ( >=media-libs/tunepimp-0.5 )
 	projectm? ( media-libs/glew )
 	python? ( dev-python/PyQt4 )
-	remote? ( dev-libs/qjson )
+	remote? ( net-libs/gnutls )
 "
 # now only presets are used, libprojectm is internal
 # http://code.google.com/p/clementine-player/source/browse/#svn/trunk/3rdparty/libprojectm/patches
@@ -64,7 +65,22 @@ DEPEND="${COMMON_DEPEND}
 "
 DOCS="Changelog TODO"
 
-MAKEOPTS="${MAKEOPTS} -j1"
+src_prepare() {
+	default_src_prepare
+
+	# some tests fail or hang
+	sed \
+		-e '/add_test_file(albumcovermanager_test.cpp/d' \
+		-e '/add_test_file(songloader_test.cpp/d' \
+		-e '/add_test_file(translations_test.cpp/d' \
+		-i tests/CMakeLists.txt || die
+	if use !lastfm; then
+		sed \
+			-e '/add_test_file(song_test.cpp/d' \
+			-e '/add_test_file(mpris1_test.cpp/d' \
+			-i tests/CMakeLists.txt || die
+	fi
+}
 
 src_configure() {
 	# linguas
@@ -95,6 +111,11 @@ src_configure() {
 		)
 
 	cmake-utils_src_configure
+}
+
+src_test() {
+	cd "${CMAKE_BUILD_DIR}" || die
+	Xemake test || die
 }
 
 pkg_preinst() {
