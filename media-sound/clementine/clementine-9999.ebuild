@@ -70,16 +70,8 @@ src_prepare() {
 
 	# some tests fail or hang
 	sed \
-		-e '/add_test_file(albumcovermanager_test.cpp/d' \
-		-e '/add_test_file(songloader_test.cpp/d' \
 		-e '/add_test_file(translations_test.cpp/d' \
 		-i tests/CMakeLists.txt || die
-	if use !lastfm; then
-		sed \
-			-e '/add_test_file(song_test.cpp/d' \
-			-e '/add_test_file(mpris1_test.cpp/d' \
-			-i tests/CMakeLists.txt || die
-	fi
 }
 
 src_configure() {
