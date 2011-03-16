@@ -37,13 +37,13 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_PROJECT="${PN}-build"
 	RELEASE_URI=""
 else
-	RELEASE_URI="http://ftp.mplayer2.org/pub/release/mplayer2-build-${PV/_/-}.tar.xz"
+	RELEASE_URI="http://ftp.mplayer2.org/pub/release/${PN}-build-${PV/_/-}.tar.xz"
 fi
 SRC_URI="${RELEASE_URI}
 	!truetype? ( ${FONT_URI} )
 "
 
-DESCRIPTION="Media Player for Linux, Uoti Urpala's fork (aka mplayer2)"
+DESCRIPTION="Media Player for Linux, Uoti Urpala's fork"
 HOMEPAGE="http://www.mplayer2.org/"
 
 FONT_RDEPS="
@@ -175,7 +175,7 @@ SLOT="0"
 LICENSE="GPL-2"
 if [[ ${PV} != *9999* ]]; then
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~sparc-solaris ~x86-solaris ~x64-macos"
-	S="${WORKDIR}/mplayer2"
+	S="${WORKDIR}/${PN}"
 else
 	KEYWORDS=""
 fi

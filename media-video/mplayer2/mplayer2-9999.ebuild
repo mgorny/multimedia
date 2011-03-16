@@ -43,7 +43,7 @@ SRC_URI="${RELEASE_URI}
 	!truetype? ( ${FONT_URI} )
 "
 
-DESCRIPTION="Media Player for Linux, Uoti Urpala's fork (aka mplayer2)"
+DESCRIPTION="Media Player for Linux, Uoti Urpala's fork"
 HOMEPAGE="http://www.mplayer2.org/"
 
 FONT_RDEPS="
