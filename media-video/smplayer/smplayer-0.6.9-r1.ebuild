@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/smplayer/smplayer-0.6.9.ebuild,v 1.7 2010/04/18 17:08:54 nixnut Exp $
 
@@ -31,7 +31,7 @@ IUSE="debug"
 DEPEND="x11-libs/qt-gui:4"
 MPLAYER_USE="[ass,png]"
 RDEPEND="${DEPEND}
-	|| ( media-video/mplayer${MPLAYER_USE} media-video/mplayer-uau${MPLAYER_USE} )"
+	|| ( media-video/mplayer${MPLAYER_USE} media-video/mplayer2${MPLAYER_USE} )"
 
 src_prepare() {
 	# Force Ctrl+Q as default quit shortcut
