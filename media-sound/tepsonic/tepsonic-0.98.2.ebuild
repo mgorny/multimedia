@@ -5,16 +5,15 @@
 EAPI="2"
 LANGSLONG="cs_CZ"
 
-inherit cmake-utils qt4-r2 git
-
-EGIT_REPO_URI="git://git.gitorious.org/${PN}/${PN}.git"
+inherit cmake-utils qt4-r2
 
 DESCRIPTION="Simple small audio player written in C++ using Qt."
 HOMEPAGE="http://www.tepsonic.org"
+SRC_URI="http://www.tepsonic.org/files/${P}-src.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE="lastfm mysql +sqlite"
 
 RDEPEND="
