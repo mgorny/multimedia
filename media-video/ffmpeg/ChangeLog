@@ -2,6 +2,9 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  22 Mar 2011; Nikoli <nikoli@lavabit.com> ffmpeg-9999.ebuild:
+  sync with portage, libswscale submodule is part of ffmpeg-mt repo now
+
   09 Mar 2011; Nikoli <nikoli@lavabit.com> ffmpeg-9999.ebuild,
   +files/ffmpeg-ffpreset.patch:
   libswscale is part of ffmpeg repo, cosmetics
