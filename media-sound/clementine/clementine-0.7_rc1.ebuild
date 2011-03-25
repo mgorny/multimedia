@@ -6,16 +6,16 @@ EAPI=4
 
 LANGS=" ar be bg br ca cs cy da de el en_CA en_GB eo es et eu fi fr gl he hi hr hu is it ja kk lt lv nb nl oc pa pl pt pt_BR ro ru sk sl sr sv tr uk vi zh_CN zh_TW"
 
-inherit cmake-utils gnome2-utils virtualx subversion
+inherit cmake-utils gnome2-utils virtualx
 
 DESCRIPTION="A modern music player and library organizer based on Amarok 1.4 and Qt4"
 HOMEPAGE="http://www.clementine-player.org/ http://code.google.com/p/clementine-player/"
-ESVN_REPO_URI="http://clementine-player.googlecode.com/svn/trunk"
+SRC_URI="http://clementine-player.googlecode.com/files/${P/_r/r}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
-IUSE="archive ayatana +dbus iphone ipod +lastfm mtp projectm python remote +udev wiimote"
+KEYWORDS="~amd64 ~x86"
+IUSE="ayatana +dbus iphone ipod +lastfm mtp projectm +udev wiimote"
 IUSE+="${LANGS// / linguas_}"
 
 REQUIRED_USE="
@@ -35,7 +35,6 @@ COMMON_DEPEND="
 	dev-libs/libechonest
 	>=media-libs/gstreamer-0.10
 	>=media-libs/gst-plugins-base-0.10
-	archive? ( >=app-arch/libarchive-2.8.3 )
 	ayatana? ( dev-libs/libindicate-qt )
 	ipod? (
 		>=media-libs/libgpod-0.7.92
@@ -48,8 +47,6 @@ COMMON_DEPEND="
 	lastfm? ( media-libs/liblastfm )
 	mtp? ( >=media-libs/libmtp-1.0.0 )
 	projectm? ( media-libs/glew )
-	python? ( dev-python/PyQt4 )
-	remote? ( net-libs/gnutls )
 "
 # now only presets are used, libprojectm is internal
 # http://code.google.com/p/clementine-player/source/browse/#svn/trunk/3rdparty/libprojectm/patches
@@ -70,8 +67,12 @@ DEPEND="${COMMON_DEPEND}
 "
 DOCS="Changelog TODO"
 
+S="${WORKDIR}/${P/_r/r}"
+
 src_prepare() {
 	default_src_prepare
+
+	epatch "${FILESDIR}"/${P}-tests-liblastfm.patch
 
 	# some tests fail or hang
 	sed \
@@ -86,6 +87,7 @@ src_configure() {
 		use linguas_${x} && langs+=" ${x}"
 	done
 
+	# scripting and remote are unstable, disable
 	mycmakeargs=(
 		-DLINGUAS="${langs}"
 		-DBUNDLE_PROJECTM_PRESETS=OFF
@@ -99,11 +101,10 @@ src_configure() {
 		$(cmake-utils_use wiimote ENABLE_WIIMOTEDEV)
 		$(cmake-utils_use projectm ENABLE_VISUALISATIONS)
 		$(cmake-utils_use ayatana ENABLE_SOUNDMENU)
-		$(cmake-utils_use python ENABLE_SCRIPTING_PYTHON)
-		$(cmake-utils_use archive ENABLE_SCRIPTING_ARCHIVES)
-		$(cmake-utils_use remote ENABLE_REMOTE)
+		-DENABLE_SCRIPTING_PYTHON=OFF
+		-DENABLE_SCRIPTING_ARCHIVES=OFF
+		-DENABLE_REMOTE=OFF
 		-DSTATIC_SQLITE=OFF
-		-DPYQT_SIP_DIR="${EPREFIX}/usr/share/sip"
 		)
 
 	cmake-utils_src_configure
