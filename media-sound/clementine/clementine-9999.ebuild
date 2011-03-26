@@ -32,7 +32,7 @@ COMMON_DEPEND="
 	>=media-libs/taglib-1.6
 	>=dev-libs/glib-2.24.1-r1:2
 	dev-libs/libxml2
-	dev-libs/libechonest
+	media-libs/libechonest
 	>=media-libs/gstreamer-0.10
 	>=media-libs/gst-plugins-base-0.10
 	archive? ( >=app-arch/libarchive-2.8.3 )
