@@ -15,11 +15,11 @@ ESVN_REPO_URI="http://clementine-player.googlecode.com/svn/trunk"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="archive ayatana +dbus iphone ipod +lastfm mtp projectm python remote +udev wiimote"
+IUSE="archive ayatana +dbus ios ipod +lastfm mtp projectm python remote +udev wiimote"
 IUSE+="${LANGS// / linguas_}"
 
 REQUIRED_USE="
-	iphone? ( ipod )
+	ios? ( ipod )
 	udev? ( dbus )
 	wiimote? ( dbus )
 "
@@ -39,7 +39,7 @@ COMMON_DEPEND="
 	ayatana? ( dev-libs/libindicate-qt )
 	ipod? (
 		>=media-libs/libgpod-0.7.92
-		iphone? (
+		ios? (
 			app-pda/libplist
 			>=app-pda/libimobiledevice-1.0
 			app-pda/usbmuxd
@@ -92,7 +92,7 @@ src_configure() {
 		$(cmake-utils_use dbus ENABLE_DBUS)
 		$(cmake-utils_use udev ENABLE_DEVICEKIT)
 		$(cmake-utils_use ipod ENABLE_LIBGPOD)
-		$(cmake-utils_use iphone ENABLE_IMOBILEDEVICE)
+		$(cmake-utils_use ios ENABLE_IMOBILEDEVICE)
 		$(cmake-utils_use lastfm ENABLE_LIBLASTFM)
 		$(cmake-utils_use mtp ENABLE_LIBMTP)
 		-DENABLE_GIO=ON
