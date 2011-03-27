@@ -21,7 +21,7 @@ RDEPEND="
 	>=x11-libs/qt-gui-4.5.0:4
 	>=x11-libs/qt-sql-4.5.0:4[mysql?,sqlite?]
 	x11-libs/libqxt
-	|| ( >=x11-libs/qt-phonon-4.5.0:4 media-sound/phonon )
+	|| ( >=x11-libs/qt-phonon-4.5.0:4 media-libs/phonon )
 	media-libs/taglib
 	lastfm? ( media-libs/lastfmlib )
 "

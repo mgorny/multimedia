@@ -18,7 +18,7 @@ IUSE=""
 DEPEND="
 	x11-libs/qt-gui:4[dbus]
 	x11-libs/qt-sql:4[sqlite]
-	|| ( x11-libs/qt-phonon:4 media-sound/phonon )
+	|| ( x11-libs/qt-phonon:4 media-libs/phonon )
 	media-libs/taglib
 "
 
