@@ -38,7 +38,7 @@ COMMON_DEPEND="
 	archive? ( >=app-arch/libarchive-2.8.3 )
 	ayatana? ( dev-libs/libindicate-qt )
 	ipod? (
-		>=media-libs/libgpod-0.7.92
+		>=media-libs/libgpod-0.8.0[ios?]
 		ios? (
 			app-pda/libplist
 			>=app-pda/libimobiledevice-1.0
@@ -71,8 +71,6 @@ DEPEND="${COMMON_DEPEND}
 DOCS="Changelog TODO"
 
 src_prepare() {
-	default_src_prepare
-
 	# some tests fail or hang
 	sed \
 		-e '/add_test_file(translations_test.cpp/d' \
@@ -87,6 +85,7 @@ src_configure() {
 	done
 
 	mycmakeargs=(
+		-DBUILD_WERROR=OFF
 		-DLINGUAS="${langs}"
 		-DBUNDLE_PROJECTM_PRESETS=OFF
 		$(cmake-utils_use dbus ENABLE_DBUS)
@@ -114,14 +113,6 @@ src_test() {
 	Xemake test
 }
 
-pkg_preinst() {
-	gnome2_icon_savelist
-}
-
-pkg_postinst() {
-	gnome2_icon_cache_update
-}
-
-pkg_postrm() {
-	gnome2_icon_cache_update
-}
+pkg_preinst() { gnome2_icon_savelist; }
+pkg_postinst() { gnome2_icon_cache_update; }
+pkg_postrm() { gnome2_icon_cache_update; }
