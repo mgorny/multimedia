@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-<herd>no-herd</herd>
+<herd>video</herd>
 <maintainer>
-	<email>nikoli@lavabit.com</email>
-	<name>Nikoli</name>
+	<email>media-video@gentoo.org</email>
 </maintainer>
 <longdescription lang="en">
 	This fork has several usefull features:
-	1) Multithreaded ffmpeg.
+	1) Uses ffmpeg-mt out of box.
 	2) Ability to change many settings staying paused.
 	3) Matroska external chapters support.
-	4) Ability to build with shared ffmpeg libraries.
+	4) Ability to cleanly build with shared libav libraries.
 </longdescription>
 <longdescription lang="ru">
 	Этот форк обладает рядом полезных возможностей:
@@ -41,7 +40,7 @@
 	<flag name="md5sum">Enables md5sum video output</flag>
 	<flag name="mmxext">Enables mmx2 support</flag>
 	<flag name="mng">MNG input support</flag>
-	<flag name="mpg123">Enable support for mp3 decoding over media-sound/mpg123.</flag>
+	<flag name="mp3">Enable support for mp3 decoding over <pkg>media-sound/mpg123</pkg> instead of relying on ffmpeg support.</flag>
 	<flag name="network">Enables network streaming support</flag>
 	<flag name="nut">Enables support for the NUT container format</flag>
 	<flag name="osdmenu">Enables support for on-screen display (OSD) menus</flag>
@@ -54,7 +53,8 @@
 	<flag name="rtmp">Enables RTMPDump Streaming Media support</flag>
 	<flag name="schroedinger">Enable Dirac video support (an advanced royalty-free video compression format) via libschroedinger (high-speed implementation in C of the Dirac codec).</flag>
 	<flag name="shm">Enable support for shm</flag>
-	<flag name="ssse3">faster floating point optimization for SSSE3 capable chips (Intel Core 2 and later chips)</flag>
+	<flag name="ssse3">Faster floating point optimization for SSSE3 capable chips (Intel Core 2 and later chips)</flag>
+	<flag name="symlink">Copy all binaries and configuration into locations occupied by <pkg>media-video/mplayer</pkg> and thus act like drop-in replacement.</flag>
 	<flag name="system-ffmpeg">Use shared FFmpeg libraries instead of static bundled ones. May not have ffmpeg-mt.</flag>
 	<flag name="tga">Enables Targa video output</flag>
 	<flag name="vdpau">Enables experimental VDPAU support (requires nVidia video cards) to offload MPEG2/MPEG4/VC1/WMV CPU processing to video card</flag>

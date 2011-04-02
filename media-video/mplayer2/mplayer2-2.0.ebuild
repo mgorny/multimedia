@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/media-video/mplayer2/mplayer2-2.0.ebuild,v 1.1 2011/03/28 22:59:02 lu_zero Exp $
 
 EAPI=4
 
@@ -14,7 +14,7 @@ IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +ass bidi bindist bl bluray
 bs2b +bzip2 cddb +cdio cdparanoia cpudetection custom-cpuopts custom-cflags debug dga +dirac
 directfb doc +dts +dv dvb +dvd +dvdnav dxr3 +enca esd +faad fbcon
 ftp gif ggi gsm +iconv ipv6 jack joystick jpeg jpeg2k kernel_linux ladspa
-libcaca lirc +live mad md5sum +mmx mmxext mng +mp3 mpg123 nas
+libcaca lirc +live mad md5sum +mmx mmxext mng +mp3 nas
 +network nut amr +opengl +osdmenu oss png pnm pulseaudio pvr +quicktime
 radio +rar +real +rtc rtmp samba +shm +schroedinger +hardcoded-tables sdl +speex sse sse2 ssse3
 tga +theora threads +truetype +unicode v4l v4l2 vdpau
@@ -43,7 +43,7 @@ SRC_URI="${RELEASE_URI}
 	!truetype? ( ${FONT_URI} )
 "
 
-DESCRIPTION="Media Player for Linux, Uoti Urpala's fork"
+DESCRIPTION="Media Player for Linux"
 HOMEPAGE="http://www.mplayer2.org/"
 
 FONT_RDEPS="
@@ -111,7 +111,7 @@ RDEPEND+="
 	live? ( media-plugins/live )
 	mad? ( media-libs/libmad )
 	mng? ( media-libs/libmng )
-	mpg123? ( media-sound/mpg123 )
+	mp3? ( media-sound/mpg123 )
 	nas? ( media-libs/nas )
 	nut? ( >=media-libs/libnut-661 )
 	png? ( media-libs/libpng )
@@ -317,7 +317,7 @@ src_prepare() {
 		${bash_scripts} || die
 
 	# We want mplayer${namesuf}
-	if [[ "${namesuf}" != "" ]]; then
+	if [[ -n ${namesuf} ]]; then
 		pushd mplayer
 		sed -e "/elif linux ; then/a\  _exesuf=\"${namesuf}\"" \
 			-i configure || die
@@ -408,7 +408,6 @@ src_configure() {
 	#############
 	# Subtitles #
 	#############
-	#
 	# SRT/ASS/SSA (subtitles) requires freetype support
 	# freetype support requires iconv
 	# iconv optionally can use unicode
@@ -462,17 +461,14 @@ src_configure() {
 	# Codecs #
 	##########
 	myconf+=" --disable-musepack" # deprecated, libavcodec Musepack decoder is preferred
+	myconf+=" --disable-mp3lib" # internal so disable
 	use dts || myconf+=" --disable-libdca"
-	if ! use mp3; then
-		myconf+="
-			--disable-mp3lib
-		"
-	fi
+	use mp3 || myconf+=" --disable-mpg123"
 	uses="a52 bs2b dv vorbis"
 	for i in ${uses}; do
 		use ${i} || myconf+=" --disable-lib${i}"
 	done
-	uses="faad gif jpeg live mad mng mpg123 png pnm speex tga theora xanim"
+	uses="faad gif jpeg live mad mng png pnm speex tga theora xanim"
 	for i in ${uses}; do
 		use ${i} || myconf+=" --disable-${i}"
 	done
@@ -651,13 +647,13 @@ src_configure() {
 		--host-cc=$(tc-getBUILD_CC)
 	"
 	myconf+="
-		--prefix=${EPREFIX}/usr
-		--bindir=${EPREFIX}/usr/bin
-		--libdir=${EPREFIX}/usr/$(get_libdir)
-		--confdir=${EPREFIX}/etc/mplayer
-		--datadir=${EPREFIX}/usr/share/mplayer${namesuf}
-		--mandir=${EPREFIX}/usr/share/man
-		--localedir=${EPREFIX}/usr/share/locale
+		--prefix="${EPREFIX}"/usr
+		--bindir="${EPREFIX}"/usr/bin
+		--libdir="${EPREFIX}"/usr/$(get_libdir)
+		--confdir="${EPREFIX}"/etc/mplayer
+		--datadir="${EPREFIX}"/usr/share/mplayer${namesuf}
+		--mandir="${EPREFIX}"/usr/share/man
+		--localedir="${EPREFIX}"/usr/share/locale
 		--enable-translation
 		"
 
@@ -837,7 +833,7 @@ _EOF_
 
 	newbin "${S}/TOOLS/midentify.sh" midentify${namesuf}
 
-	if [[ "${namesuf}" != "" ]] && use symlink; then
+	if [[ -n ${namesuf} ]] && use symlink; then
 		dosym "mplayer${namesuf}" /usr/bin/mplayer
 		dosym "midentify${namesuf}" /usr/bin/midentify
 	fi
