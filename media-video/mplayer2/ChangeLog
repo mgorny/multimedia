@@ -4,6 +4,10 @@
 
   12 Apr 2011; Nikoli <nikoli@lavabit.com> mplayer2-2.0.ebuild,
   mplayer2-9999.ebuild:
+  fix system-ffmpeg USE, cosmetics
+
+  12 Apr 2011; Nikoli <nikoli@lavabit.com> mplayer2-2.0.ebuild,
+  mplayer2-9999.ebuild:
   use /etc/mplayer2, add libav support, sync with portage, cosmetics
 
 *mplayer2-2.0 (28 Mar 2011)

@@ -8,7 +8,7 @@ EAPI=4
 
 inherit toolchain-funcs eutils flag-o-matic multilib base ${VCS_ECLASS}
 
-namesuf="${PN/mplayer/}"
+NAMESUF="${PN/mplayer/}"
 DESCRIPTION="Media Player for Linux"
 HOMEPAGE="http://www.mplayer2.org/"
 
@@ -139,10 +139,10 @@ RDEPEND+="
 	vorbis? ( media-libs/libvorbis )
 	xanim? ( media-video/xanim )
 	xvid? ( media-libs/xvid )
-	system-ffmpeg? (
+	system-ffmpeg? ( || (
 		>=media-video/libav-0.6.2${FFMPEG_USE}
 		>=media-video/ffmpeg-0.6_p25423${FFMPEG_USE}
-	)
+	) )
 	!system-ffmpeg? (
 		amr? ( media-libs/opencore-amr )
 		bzip2? ( app-arch/bzip2 )
@@ -291,14 +291,13 @@ src_prepare() {
 	sed -i -e "1c\#!${EPREFIX}/bin/bash" \
 		${bash_scripts} || die
 
-	# We want ${PN}
-	if [[ -n ${namesuf} ]]; then
+	if [[ -n ${NAMESUF} ]]; then
 		pushd mplayer
-		sed -e "/elif linux ; then/a\  _exesuf=\"${namesuf}\"" \
+		sed -e "/elif linux ; then/a\  _exesuf=\"${NAMESUF}\"" \
 			-i configure || die
 		sed -e "/ -m 644 DOCS\/man\/en\/mplayer/i\	mv DOCS\/man\/en\/mplayer.1 DOCS\/man\/en\/${PN}.1" \
 			-e "/ -m 644 DOCS\/man\/\$(lang)\/mplayer/i\	mv DOCS\/man\/\$(lang)\/mplayer.1 DOCS\/man\/\$(lang)\/${PN}.1" \
-			-e "s/er.1/er${namesuf}.1/g" \
+			-e "s/er.1/er${NAMESUF}.1/g" \
 			-i Makefile || die
 		sed -e "s/mplayer/${PN}/" \
 			-i TOOLS/midentify.sh || die
@@ -792,10 +791,10 @@ _EOF_
 	fi
 	dosym ../../../etc/${PN}/mplayer.conf /usr/share/${PN}/mplayer.conf
 
-	newbin "${S}/TOOLS/midentify.sh" midentify${namesuf}
+	newbin "${S}/TOOLS/midentify.sh" midentify${NAMESUF}
 
-	if [[ -n ${namesuf} ]] && use symlink; then
+	if [[ -n ${NAMESUF} ]] && use symlink; then
 		dosym "${PN}" /usr/bin/mplayer
-		dosym "midentify${namesuf}" /usr/bin/midentify
+		dosym "midentify${NAMESUF}" /usr/bin/midentify
 	fi
 }
