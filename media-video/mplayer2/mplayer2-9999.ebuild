@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/mplayer2/mplayer2-9999.ebuild,v 1.1 2011/03/28 22:59:02 lu_zero Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/mplayer2/mplayer2-9999.ebuild,v 1.11 2011/04/04 12:44:34 scarabeus Exp $
 
 EAPI=4
 
@@ -9,7 +9,31 @@ EAPI=4
 inherit toolchain-funcs eutils flag-o-matic multilib base ${VCS_ECLASS}
 
 namesuf="${PN/mplayer/}"
+DESCRIPTION="Media Player for Linux"
+HOMEPAGE="http://www.mplayer2.org/"
 
+if [[ ${PV} == *9999* ]]; then
+	EGIT_REPO_URI="git://repo.or.cz/mplayer-build.git"
+	EGIT_PROJECT="${PN}-build"
+	RELEASE_URI=""
+else
+	RELEASE_URI="http://ftp.mplayer2.org/pub/release/${PN}-build-${PV/_/-}.tar.xz"
+fi
+SRC_URI="${RELEASE_URI}
+	!truetype? (
+		mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
+		mirror://mplayer/releases/fonts/font-arial-iso-8859-2.tar.bz2
+		mirror://mplayer/releases/fonts/font-arial-cp1250.tar.bz2
+	)
+"
+
+LICENSE="GPL-3"
+SLOT="0"
+if [[ ${PV} != *9999* ]]; then
+	KEYWORDS="~amd64 ~x86"
+else
+	KEYWORDS=""
+fi
 IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +ass bidi bindist bl bluray
 bs2b +bzip2 cddb +cdio cdparanoia cpudetection custom-cpuopts custom-cflags debug dga +dirac
 directfb doc +dts +dv dvb +dvd +dvdnav dxr3 +enca esd +faad fbcon
@@ -18,7 +42,7 @@ libcaca lirc +live mad md5sum +mmx mmxext mng +mp3 nas
 +network nut amr +opengl +osdmenu oss png pnm pulseaudio pvr +quicktime
 radio +rar +real +rtc rtmp samba +shm +schroedinger +hardcoded-tables sdl +speex sse sse2 ssse3
 tga +theora threads +truetype +unicode v4l v4l2 vdpau
-+vorbis vpx win32codecs +X xanim xinerama +xscreensaver +xv xvmc
++vorbis vpx win32codecs +X xanim xinerama +xscreensaver +xv xvid xvmc
 "
 IUSE+=" +ffmpeg-mt -system-ffmpeg symlink"
 
@@ -27,36 +51,18 @@ for x in ${VIDEO_CARDS}; do
 	IUSE+=" video_cards_${x}"
 done
 
-FONT_URI="
-	mirror://mplayer/releases/fonts/font-arial-iso-8859-1.tar.bz2
-	mirror://mplayer/releases/fonts/font-arial-iso-8859-2.tar.bz2
-	mirror://mplayer/releases/fonts/font-arial-cp1250.tar.bz2
-"
-if [[ ${PV} == *9999* ]]; then
-	EGIT_REPO_URI="git://repo.or.cz/mplayer-build.git"
-	EGIT_PROJECT="${PN}-build"
-	RELEASE_URI=""
-else
-	RELEASE_URI="mirror://gentoo/${P}.tar.xz"
-fi
-SRC_URI="${RELEASE_URI}
-	!truetype? ( ${FONT_URI} )
-"
-
-DESCRIPTION="Media Player for Linux"
-HOMEPAGE="http://www.mplayer2.org/"
+# bindist does not cope with win32codecs, which are nonfree
+REQUIRED_USE="bindist? ( !win32codecs )"
 
 FONT_RDEPS="
 	virtual/ttf-fonts
 	media-libs/fontconfig
 	>=media-libs/freetype-2.2.1:2
 "
-X_RDEPS="
-	x11-libs/libXext
-	x11-libs/libXxf86vm
-"
 # Rar: althrought -gpl version is nice, it cant do most functions normal rars can
 #	nemesi? ( net-libs/libnemesi )
+# virtual/ffmpeg does not have all USE
+FFMPEG_USE="[amr?,bzip2?,dirac?,gsm?,hardcoded-tables?,jpeg2k?,rtmp?,schroedinger?,threads?,vpx?]"
 RDEPEND+="
 	sys-libs/ncurses
 	sys-libs/zlib
@@ -66,7 +72,8 @@ RDEPEND+="
 		)
 	)
 	X? (
-		${X_RDEPS}
+		x11-libs/libXext
+		x11-libs/libXxf86vm
 		dga? ( x11-libs/libXxf86dga )
 		ggi? (
 			media-libs/libggi
@@ -130,8 +137,10 @@ RDEPEND+="
 	truetype? ( ${FONT_RDEPS} )
 	vorbis? ( media-libs/libvorbis )
 	xanim? ( media-video/xanim )
+	xvid? ( media-libs/xvid )
 	system-ffmpeg? (
-		>=media-video/ffmpeg-0.6_p25423[amr?,bzip2?,dirac?,gsm?,hardcoded-tables?,jpeg2k?,rtmp?,schroedinger?,threads?,vpx?]
+		>=media-video/libav-0.6.2${FFMPEG_USE}
+		>=media-video/ffmpeg-0.6_p25423${FFMPEG_USE}
 	)
 	!system-ffmpeg? (
 		amr? ( media-libs/opencore-amr )
@@ -145,18 +154,14 @@ RDEPEND+="
 	)
 	symlink? ( !media-video/mplayer )
 "
-
-X_DEPS="
-	x11-proto/videoproto
-	x11-proto/xf86vidmodeproto
-"
 ASM_DEP="dev-lang/yasm"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 	dev-lang/python
 	sys-devel/gettext
 	X? (
-		${X_DEPS}
+		x11-proto/videoproto
+		x11-proto/xf86vidmodeproto
 		dga? ( x11-proto/xf86dgaproto )
 		dxr3? ( media-video/em8300-libraries )
 		xinerama? ( x11-proto/xineramaproto )
@@ -170,27 +175,6 @@ DEPEND="${RDEPEND}
 	x86? ( ${ASM_DEP} )
 	x86-fbsd? ( ${ASM_DEP} )
 "
-
-SLOT="0"
-LICENSE="GPL-3"
-if [[ ${PV} != *9999* ]]; then
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~x86-solaris"
-else
-	KEYWORDS=""
-fi
-
-# bindist does not cope with amr codecs (#299405#c6), win32codecs are nonfree
-# libcdio support: prefer libcdio over cdparanoia and don't check for cddb w/cdio
-# dvd navigation requires dvd read support
-# ass and freetype font require iconv and ass requires freetype fonts
-# unicode transformations are usefull only with iconv
-# libvorbis require external tremor to work
-# radio requires oss or alsa backend
-# xvmc requires xvideo support
-REQUIRED_USE="bindist? ( !win32codecs )"
-
-PATCHES=(
-)
 
 pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then
@@ -282,15 +266,6 @@ src_unpack() {
 }
 
 src_prepare() {
-	if [[ ${PV} = *9999* ]]; then
-		git_src_prepare
-		# Set GIT version manually
-		pushd mplayer
-		echo "GIT-r$(git rev-list HEAD|wc -l)-$(git describe --always)" \
-			> VERSION || die
-		popd
-	fi
-
 	# remove internal libs and use system:
 	sed -e '/^mplayer: /s/libass//' \
 		-i Makefile || die
@@ -322,16 +297,16 @@ src_prepare() {
 	sed -i -e "1c\#!${EPREFIX}/bin/bash" \
 		${bash_scripts} || die
 
-	# We want mplayer${namesuf}
+	# We want ${PN}
 	if [[ -n ${namesuf} ]]; then
 		pushd mplayer
 		sed -e "/elif linux ; then/a\  _exesuf=\"${namesuf}\"" \
 			-i configure || die
-		sed -e "/ -m 644 DOCS\/man\/en\/mplayer/i\	mv DOCS\/man\/en\/mplayer.1 DOCS\/man\/en\/mplayer${namesuf}.1" \
-			-e "/ -m 644 DOCS\/man\/\$(lang)\/mplayer/i\	mv DOCS\/man\/\$(lang)\/mplayer.1 DOCS\/man\/\$(lang)\/mplayer${namesuf}.1" \
+		sed -e "/ -m 644 DOCS\/man\/en\/mplayer/i\	mv DOCS\/man\/en\/mplayer.1 DOCS\/man\/en\/${PN}.1" \
+			-e "/ -m 644 DOCS\/man\/\$(lang)\/mplayer/i\	mv DOCS\/man\/\$(lang)\/mplayer.1 DOCS\/man\/\$(lang)\/${PN}.1" \
 			-e "s/er.1/er${namesuf}.1/g" \
 			-i Makefile || die
-		sed -e "s/mplayer/mplayer${namesuf}/" \
+		sed -e "s/mplayer/${PN}/" \
 			-i TOOLS/midentify.sh || die
 		popd
 	fi
@@ -473,15 +448,9 @@ src_configure() {
 	for i in ${uses}; do
 		use ${i} || myconf+=" --disable-lib${i}"
 	done
-	uses="faad gif jpeg live mad mng png pnm speex tga theora xanim"
+	uses="faad gif jpeg live mad mng png pnm speex tga theora xanim xvid"
 	for i in ${uses}; do
 		use ${i} || myconf+=" --disable-${i}"
-	done
-
-	# Encoding
-	uses="xvid"
-	for i in ${uses}; do
-		myconf+=" --disable-${i}"
 	done
 
 	#################
@@ -655,8 +624,8 @@ src_configure() {
 		--prefix="${EPREFIX}"/usr
 		--bindir="${EPREFIX}"/usr/bin
 		--libdir="${EPREFIX}"/usr/$(get_libdir)
-		--confdir="${EPREFIX}"/etc/mplayer
-		--datadir="${EPREFIX}"/usr/share/mplayer${namesuf}
+		--confdir="${EPREFIX}"/etc/${PN}
+		--datadir="${EPREFIX}"/usr/share/${PN}
 		--mandir="${EPREFIX}"/usr/share/man
 		--localedir="${EPREFIX}"/usr/share/locale
 		--enable-translation
@@ -760,7 +729,7 @@ src_compile() {
 		local ALLOWED_LINGUAS="cs de en es fr hu it pl ru zh_CN"
 		local BUILT_DOCS=""
 		for i in ${LINGUAS} ; do
-			hasq ${i} ${ALLOWED_LINGUAS} && BUILT_DOCS+=" ${i}"
+			has ${i} ${ALLOWED_LINGUAS} && BUILT_DOCS+=" ${i}"
 		done
 		if [[ -z $BUILT_DOCS ]]; then
 			emake -j1 -C DOCS/xml html-chunked
@@ -799,47 +768,39 @@ src_install() {
 	fi
 
 	if ! use ass && ! use truetype; then
-		dodir /usr/share/mplayer${namesuf}/fonts
+		dodir /usr/share/${PN}/fonts
 		# Do this generic, as the mplayer people like to change the structure
 		# of their zips ...
 		for i in $(find "${WORKDIR}/" -type d -name 'font-arial-*'); do
-			cp -pPR "${i}" "${ED}/usr/share/mplayer${namesuf}/fonts"
+			cp -pPR "${i}" "${ED}/usr/share/${PN}/fonts"
 		done
 		# Fix the font symlink ...
-		rm -rf "${ED}/usr/share/mplayer${namesuf}/font"
-		dosym fonts/font-arial-14-iso-8859-1 /usr/share/mplayer${namesuf}/font
+		rm -rf "${ED}/usr/share/${PN}/font"
+		dosym fonts/font-arial-14-iso-8859-1 /usr/share/${PN}/font
 	fi
 
-	if use symlink; then
-		insinto /etc/mplayer
-		newins "${S}/etc/example.conf" mplayer.conf
-		doins "${S}/etc/input.conf"
-		if use osdmenu; then
-			doins "${S}/etc/menu.conf"
-		fi
-
-		if use ass || use truetype; then
-			cat >> "${ED}/etc/mplayer/mplayer.conf" << _EOF_
-fontconfig=1
-subfont-osd-scale=4
-subfont-text-scale=3
+	insinto /etc/${PN}
+	newins "${S}/etc/example.conf" mplayer.conf
+	cat >> "${ED}/etc/${PN}/mplayer.conf" << _EOF_
+# Config options can be section specific, global
+# options should go in the default section
+[default]
 _EOF_
-		fi
+	doins "${S}/etc/input.conf"
+	use osdmenu && doins "${S}/etc/menu.conf"
 
-		# bug 256203
-		if use rar; then
-			cat >> "${ED}/etc/mplayer/mplayer.conf" << _EOF_
+	# set unrar path when required
+	if use rar; then
+		cat >> "${ED}/etc/${PN}/mplayer.conf" << _EOF_
 unrarexec=${EPREFIX}/usr/bin/unrar
 _EOF_
-		fi
-
-		dosym ../../../etc/mplayer/mplayer.conf /usr/share/mplayer${namesuf}/mplayer.conf
 	fi
+	dosym ../../../etc/${PN}/mplayer.conf /usr/share/${PN}/mplayer.conf
 
 	newbin "${S}/TOOLS/midentify.sh" midentify${namesuf}
 
 	if [[ -n ${namesuf} ]] && use symlink; then
-		dosym "mplayer${namesuf}" /usr/bin/mplayer
+		dosym "${PN}" /usr/bin/mplayer
 		dosym "midentify${namesuf}" /usr/bin/midentify
 	fi
 }
