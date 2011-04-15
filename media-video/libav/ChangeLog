@@ -1,6 +1,12 @@
-# ChangeLog for media-video/ffmpeg
+# ChangeLog for media-video/libav
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+*libav-9999 (15 Apr 2011)
+
+  15 Apr 2011; Nikoli <nikoli@lavabit.com> +libav-9999.ebuild,
+  +files/ffmpeg-ffpreset.patch, +metadata.xml:
+  ffmpeg-mt migrated to libav
 
   22 Mar 2011; Nikoli <nikoli@lavabit.com> ffmpeg-9999.ebuild:
   sync with portage, libswscale submodule is part of ffmpeg-mt repo now
