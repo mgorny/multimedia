@@ -34,7 +34,7 @@ if [[ ${PV} != *9999* ]]; then
 else
 	KEYWORDS=""
 fi
-IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +ass bidi bindist bl bluray
+IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +ass avx bidi bindist bl bluray
 bs2b +bzip2 cddb +cdio cdparanoia cpudetection custom-cpuopts custom-cflags debug dga +dirac
 directfb doc +dts +dv dvb +dvd +dvdnav dxr3 +enca esd +faad fbcon
 ftp gif ggi gsm +iconv ipv6 jack joystick jpeg jpeg2k kernel_linux ladspa
@@ -638,7 +638,6 @@ src_configure() {
 			--enable-gpl
 			--enable-version3
 			--enable-postproc
-			--disable-stripping
 			"
 
 		# enabled by default
@@ -665,7 +664,7 @@ src_configure() {
 		use jpeg2k && ffconf+=" --enable-libopenjpeg"
 
 		# CPU features
-		for i in mmx ssse3 altivec ; do
+		for i in mmx ssse3 altivec avx ; do
 			use ${i} || ffconf+=" --disable-${i}"
 		done
 		use mmxext || ffconf+=" --disable-mmx2"
