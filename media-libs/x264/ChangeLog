@@ -4,6 +4,10 @@
 
 x264-9999 (10 Jun 2010)
 
+  27 Apr 2011; Nikoli <nikoli@lavabit.com> x264-9999.ebuild,
+  -files/x264-onlylib-20100605.patch, +files/x264-onlylib-20110228.patch:
+  fix patch
+
   06 Jan 2011; Nikoli <nikoli@lavabit.com> x264-9999.ebuild:
   fix USE threads
 

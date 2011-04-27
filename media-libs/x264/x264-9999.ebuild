@@ -44,7 +44,7 @@ fi
 
 src_prepare() {
 	epatch "${FILESDIR}"/${PN}-nostrip.patch \
-		"${FILESDIR}"/${PN}-onlylib-20100605.patch
+		"${FILESDIR}"/${PN}-onlylib-20110228.patch
 }
 
 src_configure() {
