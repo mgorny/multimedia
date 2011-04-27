@@ -1,8 +1,8 @@
 diff --git a/Makefile b/Makefile
-index a66a9ee..cbae19b 100644
+index 67301fc..24f9b18 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -214,22 +214,7 @@ distclean: clean
+@@ -209,22 +209,7 @@ distclean: clean
  
  install: x264$(EXE) $(SONAME)
  	install -d $(DESTDIR)$(bindir)
@@ -11,11 +11,11 @@ index a66a9ee..cbae19b 100644
 -	install -d $(DESTDIR)$(libdir)/pkgconfig
 -	install -m 644 x264.h $(DESTDIR)$(includedir)
 -	install -m 644 x264_config.h $(DESTDIR)$(includedir)
--	install -m 644 libx264.a $(DESTDIR)$(libdir)
+-	install -m 644 $(LIBX264) $(DESTDIR)$(libdir)
 -	install -m 644 x264.pc $(DESTDIR)$(libdir)/pkgconfig
  	install x264$(EXE) $(DESTDIR)$(bindir)
--	$(RANLIB) $(DESTDIR)$(libdir)/libx264.a
--ifeq ($(SYS),MINGW)
+-	$(if $(RANLIB), $(RANLIB) $(DESTDIR)$(libdir)/$(LIBX264))
+-ifeq ($(SYS),WINDOWS)
 -	$(if $(SONAME), install -m 755 $(SONAME) $(DESTDIR)$(bindir))
 -else
 -	$(if $(SONAME), ln -f -s $(SONAME) $(DESTDIR)$(libdir)/libx264.$(SOSUFFIX))

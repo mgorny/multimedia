@@ -53,9 +53,9 @@ src_prepare() {
 	epatch "${FILESDIR}"/${PN}-nostrip.patch
 
 	if use static; then
-		epatch "${FILESDIR}/${PN}-nolib-static-20101130.patch"
+		epatch "${FILESDIR}/${PN}-nolib-static-20110228.patch"
 	else
-		epatch "${FILESDIR}/${PN}-nolib-20101130.patch"
+		epatch "${FILESDIR}/${PN}-nolib-20110228.patch"
 	fi
 }
 
