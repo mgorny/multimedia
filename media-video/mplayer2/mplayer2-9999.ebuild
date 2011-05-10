@@ -42,7 +42,7 @@ libcaca lirc +live mad md5sum +mmx mmxext mng +mp3 nas
 +network nut amr +opengl +osdmenu oss png pnm pulseaudio pvr +quicktime
 radio +rar +real +rtc rtmp samba +shm +schroedinger +hardcoded-tables sdl +speex sse sse2 ssse3
 tga +theora threads +truetype +unicode v4l v4l2 vdpau
-+vorbis vpx win32codecs +X xanim xinerama +xscreensaver +xv xvid xvmc
++vorbis vpx win32codecs +X xanim xinerama +xscreensaver +xv xvid
 "
 IUSE+=" +ffmpeg-mt -system-ffmpeg symlink"
 
@@ -85,7 +85,6 @@ RDEPEND+="
 		xscreensaver? ( x11-libs/libXScrnSaver )
 		xv? (
 			x11-libs/libXv
-			xvmc? ( x11-libs/libXvMC )
 		)
 	)
 	a52? ( media-libs/a52dec )
@@ -571,20 +570,7 @@ src_configure() {
 		use vdpau || myconf+=" --disable-vdpau"
 		use video_cards_vesa || myconf+=" --disable-vesa"
 		use xscreensaver || myconf+=" --disable-xss"
-
-		if use xv; then
-			if use xvmc; then
-				myconf+=" --enable-xvmc --with-xvmclib=XvMCW"
-			else
-				myconf+=" --disable-xvmc"
-			fi
-		else
-			myconf+="
-				--disable-xv
-				--disable-xvmc
-			"
-			use xvmc && elog "Disabling xvmc because it requires \"xv\" useflag enabled."
-		fi
+		use xv || myconf+=" --disable-xv"
 	else
 		myconf+="
 			--disable-dga1
@@ -596,7 +582,6 @@ src_configure() {
 			--disable-xinerama
 			--disable-xss
 			--disable-xv
-			--disable-xvmc
 			--disable-x11
 		"
 		uses="dga dxr3 ggi opengl osdmenu vdpau xinerama xscreensaver xv"
