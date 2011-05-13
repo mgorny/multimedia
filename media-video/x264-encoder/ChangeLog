@@ -4,6 +4,11 @@
 
 x264-encoder-9999 (10 Jun 2010)
 
+  13 May 2011; Nikoli <nikoli@lavabit.com> x264-encoder-9999.ebuild,
+  -files/x264-encoder-nolib-20110228.patch, -files/x264-encoder-nostrip.patch,
+  -files/x264-encoder-nolib-static-20110228.patch:
+  remove patches, migrate to EAPI4, fix USE
+
   27 Apr 2011; Nikoli <nikoli@lavabit.com> x264-encoder-9999.ebuild,
   -files/x264-encoder-nolib-20101130.patch,
   -files/x264-encoder-nolib-static-20101130.patch,

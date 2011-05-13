@@ -2,16 +2,15 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=2
+EAPI=4
 
-V_ECLASS=""
 if [ "${PV#9999}" != "${PV}" ] ; then
 	V_ECLASS="git"
 else
 	V_ECLASS="versionator"
 fi
 
-inherit eutils multilib toolchain-funcs ${V_ECLASS}
+inherit multilib toolchain-funcs ${V_ECLASS}
 
 if [ "${PV#9999}" = "${PV}" ] ; then
 	MY_P="x264-snapshot-$(get_version_component_range 3)-2245"
@@ -30,7 +29,7 @@ SLOT="0"
 if [ "${PV#9999}" = "${PV}" ] ; then
 	KEYWORDS="~alpha ~amd64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
-IUSE="debug ffmpeg mp4 static +threads -visualize"
+IUSE="debug ffmpeg mp4 static +threads"
 
 RDEPEND="
 	mp4? ( >=media-video/gpac-0.4.1_pre20060122 )
@@ -49,40 +48,24 @@ if [ "${PV#9999}" = "${PV}" ] ; then
 	S=${WORKDIR}/${MY_P}
 fi
 
-src_prepare() {
-	epatch "${FILESDIR}"/${PN}-nostrip.patch
-
-	if use static; then
-		epatch "${FILESDIR}/${PN}-nolib-static-20110228.patch"
-	else
-		epatch "${FILESDIR}/${PN}-nolib-20110228.patch"
-	fi
-}
-
 src_configure() {
 	tc-export CC
 
 	local myconf=""
 	use debug && myconf+=" --enable-debug"
+	use ffmpeg || myconf+=" --disable-lavf --disable-swscale"
+	use mp4 || myconf+=" --disable-gpac"
+	use static || myconf+=" --system-libx264"
+	use threads || myconf+=" --disable-thread"
 
 	./configure \
-		--prefix=/usr \
-		--libdir=/usr/$(get_libdir) \
+		--prefix="$EPREFIX"/usr \
+		--libdir="$EPREFIX"/usr/$(get_libdir) \
 		--disable-avs \
 		--disable-ffms \
-		$(use_enable ffmpeg lavf) \
-		$(use_enable ffmpeg swscale) \
-		$(use_enable mp4 gpac) \
-		$(use_enable threads thread) \
-		$(use_enable visualize) \
 		--extra-asflags="${ASFLAGS}" \
 		--extra-cflags="${CFLAGS}" \
 		--extra-ldflags="${LDFLAGS}" \
 		--host="${CHOST}" \
-		${myconf} \
-		|| die
-}
-
-src_install() {
-	emake DESTDIR="${D}" install || die
+		${myconf} || die
 }

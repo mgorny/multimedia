@@ -5,7 +5,4 @@
   <maintainer>
     <email>media-video@gentoo.org</email>
   </maintainer>
-<use>
-  <flag name="visualize">Enable visualization (X11 only)</flag>
-</use>
 </pkgmetadata>
