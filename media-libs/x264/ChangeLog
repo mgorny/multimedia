@@ -4,6 +4,10 @@
 
 x264-9999 (10 Jun 2010)
 
+  13 May 2011; Nikoli <nikoli@lavabit.com> -files/x264-nostrip.patch,
+  x264-9999.ebuild, -files/x264-onlylib-20110228.patch:
+  remove patches, migrate to EAPI4, add static-libs USE
+
   27 Apr 2011; Nikoli <nikoli@lavabit.com> x264-9999.ebuild,
   -files/x264-onlylib-20100605.patch, +files/x264-onlylib-20110228.patch:
   fix patch

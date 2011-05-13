@@ -2,16 +2,15 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=2
+EAPI=4
 
-V_ECLASS=""
 if [ "${PV#9999}" != "${PV}" ] ; then
 	V_ECLASS="git"
 else
 	V_ECLASS="versionator"
 fi
 
-inherit eutils multilib toolchain-funcs ${V_ECLASS}
+inherit multilib toolchain-funcs ${V_ECLASS}
 
 if [ "${PV#9999}" = "${PV}" ] ; then
 	MY_P="x264-snapshot-$(get_version_component_range 3)-2245"
@@ -29,7 +28,7 @@ SLOT="0"
 if [ "${PV#9999}" = "${PV}" ] ; then
 	KEYWORDS="~alpha ~amd64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
-IUSE="debug +threads pic"
+IUSE="debug +threads pic static-libs"
 
 RDEPEND=""
 ASM_DEP=">=dev-lang/yasm-0.6.2"
@@ -41,42 +40,34 @@ DEPEND="
 if [ "${PV#9999}" = "${PV}" ] ; then
 	S=${WORKDIR}/${MY_P}
 fi
-
-src_prepare() {
-	epatch "${FILESDIR}"/${PN}-nostrip.patch \
-		"${FILESDIR}"/${PN}-onlylib-20110228.patch
-}
+DOCS="AUTHORS doc/*.txt"
 
 src_configure() {
 	tc-export CC
 
 	local myconf=""
 	use debug && myconf+=" --enable-debug"
+	use static-libs && myconf+=" --enable-static"
+	use threads || myconf+=" --disable-thread"
 
 	if use x86 && use pic; then
 		myconf+=" --disable-asm"
 	fi
 
 	./configure \
-		--prefix=/usr \
-		--libdir=/usr/$(get_libdir) \
+		--prefix="$EPREFIX"/usr \
+		--libdir="$EPREFIX"/usr/$(get_libdir) \
+		--disable-cli \
 		--disable-avs \
 		--disable-lavf \
 		--disable-swscale \
 		--disable-ffms \
 		--disable-gpac \
-		$(use_enable threads thread) \
 		--enable-pic \
 		--enable-shared \
 		--extra-asflags="${ASFLAGS}" \
 		--extra-cflags="${CFLAGS}" \
 		--extra-ldflags="${LDFLAGS}" \
 		--host="${CHOST}" \
-		${myconf} \
-		|| die
-}
-
-src_install() {
-	emake DESTDIR="${D}" install || die
-	dodoc AUTHORS doc/*.txt
+		${myconf} || die
 }
