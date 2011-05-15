@@ -33,8 +33,8 @@ COMMON_DEPEND="
 	>=dev-libs/glib-2.24.1-r1:2
 	dev-libs/libxml2
 	media-libs/libechonest
-	>=media-libs/gstreamer-0.10
-	>=media-libs/gst-plugins-base-0.10
+	media-libs/gstreamer:0.10
+	media-libs/gst-plugins-base:0.10
 	archive? ( >=app-arch/libarchive-2.8.3 )
 	ayatana? ( dev-libs/libindicate-qt )
 	ipod? (
@@ -58,9 +58,9 @@ RDEPEND="${COMMON_DEPEND}
 	dbus? ( udev? ( sys-fs/udisks ) )
 	mtp? ( gnome-base/gvfs )
 	projectm? ( >=media-libs/libprojectm-1.2.0 )
-	>=media-plugins/gst-plugins-meta-0.10
-	>=media-plugins/gst-plugins-gio-0.10
-	>=media-plugins/gst-plugins-soup-0.10
+	media-plugins/gst-plugins-meta:0.10
+	media-plugins/gst-plugins-gio:0.10
+	media-plugins/gst-plugins-soup:0.10
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-libs/boost-1.39
@@ -72,19 +72,18 @@ DOCS="Changelog TODO"
 
 src_prepare() {
 	# some tests fail or hang
-	sed \
+	sed -i \
 		-e '/add_test_file(translations_test.cpp/d' \
-		-i tests/CMakeLists.txt || die
+		tests/CMakeLists.txt || die
 }
 
 src_configure() {
-	# linguas
 	local langs x
 	for x in ${LANGS}; do
 		use linguas_${x} && langs+=" ${x}"
 	done
 
-	mycmakeargs=(
+	local mycmakeargs=(
 		-DBUILD_WERROR=OFF
 		-DLINGUAS="${langs}"
 		-DBUNDLE_PROJECTM_PRESETS=OFF
