@@ -29,12 +29,12 @@ SLOT="0"
 if [ "${PV#9999}" = "${PV}" ] ; then
 	KEYWORDS="~alpha ~amd64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
-IUSE="debug ffmpeg mp4 static +threads"
+IUSE="debug ffmpeg mp4 +system-libx264 +threads"
 
 RDEPEND="
-	mp4? ( >=media-video/gpac-0.4.1_pre20060122 )
-	!static? ( ~media-libs/x264-${PV} )
 	ffmpeg? ( media-video/ffmpeg )
+	mp4? ( >=media-video/gpac-0.4.1_pre20060122 )
+	system-libx264? ( ~media-libs/x264-${PV} )
 "
 ASM_DEP=">=dev-lang/yasm-0.6.2"
 DEPEND="${RDEPEND}
@@ -55,7 +55,7 @@ src_configure() {
 	use debug && myconf+=" --enable-debug"
 	use ffmpeg || myconf+=" --disable-lavf --disable-swscale"
 	use mp4 || myconf+=" --disable-gpac"
-	use static || myconf+=" --system-libx264"
+	use system-libx264 && myconf+=" --system-libx264"
 	use threads || myconf+=" --disable-thread"
 
 	./configure \
