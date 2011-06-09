@@ -1,4 +1,4 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -21,9 +21,14 @@ SLOT="0"
 KEYWORDS="-* ~amd64 ~x86"
 IUSE=""
 
-DEPEND="x11-libs/qt-gui:4
+DEPEND="x11-libs/qt-gui
 	dev-libs/openssl
-	media-libs/mesa"
+	media-libs/mesa
+	x11-libs/qt-dbus"
+
+src_prepare() {
+	cd "${MY_P}"
+}
 
 src_compile() {
 	cd "${MY_P}"
