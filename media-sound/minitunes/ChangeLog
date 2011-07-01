@@ -1,6 +1,10 @@
 # ChangeLog for media-sound/minitunes
-# Copyright 1999-2010 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+  01 Jul 2011; Nikoli <nikoli@lavabit.com> minitunes-0.1.1.ebuild,
+  minitunes-9999.ebuild:
+  migrate to git-2 and EAPI4
 
 *minitunes-9999 (24 Aug 2010)
 
