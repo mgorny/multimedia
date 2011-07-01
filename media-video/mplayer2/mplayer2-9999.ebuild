@@ -1,10 +1,10 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/mplayer2/mplayer2-9999.ebuild,v 1.11 2011/04/04 12:44:34 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/mplayer2/mplayer2-9999.ebuild,v 1.15 2011/05/10 13:27:54 scarabeus Exp $
 
 EAPI=4
 
-[[ ${PV} = *9999* ]] && VCS_ECLASS="git" || VCS_ECLASS=""
+[[ ${PV} = *9999* ]] && VCS_ECLASS="git-2" || VCS_ECLASS=""
 
 inherit toolchain-funcs eutils flag-o-matic multilib base ${VCS_ECLASS}
 
@@ -13,9 +13,7 @@ DESCRIPTION="Media Player for Linux"
 HOMEPAGE="http://www.mplayer2.org/"
 
 if [[ ${PV} == *9999* ]]; then
-	EGIT_REPO_URI="git://repo.or.cz/mplayer-build.git"
-	EGIT_PROJECT="${PN}-build"
-	RELEASE_URI=""
+	EGIT_REPO_URI="git://git.mplayer2.org/mplayer2.git"
 else
 	RELEASE_URI="http://ftp.mplayer2.org/pub/release/${PN}-build-${PV/_/-}.tar.xz"
 fi
@@ -29,12 +27,13 @@ SRC_URI="${RELEASE_URI}
 
 LICENSE="GPL-3"
 SLOT="0"
-if [[ ${PV} != *9999* ]]; then
-	KEYWORDS="~amd64 ~x86"
-else
+if [[ ${PV} == *9999* ]]; then
 	KEYWORDS=""
+else
+	KEYWORDS="~amd64 ~arm ~hppa ~x86 ~amd64-linux"
+	S="${WORKDIR}/${PN}-build-${PV}/mplayer"
 fi
-IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +ass avx bidi bindist bl bluray
+IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +ass bidi bindist bl bluray
 bs2b +bzip2 cddb +cdio cdparanoia cpudetection custom-cpuopts custom-cflags debug dga +dirac
 directfb doc +dts +dv dvb +dvd +dvdnav dxr3 +enca esd +faad fbcon
 ftp gif ggi gsm +iconv ipv6 jack joystick jpeg jpeg2k kernel_linux ladspa
@@ -44,7 +43,7 @@ radio +rar +real +rtc rtmp samba +shm +schroedinger +hardcoded-tables sdl +speex
 tga +theora threads +truetype +unicode v4l v4l2 vdpau
 +vorbis vpx win32codecs +X xanim xinerama +xscreensaver +xv xvid
 "
-IUSE+=" +ffmpeg-mt -system-ffmpeg symlink"
+IUSE+=" symlink"
 
 VIDEO_CARDS="s3virge mga tdfx vesa"
 for x in ${VIDEO_CARDS}; do
@@ -137,19 +136,9 @@ RDEPEND+="
 	vorbis? ( media-libs/libvorbis )
 	xanim? ( media-video/xanim )
 	xvid? ( media-libs/xvid )
-	system-ffmpeg? ( || (
+	|| (
 		>=media-video/libav-0.6.2${FFMPEG_USE}
 		>=media-video/ffmpeg-0.6_p25423${FFMPEG_USE}
-	) )
-	!system-ffmpeg? (
-		amr? ( media-libs/opencore-amr )
-		bzip2? ( app-arch/bzip2 )
-		dirac? ( media-video/dirac )
-		gsm? ( >=media-sound/gsm-1.0.12-r1 )
-		jpeg2k? ( >=media-libs/openjpeg-1.3-r2 )
-		rtmp? ( media-video/rtmpdump )
-		schroedinger? ( media-libs/schroedinger )
-		vpx? ( media-libs/libvpx )
 	)
 	symlink? ( !media-video/mplayer )
 "
@@ -213,100 +202,25 @@ pkg_setup() {
 		ewarn "3dnowext mmx mmxext sse sse2 ssse3) are properly set."
 	fi
 
-	if use ffmpeg-mt && use system-ffmpeg; then
-		ewarn "USE flags ffmpeg-mt and system-ffmpeg are not compatible, system-ffmpeg will be used."
-	fi
-}
-
-src_unpack() {
-	if [[ ${PV} = *9999* ]]; then
-		git_src_unpack
-
-		EGIT_REPO_URI="git://repo.or.cz/mplayer.git"
-		EGIT_PROJECT="${PN}"
-		S+="/mplayer"
-		git_fetch
-		S="${WORKDIR}/${P}"
-
-		if ! use system-ffmpeg; then
-			if use ffmpeg-mt; then
-				EGIT_BRANCH="mt"
-				EGIT_COMMIT="mt"
-				S+="/ffmpeg-mt"
-			else
-				S+="/ffmpeg"
-			fi
-			EGIT_REPO_URI="git://repo.or.cz/FFMpeg-mirror/mplayer-patches.git"
-			EGIT_PROJECT="${PN}-ffmpeg"
-			git_fetch
-			EGIT_BRANCH="master"
-			unset EGIT_COMMIT
-
-			cd "${S}"
-			EGIT_REPO_URI="git://git.mplayerhq.hu/libswscale"
-			EGIT_PROJECT="libswscale"
-			EGIT_COMMIT="$(git submodule status -- libswscale|sed -e 's/^-\(.*\) .*/\1/')"
-			S+="/${EGIT_PROJECT}"
-			git_fetch
-
-			S="${WORKDIR}/${P}"
-		fi
-
-		cd "${WORKDIR}"
-	else
-		unpack ${A}
-	fi
-
-	if ! use truetype; then
-		unpack font-arial-iso-8859-1.tar.bz2 \
-			font-arial-iso-8859-2.tar.bz2 \
-			font-arial-cp1250.tar.bz2
-	fi
+	einfo "For various format support you need to enable the support on your ffmpeg package:"
+	einfo "    media-video/libav or media-video/ffmpeg"
 }
 
 src_prepare() {
-	# remove internal libs and use system:
-	sed -e '/^mplayer: /s/libass//' \
-		-i Makefile || die
-	rm -rf \
-		libass \
-		|| die
-
-	if use system-ffmpeg; then
-		sed -e '/^mplayer: /s/ffmpeg//' \
-			-i Makefile || die
-		rm -rf ffmpeg ffmpeg-mt || die
-	else
-		if use ffmpeg-mt; then
-			touch ffmpeg-mt-enabled || die "enable-mt failed"
-			rm -rf ffmpeg || die
-		else
-			rm -rf ffmpeg-mt || die
-		fi
-		sed -i \
-			-e "/'--cpu=host',/d" \
-			-e "/'--disable-debug',/d" \
-			-e "/'--enable-pthreads',/d" \
-			script/ffmpeg-config || die
-	fi
-
 	# fix path to bash executable in configure scripts
-	local bash_scripts="mplayer/configure mplayer/version.sh"
-	use system-ffmpeg || bash_scripts+=" ffmpeg*/configure ffmpeg*/version.sh"
+	local bash_scripts="configure version.sh"
 	sed -i -e "1c\#!${EPREFIX}/bin/bash" \
 		${bash_scripts} || die
 
 	if [[ -n ${NAMESUF} ]]; then
-		pushd mplayer
 		sed -e "/elif linux ; then/a\  _exesuf=\"${NAMESUF}\"" \
 			-i configure || die
-		sed -e "/ -m 644 DOCS\/man\/en\/mplayer/i\	mv DOCS\/man\/en\/mplayer.1 DOCS\/man\/en\/${PN}.1" \
-			-e "/ -m 644 DOCS\/man\/\$(lang)\/mplayer/i\	mv DOCS\/man\/\$(lang)\/mplayer.1 DOCS\/man\/\$(lang)\/${PN}.1" \
+		sed -e "\, -m 644 DOCS/man/en/mplayer,i\	mv DOCS/man/en/mplayer.1 DOCS/man/en/${PN}.1" \
+			-e "\, -m 644 DOCS/man/\$(lang)/mplayer,i\	mv DOCS/man/\$(lang)/mplayer.1 DOCS/man/\$(lang)/${PN}.1" \
 			-e "s/er.1/er${NAMESUF}.1/g" \
 			-i Makefile || die
 		sed -e "s/mplayer/${PN}/" \
 			-i TOOLS/midentify.sh || die
-		popd
 	fi
 
 	base_src_prepare
@@ -560,7 +474,7 @@ src_configure() {
 	# X enabled configuration #
 	###########################
 	if use X; then
-		uses="dxr3 ggi xinerama"
+		uses="dxr3 ggi xinerama xv"
 		for i in ${uses}; do
 			use ${i} || myconf+=" --disable-${i}"
 		done
@@ -570,7 +484,6 @@ src_configure() {
 		use vdpau || myconf+=" --disable-vdpau"
 		use video_cards_vesa || myconf+=" --disable-vesa"
 		use xscreensaver || myconf+=" --disable-xss"
-		use xv || myconf+=" --disable-xv"
 	else
 		myconf+="
 			--disable-dga1
@@ -600,113 +513,24 @@ src_configure() {
 		"
 	fi
 
-	common_options="
-		--cc=$(tc-getCC)
-		--host-cc=$(tc-getBUILD_CC)
-	"
-	myconf+="
-		--prefix="${EPREFIX}"/usr
-		--bindir="${EPREFIX}"/usr/bin
-		--libdir="${EPREFIX}"/usr/$(get_libdir)
-		--confdir="${EPREFIX}"/etc/${PN}
-		--datadir="${EPREFIX}"/usr/share/${PN}
-		--mandir="${EPREFIX}"/usr/share/man
-		--localedir="${EPREFIX}"/usr/share/locale
-		--enable-translation
-		"
-
-	echo "${common_options}" > common_options
-	echo "${myconf}" > mplayer_options
-
-	if ! use system-ffmpeg; then
-		local ffconf="
-			--enable-gpl
-			--enable-version3
-			--enable-postproc
-			"
-
-		# enabled by default
-		use debug || ffconf+=" --disable-debug"
-		use network || ffconf+=" --disable-network"
-		use bzip2 || ffconf+=" --disable-bzlib"
-
-		use custom-cflags && ffconf+=" --disable-optimizations"
-		use cpudetection && ffconf+=" --enable-runtime-cpudetect"
-
-		# Threads; we only support pthread for now but ffmpeg supports more
-		use threads || ffconf+=" --disable-pthreads"
-
-		# ffmpeg encoders
-		for i in faac mp3lame theora vorbis x264 xvid; do
-			ffconf+=" --disable-lib${i}"
-		done
-
-		# ffmpeg decoders
-		use amr && ffconf+=" --enable-libopencore-amrwb --enable-libopencore-amrnb"
-		for i in gsm dirac rtmp schroedinger speex vpx; do
-			use ${i} && ffconf+=" --enable-lib${i}"
-		done
-		use jpeg2k && ffconf+=" --enable-libopenjpeg"
-
-		# CPU features
-		for i in mmx ssse3 altivec avx ; do
-			use ${i} || ffconf+=" --disable-${i}"
-		done
-		use mmxext || ffconf+=" --disable-mmx2"
-		use 3dnow || ffconf+=" --disable-amd3dnow"
-		use 3dnowext || ffconf+=" --disable-amd3dnowext"
-		# disable mmx accelerated code if PIC is required
-		# as the provided asm decidedly is not PIC.
-		if gcc-specs-pie ; then
-			ffconf+=" --disable-mmx --disable-mmx2"
-		fi
-
-		# Try to get cpu type based on CFLAGS.
-		# Bug #172723
-		# We need to do this so that features of that CPU will be better used
-		# If they contain an unknown CPU it will not hurt since ffmpeg's configure
-		# will just ignore it.
-		for i in $(get-flag march) $(get-flag mcpu) $(get-flag mtune) ; do
-			[ "${i}" = "native" ] && i="host" # bug #273421
-			[[ ${i} = *-sse3 ]] && i="${i%-sse3}" # bug 283968
-			ffconf+=" --cpu=${i}"
-			break
-		done
-
-		# cross compile support
-		if tc-is-cross-compiler ; then
-			ffconf+=" --enable-cross-compile --arch=$(tc-arch-kernel) --cross-prefix=${CHOST}-"
-			case ${CHOST} in
-				*freebsd*)
-					ffconf+=" --target-os=freebsd"
-					;;
-				mingw32*)
-					ffconf+=" --target-os=mingw32"
-					;;
-				*linux*)
-					ffconf+=" --target-os=linux"
-					;;
-			esac
-		fi
-
-		# Misc stuff
-		use hardcoded-tables && ffconf+=" --enable-hardcoded-tables"
-
-		echo "${ffconf}" > ffmpeg_options
-	fi
-
-	sed -i \
-		-e 's/\t//g' \
-		-e 's/ --/\n--/g' \
-		-e '/^$/d' \
-		*_options || die
+	./configure \
+		--cc=$(tc-getCC) \
+		--host-cc=$(tc-getBUILD_CC) \
+		--prefix="${EPREFIX}"/usr \
+		--bindir="${EPREFIX}"/usr/bin \
+		--libdir="${EPREFIX}"/usr/$(get_libdir) \
+		--confdir="${EPREFIX}"/etc/${PN} \
+		--datadir="${EPREFIX}"/usr/share/${PN} \
+		--mandir="${EPREFIX}"/usr/share/man \
+		--localedir="${EPREFIX}"/usr/share/locale \
+		--enable-translation \
+		${myconf} || die
 }
 
 src_compile() {
 	base_src_compile
 	# Build only user-requested docs if they're available.
 	if use doc ; then
-		pushd mplayer
 		# select available languages from $LINGUAS
 		LINGUAS=${LINGUAS/zh/zh_CN}
 		local ALLOWED_LINGUAS="cs de en es fr hu it pl ru zh_CN"
@@ -732,8 +556,6 @@ src_install() {
 		INSTALLSTRIP="" \
 		install
 
-	S+="/mplayer"
-	cd "${S}"
 	dodoc AUTHORS Copyright README etc/codecs.conf
 
 	docinto tech/

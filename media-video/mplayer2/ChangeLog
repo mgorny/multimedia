@@ -2,6 +2,10 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  01 Jul 2011; Nikoli <nikoli@lavabit.com> mplayer2-2.0.ebuild,
+  mplayer2-9999.ebuild, metadata.xml:
+  remove support for internal ffmpeg, cosmetics
+
   10 May 2011; Nikoli <nikoli@lavabit.com> mplayer2-9999.ebuild:
   upstream removed xvmc support
 
