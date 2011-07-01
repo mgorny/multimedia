@@ -2,10 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="4"
 LANGSLONG="cs_CZ"
 
-inherit cmake-utils qt4-r2 git
+inherit cmake-utils qt4-r2 git-2
 
 EGIT_REPO_URI="git://git.gitorious.org/${PN}/${PN}.git"
 
@@ -29,10 +29,7 @@ DEPEND="${RDEPEND}"
 
 CMAKE_IN_SOURCE_BUILD="1"
 
-pkg_setup() {
-	use !sqlite && use !mysql && ewarn \
-		"You need at least one database backend, enable sqlite or mysql."
-}
+REQUIRED_USE="^^ ( sqlite mysql )"
 
 src_configure() {
 	# linguas
