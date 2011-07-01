@@ -1,12 +1,12 @@
-# Copyright 1999-2010 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="4"
 
 LANGS="ca cs de es fr gl it ja nl pl pt ro ru sk sv ta tr uk zh"
 
-inherit cmake-utils qt4-r2 git
+inherit cmake-utils qt4-r2 git-2
 
 DESCRIPTION="VideoLAN Movie Creator"
 HOMEPAGE="http://www.vlmc.org"
