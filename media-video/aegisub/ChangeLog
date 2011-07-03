@@ -2,6 +2,10 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  03 Jul 2011; Nikoli <nikoli@lavabit.com>
+  +files/aegisub-2.1.9-external-libass.patch, aegisub-2.1.9999.ebuild:
+  use system libass headers
+
 *aegisub-2.1.9999 (03 Jul 2011)
 
   03 Jul 2011; Nikoli <nikoli@lavabit.com> +aegisub-2.1.9999.ebuild,

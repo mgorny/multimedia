@@ -46,7 +46,9 @@ src_prepare() {
 	echo "${ESVN_WC_REVISION}" > svn_revision
 
 	#epatch "${FILESDIR}"/${PN}-2.1.8-do-not-verify-audiolibs.patch
-	epatch "${FILESDIR}"/${PN}-2.1.8-external-libass.patch
+	epatch "${FILESDIR}"/${PN}-2.1.9-external-libass.patch
+
+	rm -rf libass || die
 
 	sh autogen.sh --skip-configure
 	eautoreconf
