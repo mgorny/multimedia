@@ -34,7 +34,7 @@ RDEPEND="
 	lua? ( >=dev-lang/lua-5.1.1 )
 
 	spell? ( >=app-text/hunspell-1.2 )
-	ffmpeg? ( virtual/ffmpeg )
+	ffmpeg? ( >=media-video/ffmpeg-0.6_p25767 )
 "
 DEPEND="${RDEPEND}
 	dev-util/intltool
