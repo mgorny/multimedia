@@ -42,13 +42,14 @@ DEPEND="${RDEPEND}
 "
 
 src_prepare() {
+	subversion_wc_info
+	echo "${ESVN_WC_REVISION}" > svn_revision
+
 	#epatch "${FILESDIR}"/${PN}-2.1.8-do-not-verify-audiolibs.patch
 	epatch "${FILESDIR}"/${PN}-2.1.8-external-libass.patch
 
 	sh autogen.sh --skip-configure
 	eautoreconf
-
-	echo "${ESVN_WC_REVISION}" > svn_revision
 }
 
 src_configure() {
