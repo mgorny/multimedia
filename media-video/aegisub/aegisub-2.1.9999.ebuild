@@ -20,7 +20,7 @@ RDEPEND="
 	x11-libs/wxGTK:${WX_GTK_VER}[X,opengl,debug?]
 	virtual/opengl
 	virtual/glu
-	>=media-libs/libass-0.9.7[fontconfig]
+	>=media-libs/libass-0.9.12[fontconfig]
 	virtual/libiconv
 	>=media-libs/fontconfig-2.4.2
 	media-libs/freetype:2
