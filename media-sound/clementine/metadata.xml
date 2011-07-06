@@ -11,6 +11,8 @@
     <flag name="ayatana">Build in support for Ayatana notification using the libindicate-qt plugin.</flag>
     <flag name="ios">Enable support for iPod Touch, iPhone, iPad</flag>
     <flag name="lastfm">Use liblastfm for fetching song info, scrobbling and radio streams</flag>
+    <flag name="mms">Enable mms support</flag>
+    <flag name="ofa">Support for Open Fingerprint Architecture (OFA)</flag>
     <flag name='projectm'>Build with ProjectM visualization</flag>
     <flag name='remote'>Enable remote control support</flag>
     <flag name="wiimote">Enable support for Wii remote</flag>

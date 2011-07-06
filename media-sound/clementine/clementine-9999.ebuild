@@ -15,7 +15,7 @@ ESVN_REPO_URI="http://clementine-player.googlecode.com/svn/trunk"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="archive ayatana +dbus ios ipod +lastfm mtp projectm python remote +udev wiimote"
+IUSE="archive ayatana +dbus ios ipod +lastfm mms mtp +ofa projectm python remote +udev wiimote"
 IUSE+="${LANGS// / linguas_}"
 
 REQUIRED_USE="
@@ -56,11 +56,14 @@ COMMON_DEPEND="
 # r1966 "Compile with a static sqlite by default, since Qt 4.7 doesn't seem to expose the symbols we need to use FTS"
 RDEPEND="${COMMON_DEPEND}
 	dbus? ( udev? ( sys-fs/udisks ) )
+	mms? ( media-plugins/gst-plugins-libmms:0.10 )
 	mtp? ( gnome-base/gvfs )
+	ofa? ( media-plugins/gst-plugins-ofa )
 	projectm? ( >=media-libs/libprojectm-1.2.0 )
 	media-plugins/gst-plugins-meta:0.10
 	media-plugins/gst-plugins-gio:0.10
 	media-plugins/gst-plugins-soup:0.10
+	media-plugins/gst-plugins-taglib:0.10
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-libs/boost-1.39
@@ -68,7 +71,7 @@ DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	x11-libs/qt-test:4
 "
-DOCS="Changelog TODO"
+DOCS="Changelog"
 
 src_prepare() {
 	# some tests fail or hang
