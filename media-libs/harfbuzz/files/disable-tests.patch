@@ -1,0 +1,11 @@
+--- Makefile.am.old	2011-07-16 01:22:23.189990251 +0300
++++ Makefile.am	2011-07-16 01:22:42.089990249 +0300
+@@ -2,7 +2,7 @@
+ 
+ NULL =
+ 
+-SUBDIRS = src test
++SUBDIRS = src #test
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = harfbuzz.pc
