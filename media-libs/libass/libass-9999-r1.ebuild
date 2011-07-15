@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/libass/libass-0.9.11.ebuild,v 1.10 2011/04/05 17:44:35 scarabeus Exp $
+# $Header: $
 
 EAPI=4
 
@@ -20,10 +20,9 @@ RDEPEND="
 	>=media-libs/freetype-2.2.1
 	virtual/libiconv
 	enca? ( app-i18n/enca )
-"
+	>=media-libs/harfbuzz-0.7.0"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
-"
+	dev-util/pkgconfig"
 
 DOCS="Changelog"
 
