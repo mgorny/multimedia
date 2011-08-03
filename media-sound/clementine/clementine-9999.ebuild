@@ -15,7 +15,7 @@ EGIT_REPO_URI="https://code.google.com/p/clementine-player/"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="archive ayatana +dbus ios ipod +lastfm mms mtp +ofa projectm python remote +udev wiimote"
+IUSE="ayatana +dbus ios ipod +lastfm mms mtp +ofa projectm remote +udev wiimote"
 IUSE+="${LANGS// / linguas_}"
 
 REQUIRED_USE="
@@ -35,7 +35,6 @@ COMMON_DEPEND="
 	media-libs/libechonest
 	media-libs/gstreamer:0.10
 	media-libs/gst-plugins-base:0.10
-	archive? ( >=app-arch/libarchive-2.8.3 )
 	ayatana? ( dev-libs/libindicate-qt )
 	ipod? (
 		>=media-libs/libgpod-0.8.0[ios?]
@@ -48,8 +47,12 @@ COMMON_DEPEND="
 	lastfm? ( media-libs/liblastfm )
 	mtp? ( >=media-libs/libmtp-1.0.0 )
 	projectm? ( media-libs/glew )
-	python? ( dev-python/PyQt4 )
-	remote? ( net-libs/gnutls )
+	remote? (
+		net-libs/gnutls
+		>=net-libs/pjsip-1.8
+		media-libs/portaudio
+		net-libs/libsrtp
+	)
 "
 # now only presets are used, libprojectm is internal
 # http://code.google.com/p/clementine-player/source/browse/#svn/trunk/3rdparty/libprojectm/patches
@@ -86,6 +89,7 @@ src_configure() {
 		use linguas_${x} && langs+=" ${x}"
 	done
 
+	# GIO is disabled because of upstream #802
 	local mycmakeargs=(
 		-DBUILD_WERROR=OFF
 		-DLINGUAS="${langs}"
@@ -96,15 +100,12 @@ src_configure() {
 		$(cmake-utils_use ios ENABLE_IMOBILEDEVICE)
 		$(cmake-utils_use lastfm ENABLE_LIBLASTFM)
 		$(cmake-utils_use mtp ENABLE_LIBMTP)
-		-DENABLE_GIO=ON
+		-DENABLE_GIO=OFF
 		$(cmake-utils_use wiimote ENABLE_WIIMOTEDEV)
 		$(cmake-utils_use projectm ENABLE_VISUALISATIONS)
 		$(cmake-utils_use ayatana ENABLE_SOUNDMENU)
-		$(cmake-utils_use python ENABLE_SCRIPTING_PYTHON)
-		$(cmake-utils_use archive ENABLE_SCRIPTING_ARCHIVES)
 		$(cmake-utils_use remote ENABLE_REMOTE)
 		-DSTATIC_SQLITE=OFF
-		-DPYQT_SIP_DIR="${EPREFIX}/usr/share/sip"
 		)
 
 	cmake-utils_src_configure
