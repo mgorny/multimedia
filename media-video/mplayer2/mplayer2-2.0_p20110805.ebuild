@@ -15,7 +15,7 @@ HOMEPAGE="http://www.mplayer2.org/"
 if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="git://git.mplayer2.org/mplayer2.git"
 else
-	RELEASE_URI="http://ftp.mplayer2.org/pub/release/${PN}-build-${PV/_/-}.tar.xz"
+	RELEASE_URI="http://rion-overlay.googlecode.com/files/${P}.tar.xz"
 fi
 SRC_URI="${RELEASE_URI}
 	!truetype? (
@@ -31,7 +31,6 @@ if [[ ${PV} == *9999* ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~arm ~hppa ~x86 ~amd64-linux"
-	S="${WORKDIR}/${PN}-build-${PV}/mplayer"
 fi
 IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +libass bidi bindist bl bluray
 bs2b +bzip2 cddb +cdio cdparanoia cpudetection custom-cpuopts custom-cflags debug dga +dirac

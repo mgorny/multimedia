@@ -35,6 +35,7 @@
 	<flag name="enca">Enables support for charset discovery and conversion</flag>
 	<flag name="faad">Use external faad library for AAC decoding</flag>
 	<flag name="hardcoded-tables">Use pre-calculated tables rather than calculating them on the fly.</flag>
+	<flag name="libass">SRT/SSA/ASS (SubRip / SubStation Alpha) subtitle support</flag>
 	<flag name="live">Enables live.com streaming media support</flag>
 	<flag name="md5sum">Enables md5sum video output</flag>
 	<flag name="mmxext">Enables mmx2 support</flag>

@@ -2,6 +2,12 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*mplayer2-2.0_p20110805 (06 Aug 2011)
+
+  06 Aug 2011; Nikoli <nikoli@lavabit.com> +mplayer2-2.0_p20110805.ebuild,
+  mplayer2-9999.ebuild, metadata.xml:
+  add snapshot, upstream renamed ass option to libass
+
 *mplayer2-2.0_p20110705 (05 Jul 2011)
 
   05 Jul 2011; Nikoli <nikoli@lavabit.com> +mplayer2-2.0_p20110705.ebuild:
