@@ -12,17 +12,20 @@ EGIT_REPO_URI="git://repo.or.cz/${PN}.git"
 
 LICENSE="ISC"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS=""
 IUSE="+enca +fontconfig static-libs"
 
 RDEPEND="
 	fontconfig? ( >=media-libs/fontconfig-2.4.2 )
 	>=media-libs/freetype-2.2.1
+	>=dev-libs/fribidi-0.19
+	>=media-libs/harfbuzz-0.7
 	virtual/libiconv
 	enca? ( app-i18n/enca )
-	>=media-libs/harfbuzz-0.7.0"
+"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig"
+	dev-util/pkgconfig
+"
 
 DOCS="Changelog"
 

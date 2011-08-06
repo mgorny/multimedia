@@ -2,6 +2,10 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  06 Aug 2011; Nikoli <nikoli@lavabit.com> +libass-9999.ebuild,
+  -libass-9999-r1.ebuild:
+  add fribidi dep, remove keywords from live ebuild, cosmetics
+
 *libass-9999-r1 (15 Jul 2011)
 
   15 Jul 2011; Steve Dibb <beandog@gentoo.org> -libass-9999.ebuild,
