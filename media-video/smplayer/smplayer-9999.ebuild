@@ -21,7 +21,7 @@ IUSE="debug"
 DEPEND="x11-libs/qt-gui:4"
 MPLAYER_USE="[ass,png]"
 RDEPEND="${DEPEND}
-	|| ( media-video/mplayer${MPLAYER_USE} media-video/mplayer2${MPLAYER_USE} )"
+	|| ( media-video/mplayer${MPLAYER_USE} media-video/mplayer2[libass,png] media-video/mplayer2${MPLAYER_USE} )"
 
 src_prepare() {
 	# For Version Branding
