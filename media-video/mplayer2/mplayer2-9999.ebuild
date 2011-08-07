@@ -30,7 +30,7 @@ SLOT="0"
 if [[ ${PV} == *9999* ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~arm ~hppa ~x86 ~amd64-linux"
+	KEYWORDS="~amd64 ~arm ~hppa ~ia64 ~sparc ~x86 ~amd64-linux"
 	S="${WORKDIR}/${PN}-build-${PV}/mplayer"
 fi
 IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +libass bidi bindist bl bluray
