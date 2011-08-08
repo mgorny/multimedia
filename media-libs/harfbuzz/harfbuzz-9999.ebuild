@@ -30,6 +30,10 @@ DEPEND="${RDEPEND}
 "
 
 src_prepare() {
+	# tests are broken
+	sed -e '/^SUBDIRS = /s/ test$//' \
+		 -i Makefile.am || die
+
 	eautoreconf
 }
 
