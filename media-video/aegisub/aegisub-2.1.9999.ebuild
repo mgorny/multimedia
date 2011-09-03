@@ -20,7 +20,7 @@ RDEPEND="
 	x11-libs/wxGTK:${WX_GTK_VER}[X,opengl,debug?]
 	virtual/opengl
 	virtual/glu
-	>=media-libs/libass-0.9.12[fontconfig]
+	>=media-libs/libass-0.9.11[fontconfig]
 	virtual/libiconv
 	>=media-libs/fontconfig-2.4.2
 	media-libs/freetype:2
@@ -33,7 +33,7 @@ RDEPEND="
 	lua? ( >=dev-lang/lua-5.1.1 )
 
 	spell? ( >=app-text/hunspell-1.2 )
-	ffmpeg? ( media-libs/ffmpegsource )
+	ffmpeg? ( >=media-libs/ffmpegsource-2.13.1 )
 "
 DEPEND="${RDEPEND}
 	dev-util/intltool
