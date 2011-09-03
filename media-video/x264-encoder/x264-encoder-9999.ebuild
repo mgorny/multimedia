@@ -36,7 +36,7 @@ IUSE="debug ffmpeg ffmpegsource mp4 +system-libx264 +threads"
 REQUIRED_USE="ffmpegsource? ( ffmpeg )"
 
 RDEPEND="
-	ffmpeg? ( media-video/ffmpeg )
+	ffmpeg? ( virtual/ffmpeg )
 	ffmpegsource? ( media-libs/ffmpegsource )
 	mp4? ( >=media-video/gpac-0.4.1_pre20060122 )
 	system-libx264? ( ~media-libs/x264-${PV} )
