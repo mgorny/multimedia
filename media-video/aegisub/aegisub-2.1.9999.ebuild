@@ -33,7 +33,7 @@ RDEPEND="
 	lua? ( >=dev-lang/lua-5.1.1 )
 
 	spell? ( >=app-text/hunspell-1.2 )
-	ffmpeg? ( virtual/ffmpeg )
+	ffmpeg? ( media-libs/ffmpegsource )
 "
 DEPEND="${RDEPEND}
 	dev-util/intltool
@@ -44,10 +44,6 @@ DEPEND="${RDEPEND}
 src_prepare() {
 	subversion_wc_info
 	echo "${ESVN_WC_REVISION}" > svn_revision
-
-	epatch "${FILESDIR}"/${PN}-2.1.9-external-libass.patch
-
-	rm -rf libass || die
 
 	sh autogen.sh --skip-configure
 	eautoreconf
@@ -61,7 +57,7 @@ src_configure() {
 		$(use_with pulseaudio) \
 		$(use_with openal) \
 		$(use_with lua) \
-		$(use ffmpeg || echo "--without-ffmpeg") \
+		$(use_with ffmpeg ffms) \
 		$(use_with spell hunspell) \
 		$(use_enable debug) \
 		$(use_enable nls)
