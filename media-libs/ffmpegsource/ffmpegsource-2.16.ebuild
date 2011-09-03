@@ -4,15 +4,16 @@
 
 EAPI=4
 
-inherit autotools subversion
+inherit autotools
 
+MY_P="ffms-${PV}-src"
 DESCRIPTION="An FFmpeg based source library for easy frame accurate access"
 HOMEPAGE="https://code.google.com/p/ffmpegsource/"
-ESVN_REPO_URI="http://ffmpegsource.googlecode.com/svn/trunk/"
+SRC_URI="https://ffmpegsource.googlecode.com/files/${MY_P}.tar.bz2"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE="postproc static-libs"
 
 RDEPEND="
@@ -22,6 +23,8 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
 "
+
+S="${WORKDIR}/${MY_P}"
 
 src_prepare() {
 	eautoreconf
