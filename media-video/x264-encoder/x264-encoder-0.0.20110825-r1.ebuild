@@ -53,6 +53,10 @@ if [ "${PV#9999}" = "${PV}" ] ; then
 	S=${WORKDIR}/${MY_P}
 fi
 
+src_prepare() {
+	epatch "${FILESDIR}"/${PN}-system-gpac.patch
+}
+
 src_configure() {
 	tc-export CC
 

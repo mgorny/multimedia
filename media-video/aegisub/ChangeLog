@@ -2,6 +2,14 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*aegisub-2.1.9_pre5585 (03 Sep 2011)
+
+  03 Sep 2011; Nikoli <nikoli@lavabit.com> +aegisub-2.1.9_pre5585.ebuild:
+  new snapshot
+
+  03 Sep 2011; Nikoli <nikoli@lavabit.com> aegisub-2.1.9999.ebuild:
+  upstream removed internal libass and ffmpegsource
+
   05 Jul 2011; Nikoli <nikoli@lavabit.com> aegisub-2.1.9_pre5440.ebuild,
   aegisub-2.1.9999.ebuild:
   sync libass dep with patch

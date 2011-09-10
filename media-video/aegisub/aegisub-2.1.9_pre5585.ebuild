@@ -5,15 +5,15 @@
 EAPI="4"
 
 WX_GTK_VER="2.8"
-inherit autotools eutils wxwidgets subversion
+inherit autotools eutils wxwidgets
 
 DESCRIPTION="Advanced SSA/ASS subtitle editor"
 HOMEPAGE="http://www.aegisub.net/"
-ESVN_REPO_URI="http://svn.aegisub.org/branches/aegisub_2.1.9/aegisub/"
+SRC_URI="http://rion-overlay.googlecode.com/files/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE="alsa debug +ffmpeg lua nls openal oss portaudio pulseaudio spell"
 
 RDEPEND="
@@ -42,9 +42,6 @@ DEPEND="${RDEPEND}
 "
 
 src_prepare() {
-	subversion_wc_info
-	echo "${ESVN_WC_REVISION}" > svn_revision
-
 	sh autogen.sh --skip-configure
 	eautoreconf
 }
