@@ -2,6 +2,9 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  16 Sep 2011; Steve Dibb <beandog@gentoo.org> ChangeLog:
+  Remove smplayer-0.6.9-r1.ebuild, moved to portage tree
+
   06 Aug 2011; Nikoli <nikoli@lavabit.com> smplayer-0.6.9-r1.ebuild,
   smplayer-9999.ebuild:
   mplayer2 renamed USE ass to libass
