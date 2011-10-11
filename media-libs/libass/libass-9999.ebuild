@@ -8,20 +8,20 @@ inherit autotools git-2
 
 DESCRIPTION="Library for SSA/ASS subtitles rendering"
 HOMEPAGE="http://code.google.com/p/libass/"
-EGIT_REPO_URI="git://repo.or.cz/${PN}.git"
+EGIT_REPO_URI="https://code.google.com/p/libass/"
 
 LICENSE="ISC"
 SLOT="0"
 KEYWORDS=""
-IUSE="+enca +fontconfig static-libs"
+IUSE="+enca +fontconfig +harfbuzz static-libs"
 
 RDEPEND="
-	fontconfig? ( >=media-libs/fontconfig-2.4.2 )
-	>=media-libs/freetype-2.2.1
-	>=dev-libs/fribidi-0.19
-	>=media-libs/harfbuzz-0.7
-	virtual/libiconv
 	enca? ( app-i18n/enca )
+	fontconfig? ( >=media-libs/fontconfig-2.4.2 )
+	harfbuzz? ( >=media-libs/harfbuzz-0.7 )
+	>=media-libs/freetype-2.2.1:2
+	>=dev-libs/fribidi-0.19.0
+	virtual/libiconv
 "
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig
@@ -37,6 +37,7 @@ src_configure() {
 	econf \
 		$(use_enable enca) \
 		$(use_enable fontconfig) \
+		$(use_enable harfbuzz) \
 		$(use_enable static-libs static)
 }
 
