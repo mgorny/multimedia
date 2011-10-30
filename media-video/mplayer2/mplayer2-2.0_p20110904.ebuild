@@ -30,7 +30,7 @@ SLOT="0"
 if [[ ${PV} == *9999* ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~arm ~hppa ~ia64 ~sparc ~x86 ~amd64-linux"
+	KEYWORDS="~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
 fi
 IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +libass bidi bindist bl bluray
 bs2b +bzip2 cddb +cdio cdparanoia cpudetection custom-cpuopts custom-cflags debug dga +dirac

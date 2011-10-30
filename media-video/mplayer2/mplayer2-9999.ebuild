@@ -30,7 +30,7 @@ SLOT="0"
 if [[ ${PV} == *9999* ]]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~amd64 ~arm ~hppa ~ia64 ~sparc ~x86 ~amd64-linux"
+	KEYWORDS="~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
 	S="${WORKDIR}/${PN}-build-${PV}/mplayer"
 fi
 IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +libass bidi bindist bl bluray
@@ -38,7 +38,7 @@ bs2b +bzip2 cddb +cdio cdparanoia cpudetection custom-cpuopts custom-cflags debu
 directfb doc +dts +dv dvb +dvd +dvdnav dxr3 +enca esd +faad fbcon
 ftp gif ggi gsm +iconv ipv6 jack joystick jpeg jpeg2k kernel_linux ladspa
 libcaca lirc +live mad md5sum +mmx mmxext mng +mp3 nas
-+network nut amr +opengl +osdmenu oss png pnm pulseaudio pvr +quicktime
++network nut amr +opengl oss png pnm pulseaudio pvr +quicktime
 radio +rar +real +rtc rtmp samba +shm +schroedinger +hardcoded-tables sdl +speex sse sse2 ssse3
 tga +theora threads +truetype +unicode v4l v4l2 vdpau
 +vorbis vpx win32codecs +X xanim xinerama +xscreensaver +xv xvid
@@ -51,7 +51,20 @@ for x in ${VIDEO_CARDS}; do
 done
 
 # bindist does not cope with win32codecs, which are nonfree
-REQUIRED_USE="bindist? ( !win32codecs )"
+REQUIRED_USE="bindist? ( !win32codecs )
+	cdio? ( !cdparanoia )
+	cddb? ( || ( cdio cdparanoia ) network )
+	dvdnav? ( dvd )
+	radio? ( || ( dvb v4l v4l2 ) )
+	dga? ( X )
+	dxr3? ( X )
+	ggi? ( X )
+	opengl? ( X )
+	vdpau? ( X )
+	xinerama? ( X )
+	xscreensaver? ( X )
+	xv? ( X )
+"
 
 FONT_RDEPS="
 	virtual/ttf-fonts
@@ -270,15 +283,12 @@ src_configure() {
 		"
 	fi
 
-	# libcdio support: prefer libcdio over cdparanoia
-	# don't check for cddb w/cdio
-	if use cdio; then
-		myconf+=" --disable-cdparanoia"
-	else
-		myconf+=" --disable-libcdio"
-		use cdparanoia || myconf+=" --disable-cdparanoia"
-		use cddb || myconf+=" --disable-cddb"
-	fi
+	########
+	# CDDA #
+	########
+	use cddb || myconf+=" --disable-cddb"
+	use cdio || myconf+=" --disable-libcdio"
+	use cdparanoia || myconf+=" --disable-cdparanoia"
 
 	################################
 	# DVD read, navigation support #
@@ -427,6 +437,7 @@ src_configure() {
 	################
 	# Audio Output #
 	################
+	myconf+=" --disable-rsound" # media-sound/rsound is in pro-audio overlay only
 	uses="alsa esd jack ladspa nas"
 	for i in ${uses}; do
 		use ${i} || myconf+=" --disable-${i}"
@@ -480,7 +491,6 @@ src_configure() {
 		done
 		use dga || myconf+=" --disable-dga1 --disable-dga2"
 		use opengl || myconf+=" --disable-gl"
-		use osdmenu && myconf+=" --enable-menu"
 		use vdpau || myconf+=" --disable-vdpau"
 		use video_cards_vesa || myconf+=" --disable-vesa"
 		use xscreensaver || myconf+=" --disable-xss"
@@ -497,10 +507,6 @@ src_configure() {
 			--disable-xv
 			--disable-x11
 		"
-		uses="dga dxr3 ggi opengl osdmenu vdpau xinerama xscreensaver xv"
-		for i in ${uses}; do
-			use ${i} && elog "Useflag \"${i}\" require \"X\" useflag enabled to work."
-		done
 	fi
 
 	############################
@@ -592,7 +598,6 @@ src_install() {
 [default]
 _EOF_
 	doins "${S}/etc/input.conf"
-	use osdmenu && doins "${S}/etc/menu.conf"
 
 	# set unrar path when required
 	if use rar; then
