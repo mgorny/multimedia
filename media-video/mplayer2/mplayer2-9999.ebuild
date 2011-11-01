@@ -40,7 +40,7 @@ ftp gif ggi gsm +iconv ipv6 jack joystick jpeg jpeg2k kernel_linux ladspa
 libcaca lirc +live mad md5sum +mmx mmxext mng +mp3 nas
 +network nut amr +opengl oss png pnm pulseaudio pvr +quicktime
 radio +rar +real +rtc rtmp samba +shm +schroedinger +hardcoded-tables sdl +speex sse sse2 ssse3
-tga +theora threads +truetype +unicode v4l v4l2 vdpau
+tga +theora threads +truetype +unicode v4l vdpau
 +vorbis vpx win32codecs +X xanim xinerama +xscreensaver +xv xvid
 "
 IUSE+=" symlink"
@@ -55,7 +55,7 @@ REQUIRED_USE="bindist? ( !win32codecs )
 	cdio? ( !cdparanoia )
 	cddb? ( || ( cdio cdparanoia ) network )
 	dvdnav? ( dvd )
-	radio? ( || ( dvb v4l v4l2 ) )
+	radio? ( || ( dvb v4l ) )
 	dga? ( X )
 	dxr3? ( X )
 	ggi? ( X )
@@ -331,12 +331,13 @@ src_configure() {
 	myconf+=" --disable-tv-bsdbt848"
 	# broken upstream, won't work with recent kernels
 	myconf+=" --disable-ivtv"
-	if { use dvb || use v4l || use v4l2 || use pvr || use radio; }; then
+	# v4l1 is gone since linux-headers-2.6.38
+	myconf+=" --disable-tv-v4l1"
+	if { use dvb || use v4l || use pvr || use radio; }; then
 		use dvb || myconf+=" --disable-dvb"
 		use pvr || myconf+=" --disable-pvr"
-		use v4l || myconf+=" --disable-tv-v4l1"
-		use v4l2 || myconf+=" --disable-tv-v4l2"
-		if use radio && { use dvb || use v4l || use v4l2; }; then
+		use v4l || myconf+=" --disable-tv-v4l2"
+		if use radio && { use dvb || use v4l; }; then
 			myconf+="
 				--enable-radio
 				--disable-radio-capture
@@ -350,7 +351,6 @@ src_configure() {
 	else
 		myconf+="
 			--disable-tv
-			--disable-tv-v4l1
 			--disable-tv-v4l2
 			--disable-radio
 			--disable-radio-v4l2

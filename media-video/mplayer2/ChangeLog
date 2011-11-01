@@ -2,6 +2,12 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  01 Nov 2011; Nikoli <nikoli@lavabit.com> -mplayer2-2.0.ebuild,
+  -mplayer2-2.0_p20110705.ebuild, -mplayer2-2.0_p20110805.ebuild,
+  mplayer2-2.0_p20110904.ebuild, mplayer2-9999.ebuild:
+  rename USE v4l2 to v4l while removing support for video4linux 1.x, bug
+  #385241
+
   30 Oct 2011; Nikoli <nikoli@lavabit.com> mplayer2-2.0_p20110904.ebuild,
   mplayer2-9999.ebuild:
   OSD menu was removed upstream, add ~ppc ~ppc64 keywords, better REQUIRED_USE

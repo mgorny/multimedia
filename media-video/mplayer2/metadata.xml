@@ -22,7 +22,6 @@
 <use>
 	<flag name="3dnowext">Enable 3dnowext cpu instructions</flag>
 	<flag name="amr">Enables Adaptive Multi-Rate format support</flag>
-	<flag name="ass">SRT/SSA/ASS (SubRip / SubStation Alpha) subtitle support</flag>
 	<flag name="bl">Blinkenlights video output</flag>
 	<flag name="bluray">Enable playback of Blu-ray filesystems</flag>
 	<flag name="bs2b">Enable Bauer stereophonic-to-binaural headphone filter</flag>
@@ -59,6 +58,5 @@
 	<flag name="vdpau">Enables experimental VDPAU support (requires nVidia video cards) to offload MPEG2/MPEG4/VC1/WMV CPU processing to video card</flag>
 	<flag name="vpx">Enables vp8 codec support using libvpx: Decoding vp8 does not require this to be enabled but libvpx can also be used for decoding; encoding vp8 requires this useflag to be enabled though.</flag>
 	<flag name="xanim">Enables support for xanim based codecs</flag>
-	<flag name="xvmc">Enables X-Video Motion Compensation support</flag>
 </use>
 </pkgmetadata>
