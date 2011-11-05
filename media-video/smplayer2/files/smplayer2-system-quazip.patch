@@ -1,0 +1,88 @@
+diff --git a/src/findsubtitles/findsubtitles.pro b/src/findsubtitles/findsubtitles.pro
+index bbfa8a1..e48e6ee 100644
+--- a/src/findsubtitles/findsubtitles.pro
++++ b/src/findsubtitles/findsubtitles.pro
+@@ -28,29 +28,14 @@ FORMS += ../filechooser.ui findsubtitleswindow.ui findsubtitlesconfigdialog.ui
+ DEFINES += NO_SMPLAYER_SUPPORT DOWNLOAD_SUBS
+ 
+ contains( DEFINES, DOWNLOAD_SUBS ) {
+-	INCLUDEPATH += filedownloader quazip
+-	DEPENDPATH += filedownloader quazip
++	INCLUDEPATH += filedownloader
++	DEPENDPATH += filedownloader
+ 
+ 	HEADERS += filedownloader.h subchooserdialog.h
+ 	SOURCES += filedownloader.cpp subchooserdialog.cpp
+ 
+ 	FORMS += subchooserdialog.ui
+ 
+-	HEADERS += crypt.h \
+-	           ioapi.h \
+-	           quazip.h \
+-	           quazipfile.h \
+-	           quazipfileinfo.h \
+-	           quazipnewinfo.h \
+-	           unzip.h \
+-	           zip.h
+-
+-	SOURCES += ioapi.c \
+-	           quazip.cpp \
+-	           quazipfile.cpp \
+-	           quazipnewinfo.cpp \
+-	           unzip.c \
+-	           zip.c
+ 
+ 	LIBS += -lz
+ 	
+diff --git a/src/findsubtitles/findsubtitleswindow.cpp b/src/findsubtitles/findsubtitleswindow.cpp
+index d1a21f3..8f2ff0f 100644
+--- a/src/findsubtitles/findsubtitleswindow.cpp
++++ b/src/findsubtitles/findsubtitleswindow.cpp
+@@ -36,8 +36,8 @@
+ #ifdef DOWNLOAD_SUBS
+ #include "filedownloader.h"
+ #include "subchooserdialog.h"
+-#include "quazip.h"
+-#include "quazipfile.h"
++#include <quazip/quazip.h>
++#include <quazip/quazipfile.h>
+ #include <QTemporaryFile>
+ #include <QBuffer>
+ #endif
+diff --git a/src/smplayer2.pro b/src/smplayer2.pro
+index 443341b..94f5c92 100644
+--- a/src/smplayer2.pro
++++ b/src/smplayer2.pro
+@@ -243,29 +243,15 @@ TRANSLATIONS = translations/smplayer2_es.ts translations/smplayer2_de.ts \
+                translations/smplayer2_da.ts
+ 
+ contains( DEFINES, DOWNLOAD_SUBS ) {
+-	INCLUDEPATH += findsubtitles/filedownloader findsubtitles/quazip
+-	DEPENDPATH += findsubtitles/filedownloader findsubtitles/quazip
++	INCLUDEPATH += findsubtitles/filedownloader
++	DEPENDPATH += findsubtitles/filedownloader
+ 
+ 	HEADERS += filedownloader.h subchooserdialog.h
+ 	SOURCES += filedownloader.cpp subchooserdialog.cpp
+ 
+ 	FORMS += subchooserdialog.ui
+ 
+-	HEADERS += crypt.h \
+-	           ioapi.h \
+-	           quazip.h \
+-	           quazipfile.h \
+-	           quazipfileinfo.h \
+-	           quazipnewinfo.h \
+-	           unzip.h \
+-	           zip.h
+-
+-	SOURCES += ioapi.c \
+-	           quazip.cpp \
+-	           quazipfile.cpp \
+-	           quazipnewinfo.cpp \
+-	           unzip.c \
+-	           zip.c
++	LIBS += -lquazip
+ 
+ 	LIBS += -lz
+ }
