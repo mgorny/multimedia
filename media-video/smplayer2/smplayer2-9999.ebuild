@@ -26,13 +26,6 @@ RDEPEND="${DEPEND}
 "
 
 src_prepare() {
-	# Force Ctrl+Q as default quit shortcut
-	epatch "${FILESDIR}"/smplayer-0.6.8-quit.patch
-
-	# Unbundle dev-libs/quazip
-	rm -R src/findsubtitles/quazip/ || die
-	epatch "${FILESDIR}"/${PN}-system-quazip.patch
-
 	# Set version
 	local version="0.7.0_pre$(git log -n1 --date=short --format=%cd|tr -d '-')-$(git describe --match "v[0-9]*" --always)"
 	sed -i -e "/#define VERSION /s/UNKNOWN/$version/" \

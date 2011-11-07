@@ -2,6 +2,9 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  07 Nov 2011; Nikoli <nikoli@lavabit.com> smplayer2-9999.ebuild:
+  quit shortcut and bundled quazip are fixed upstream
+
 *smplayer2-9999 (05 Nov 2011)
 *smplayer2-0.7.0_pre20111022 (05 Nov 2011)
 
