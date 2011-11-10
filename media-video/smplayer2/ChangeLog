@@ -2,6 +2,12 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*smplayer2-0.7.0_pre20111110 (10 Nov 2011)
+
+  10 Nov 2011; Nikoli <nikoli@lavabit.com> +smplayer2-0.7.0_pre20111110.ebuild,
+  smplayer2-9999.ebuild, metadata.xml:
+  migrate to cmake, new snapshot
+
   07 Nov 2011; Nikoli <nikoli@lavabit.com> smplayer2-9999.ebuild:
   quit shortcut and bundled quazip are fixed upstream
 

@@ -6,15 +6,15 @@ EAPI="4"
 LANGS="bg ca cs da de en_US es et eu fi fr gl hu it ja ka ko ku lt mk nl pl pt pt_BR sk sr sv tr zh_CN zh_TW"
 LANGSLONG="ar_SY el_GR ro_RO ru_RU sl_SI uk_UA vi_VN"
 
-inherit cmake-utils git-2
+inherit cmake-utils
 
 DESCRIPTION="Qt4 GUI front-end for mplayer2"
 HOMEPAGE="https://github.com/lachs0r/SMPlayer2"
-EGIT_REPO_URI="git://github.com/lachs0r/SMPlayer2.git"
+SRC_URI="http://rion-overlay.googlecode.com/files/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~arm ~hppa ~x86"
 IUSE="debug +download-subs"
 for x in ${LANGS}; do
 	IUSE="${IUSE} linguas_${x}"
