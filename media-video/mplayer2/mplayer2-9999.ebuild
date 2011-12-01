@@ -1,6 +1,6 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/mplayer2/mplayer2-9999.ebuild,v 1.15 2011/05/10 13:27:54 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/mplayer2/mplayer2-2.0_p20111126.ebuild,v 1.1 2011/11/30 04:49:34 lu_zero Exp $
 
 EAPI=4
 
@@ -15,7 +15,7 @@ HOMEPAGE="http://www.mplayer2.org/"
 if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="git://git.mplayer2.org/mplayer2.git"
 else
-	RELEASE_URI="http://ftp.mplayer2.org/pub/release/${PN}-build-${PV/_/-}.tar.xz"
+	RELEASE_URI="http://rion-overlay.googlecode.com/files/${P}.tar.xz"
 fi
 SRC_URI="${RELEASE_URI}
 	!truetype? (
@@ -31,17 +31,17 @@ if [[ ${PV} == *9999* ]]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
-	S="${WORKDIR}/${PN}-build-${PV}/mplayer"
 fi
-IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +libass bidi bindist bl bluray
-bs2b +bzip2 cddb +cdio cdparanoia cpudetection custom-cpuopts custom-cflags debug dga +dirac
-directfb doc +dts +dv dvb +dvd +dvdnav dxr3 +enca esd +faad fbcon
-ftp gif ggi gsm +iconv ipv6 jack joystick jpeg jpeg2k kernel_linux ladspa
-libcaca lirc +live mad md5sum +mmx mmxext mng +mp3 nas
-+network nut amr +opengl oss png pnm pulseaudio pvr +quicktime
-radio +rar +real +rtc rtmp samba +shm +schroedinger +hardcoded-tables sdl +speex sse sse2 ssse3
-tga +theora threads +truetype +unicode v4l vdpau
-+vorbis vpx win32codecs +X xanim xinerama +xscreensaver +xv xvid
+IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +ass bidi bindist bl
+bluray bs2b +bzip2 cddb +cdio cdparanoia cpudetection custom-cpuopts
+custom-cflags debug dga +dirac directfb doc +dts +dv dvb +dvd +dvdnav
+dxr3 +enca esd +faad fbcon ftp gif ggi gsm +iconv ipv6 jack joystick
+jpeg jpeg2k kernel_linux ladspa libcaca lirc +live mad md5sum +mmx
+mmxext mng +mp3 nas +network nut amr +opengl oss png pnm pulseaudio
+pvr +quicktime radio +rar +real +rtc rtmp samba +shm +schroedinger
+sdl +speex sse sse2 ssse3 tga +theora threads +truetype +unicode
+v4l vdpau +vorbis vpx win32codecs +X xanim xinerama +xscreensaver
++xv xvid
 "
 IUSE+=" symlink"
 
@@ -74,7 +74,7 @@ FONT_RDEPS="
 # Rar: althrought -gpl version is nice, it cant do most functions normal rars can
 #	nemesi? ( net-libs/libnemesi )
 # virtual/ffmpeg does not have all USE
-FFMPEG_USE="[amr?,bzip2?,dirac?,gsm?,hardcoded-tables?,jpeg2k?,rtmp?,schroedinger?,threads?,vpx?]"
+LIBAV_USE="[amr?,bzip2?,dirac?,gsm?,jpeg2k?,rtmp?,schroedinger?,threads?,vpx?]"
 RDEPEND+="
 	sys-libs/ncurses
 	sys-libs/zlib
@@ -102,6 +102,7 @@ RDEPEND+="
 	a52? ( media-libs/a52dec )
 	aalib? ( media-libs/aalib )
 	alsa? ( media-libs/alsa-lib )
+	ass? ( ${FONT_RDEPS} >=media-libs/libass-0.9.10[enca?,fontconfig] )
 	bidi? ( dev-libs/fribidi )
 	bluray? ( media-libs/libbluray )
 	bs2b? ( media-libs/libbs2b )
@@ -123,7 +124,6 @@ RDEPEND+="
 	jack? ( media-sound/jack-audio-connection-kit )
 	jpeg? ( virtual/jpeg )
 	ladspa? ( media-libs/ladspa-sdk )
-	libass? ( ${FONT_RDEPS} >=media-libs/libass-0.9.10[enca?,fontconfig] )
 	libcaca? ( media-libs/libcaca )
 	lirc? ( app-misc/lirc )
 	live? ( media-plugins/live )
@@ -150,8 +150,8 @@ RDEPEND+="
 	xanim? ( media-video/xanim )
 	xvid? ( media-libs/xvid )
 	|| (
-		>=media-video/libav-0.6.2${FFMPEG_USE}
-		>=media-video/ffmpeg-0.6_p25423${FFMPEG_USE}
+		>=media-video/libav-0.6.2${LIBAV_USE}
+		>=media-video/ffmpeg-0.6_p25423${LIBAV_USE}
 	)
 	symlink? ( !media-video/mplayer )
 "
@@ -265,11 +265,12 @@ src_configure() {
 		$(use_enable network networking)
 		$(use_enable joystick)
 	"
-	uses="libass bl bluray enca ftp rtc" # nemesi <- not working with in-tree ebuild
+	uses="bl bluray enca ftp rtc" # nemesi <- not working with in-tree ebuild
 	myconf+=" --disable-nemesi" # nemesi automagic disable
 	for i in ${uses}; do
 		use ${i} || myconf+=" --disable-${i}"
 	done
+	use ass || myconf+=" --disable-libass"
 	use bidi || myconf+=" --disable-fribidi"
 	use ipv6 || myconf+=" --disable-inet6"
 	use nut || myconf+=" --disable-libnut"
@@ -314,7 +315,7 @@ src_configure() {
 	# SRT/ASS/SSA (subtitles) requires freetype support
 	# freetype support requires iconv
 	# iconv optionally can use unicode
-	if ! use libass && ! use truetype; then
+	if ! use ass && ! use truetype; then
 		myconf+=" --disable-freetype"
 		if ! use iconv; then
 			myconf+="
@@ -578,7 +579,7 @@ src_install() {
 		dohtml -r "${S}"/DOCS/HTML/*
 	fi
 
-	if ! use libass && ! use truetype; then
+	if ! use ass && ! use truetype; then
 		dodir /usr/share/${PN}/fonts
 		# Do this generic, as the mplayer people like to change the structure
 		# of their zips ...

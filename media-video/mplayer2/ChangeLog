@@ -2,6 +2,10 @@
 # Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  01 Dec 2011; Nikoli <nikoli@lavabit.com> -mplayer2-2.0_p20110904.ebuild,
+  mplayer2-2.0_p20111126.ebuild, mplayer2-9999.ebuild, metadata.xml:
+  sync with portage, remove old
+
 *mplayer2-2.0_p20111126 (28 Nov 2011)
 
   28 Nov 2011; Nikoli <nikoli@lavabit.com> +mplayer2-2.0_p20111126.ebuild:
