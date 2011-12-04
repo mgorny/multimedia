@@ -1,21 +1,21 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/clementine/clementine-0.7.1-r2.ebuild,v 1.1 2011/07/06 17:59:59 ssuominen Exp $
 
 EAPI=4
 
 LANGS=" ar be bg bn br bs ca cs cy da de el en_CA en_GB eo es et eu fa fi fr gl he hi hr hu hy ia id is it ja ka kk ko lt lv mr ms nb nl oc pa pl pt_BR pt ro ru sk sl sr@latin sr sv tr uk vi zh_CN zh_TW"
 
-inherit cmake-utils gnome2-utils virtualx git-2
+inherit cmake-utils gnome2-utils virtualx
 
 DESCRIPTION="A modern music player and library organizer based on Amarok 1.4 and Qt4"
 HOMEPAGE="http://www.clementine-player.org/ http://code.google.com/p/clementine-player/"
-EGIT_REPO_URI="https://code.google.com/p/clementine-player/"
+SRC_URI="http://clementine-player.googlecode.com/files/${P/_/}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
-IUSE="ayatana cdda +dbus ios ipod kde +lastfm mms mtp +ofa projectm remote +udev wiimote"
+KEYWORDS="~amd64 ~x86"
+IUSE="ayatana cdda +dbus ios ipod kde +lastfm mms mtp +ofa projectm +udev wiimote"
 IUSE+="${LANGS// / linguas_}"
 
 REQUIRED_USE="
@@ -50,12 +50,6 @@ COMMON_DEPEND="
 	lastfm? ( media-libs/liblastfm )
 	mtp? ( >=media-libs/libmtp-1.0.0 )
 	projectm? ( media-libs/glew )
-	remote? (
-		net-libs/gnutls
-		>=net-libs/pjsip-1.8
-		media-libs/portaudio
-		net-libs/libsrtp
-	)
 "
 # now only presets are used, libprojectm is internal
 # http://code.google.com/p/clementine-player/source/browse/#svn/trunk/3rdparty/libprojectm/patches
@@ -81,6 +75,8 @@ DEPEND="${COMMON_DEPEND}
 "
 DOCS="Changelog"
 
+S="${WORKDIR}/${P/_/}"
+
 src_prepare() {
 	# some tests fail or hang
 	sed -i \
@@ -96,6 +92,7 @@ src_configure() {
 
 	# GIO is disabled because of upstream #802
 	# spotify is not in portage
+	# REMOTE is unstable
 	local mycmakeargs=(
 		-DBUILD_WERROR=OFF
 		-DLINGUAS="${langs}"
@@ -112,9 +109,9 @@ src_configure() {
 		$(cmake-utils_use wiimote ENABLE_WIIMOTEDEV)
 		$(cmake-utils_use projectm ENABLE_VISUALISATIONS)
 		$(cmake-utils_use ayatana ENABLE_SOUNDMENU)
-		$(cmake-utils_use remote ENABLE_REMOTE)
 		-DENABLE_SPOTIFY=OFF
 		-DENABLE_SPOTIFY_BLOB=OFF
+		-DENABLE_REMOTE=OFF
 		-DENABLE_BREAKPAD=OFF
 		-DSTATIC_SQLITE=OFF
 		-DUSE_SYSTEM_GMOCK=ON
