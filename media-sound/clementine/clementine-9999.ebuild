@@ -77,7 +77,7 @@ DEPEND="${COMMON_DEPEND}
 	sys-devel/gettext
 	x11-libs/qt-test:4
 	kde? ( dev-util/automoc )
-	test? ( dev-cpp/gmock )
+	dev-cpp/gmock
 "
 DOCS="Changelog"
 
