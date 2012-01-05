@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -29,7 +29,7 @@ COMMON_DEPEND="
 	>=x11-libs/qt-opengl-4.5:4
 	>=x11-libs/qt-sql-4.5:4[sqlite]
 	dev-db/sqlite[fts3]
-	>=media-libs/taglib-1.6
+	>=media-libs/taglib-1.7
 	>=dev-libs/glib-2.24.1-r1:2
 	dev-libs/libxml2
 	dev-libs/qjson
@@ -47,7 +47,7 @@ COMMON_DEPEND="
 		)
 	)
 	kde? ( >=kde-base/kdelibs-4.4 )
-	lastfm? ( media-libs/liblastfm )
+	lastfm? ( >=media-libs/liblastfm-0.3.3 )
 	mtp? ( >=media-libs/libmtp-1.0.0 )
 	projectm? ( media-libs/glew )
 	remote? (
@@ -94,7 +94,6 @@ src_configure() {
 		use linguas_${x} && langs+=" ${x}"
 	done
 
-	# GIO is disabled because of upstream #802
 	# spotify is not in portage
 	local mycmakeargs=(
 		-DBUILD_WERROR=OFF
@@ -108,7 +107,7 @@ src_configure() {
 		$(cmake-utils_use kde ENABLE_PLASMARUNNER)
 		$(cmake-utils_use lastfm ENABLE_LIBLASTFM)
 		$(cmake-utils_use mtp ENABLE_LIBMTP)
-		-DENABLE_GIO=OFF
+		-DENABLE_GIO=ON
 		$(cmake-utils_use wiimote ENABLE_WIIMOTEDEV)
 		$(cmake-utils_use projectm ENABLE_VISUALISATIONS)
 		$(cmake-utils_use ayatana ENABLE_SOUNDMENU)
