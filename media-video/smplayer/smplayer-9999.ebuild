@@ -18,7 +18,8 @@ SLOT="0"
 KEYWORDS=""
 IUSE="debug"
 
-DEPEND="x11-libs/qt-gui:4"
+DEPEND="x11-libs/qt-gui:4
+	dev-libs/quazip"
 MPLAYER_USE="[ass,png]"
 RDEPEND="${DEPEND}
 	|| ( media-video/mplayer${MPLAYER_USE} media-video/mplayer2${MPLAYER_USE} )"
@@ -33,6 +34,10 @@ src_prepare() {
 
 	# Force Ctrl+Q as default quit shortcut
 	epatch "${FILESDIR}/${PN}-0.6.8-quit.patch"
+
+	# Unbundle dev-libs/quazip
+	rm -R src/findsubtitles/quazip/ || die
+	epatch "${FILESDIR}"/smplayer-0.6.9-quazip.patch
 
 	# Upstream Makefile sucks
 	sed -i -e "/^PREFIX=/s:/usr/local:/usr:" \
