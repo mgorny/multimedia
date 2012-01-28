@@ -2,6 +2,10 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  28 Jan 2012; Nikoli <nikoli@lavabit.com> clementine-9999.ebuild,
+  metadata.xml:
+  update, upstream migrated from ofa to chromaprint
+
   05 Jan 2012; Nikoli <nikoli@lavabit.com> -clementine-1.0.0_rc1.ebuild,
   clementine-9999.ebuild:
   update deps, gio works fine now

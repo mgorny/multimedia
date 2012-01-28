@@ -15,7 +15,7 @@ EGIT_REPO_URI="https://code.google.com/p/clementine-player/"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="ayatana cdda +dbus ios ipod kde +lastfm mms mtp +ofa projectm remote +udev wiimote"
+IUSE="ayatana cdda +dbus ios ipod kde lastfm mms mtp projectm remote test +udev wiimote"
 IUSE+="${LANGS// / linguas_}"
 
 REQUIRED_USE="
@@ -30,10 +30,11 @@ COMMON_DEPEND="
 	>=x11-libs/qt-sql-4.5:4[sqlite]
 	dev-db/sqlite[fts3]
 	>=media-libs/taglib-1.7
-	>=dev-libs/glib-2.24.1-r1:2
+	>=dev-libs/glib-2.24.1-r1
 	dev-libs/libxml2
 	dev-libs/qjson
 	media-libs/libechonest
+	>=media-libs/chromaprint-0.6
 	media-libs/gstreamer:0.10
 	media-libs/gst-plugins-base:0.10
 	ayatana? ( dev-libs/libindicate-qt )
@@ -64,7 +65,6 @@ RDEPEND="${COMMON_DEPEND}
 	dbus? ( udev? ( sys-fs/udisks ) )
 	mms? ( media-plugins/gst-plugins-libmms:0.10 )
 	mtp? ( gnome-base/gvfs )
-	ofa? ( media-plugins/gst-plugins-ofa )
 	projectm? ( >=media-libs/libprojectm-1.2.0 )
 	media-plugins/gst-plugins-meta:0.10
 	media-plugins/gst-plugins-gio:0.10
@@ -78,6 +78,7 @@ DEPEND="${COMMON_DEPEND}
 	x11-libs/qt-test:4
 	kde? ( dev-util/automoc )
 	dev-cpp/gmock
+	test? ( gnome-base/gsettings-desktop-schemas )
 "
 DOCS="Changelog"
 
