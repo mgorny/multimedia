@@ -1,6 +1,14 @@
 # ChangeLog for media-video/smplayer
-# Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+*smplayer-0.7.0 (01 Feb 2012)
+
+  01 Feb 2012; Ben de Groot <yngwin@gentoo.org> +smplayer-0.7.0.ebuild,
+  smplayer-9999.ebuild:
+  Version bump to 0.7.0. This version fixes bug #345653. Drop quit.patch, now
+  applied upstream. Add mplayer[X], bug #377343. Sync live ebuild with release
+  version ebuild.
 
   10 Jan 2012; Nikos Chantziaras <realnc@gmail.com> smplayer-9999.ebuild:
   Build against system quazip
