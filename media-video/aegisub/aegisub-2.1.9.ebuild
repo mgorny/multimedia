@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -33,7 +33,7 @@ RDEPEND="
 	lua? ( >=dev-lang/lua-5.1.1 )
 
 	spell? ( >=app-text/hunspell-1.2 )
-	ffmpeg? ( >=media-libs/ffmpegsource-2.13.1 )
+	ffmpeg? ( >=media-libs/ffmpegsource-2.17 )
 "
 DEPEND="${RDEPEND}
 	dev-util/intltool
