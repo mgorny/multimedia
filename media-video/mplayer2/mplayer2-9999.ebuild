@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/mplayer2/mplayer2-9999.ebuild,v 1.19 2011/12/01 20:13:49 lu_zero Exp $
 
@@ -111,7 +111,7 @@ RDEPEND+="
 	directfb? ( dev-libs/DirectFB )
 	dts? ( media-libs/libdca )
 	dv? ( media-libs/libdv )
-	dvb? ( media-tv/linuxtv-dvb-headers )
+	dvb? ( virtual/linuxtv-dvb-headers )
 	dvd? (
 		>=media-libs/libdvdread-4.1.3
 		dvdnav? ( >=media-libs/libdvdnav-4.1.3 )
