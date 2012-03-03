@@ -2,8 +2,8 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: /var/cvsroot/gentoo-x86/media-video/smplayer/smplayer-0.6.10.ebuild,v 1.1 2012/01/22 19:38:31 hwoarang Exp $
 
-EAPI="4"
-LANGS="bg ca cs da de en_US es et eu fi fr gl hr hu it ja ka ko ku mk nl pl
+EAPI=4
+LANGS="bg ca cs da de en_US es et eu fi fr gl hr hu it ja ka ko ku lt mk nl pl
 pt_BR pt sk sr sv tr zh_CN zh_TW"
 LANGSLONG="ar_SY el_GR ro_RO ru_RU sl_SI uk_UA vi_VN"
 
@@ -92,7 +92,7 @@ src_compile() {
 
 src_install() {
 	# remove unneeded copies of GPL
-	rm -f Copying.txt docs/{cs,en,ja,ru}/gpl.html || die
+	rm -f Copying.txt docs/{cs,en,hu,it,ja,pt,ru,zh_CN}/gpl.html || die
 	rm -rf docs/{de,es,nl,ro} || die
 
 	# remove windows-only files
