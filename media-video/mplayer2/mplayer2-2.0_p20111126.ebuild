@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/mplayer2/mplayer2-2.0_p20111126.ebuild,v 1.2 2011/12/01 20:13:49 lu_zero Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/mplayer2/mplayer2-2.0_p20111126.ebuild,v 1.9 2012/03/18 13:48:26 ssuominen Exp $
 
 EAPI=4
 
@@ -34,8 +34,8 @@ else
 fi
 IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +ass bidi bindist bl
 bluray bs2b +bzip2 cddb +cdio cdparanoia cpudetection custom-cpuopts
-custom-cflags debug dga +dirac directfb doc +dts +dv dvb +dvd +dvdnav
-dxr3 +enca esd +faad fbcon ftp gif ggi gsm +iconv ipv6 jack joystick
+custom-cflags debug +dirac directfb doc +dts +dv dvb +dvd +dvdnav
+dxr3 +enca +faad fbcon ftp gif ggi gsm +iconv ipv6 jack joystick
 jpeg jpeg2k kernel_linux ladspa libcaca lirc +live mad md5sum +mmx
 mmxext mng +mp3 nas +network nut amr +opengl oss png pnm pulseaudio
 pvr +quicktime radio +rar +real +rtc rtmp samba +shm +schroedinger
@@ -56,7 +56,6 @@ REQUIRED_USE="bindist? ( !win32codecs )
 	cddb? ( || ( cdio cdparanoia ) network )
 	dvdnav? ( dvd )
 	radio? ( || ( dvb v4l ) )
-	dga? ( X )
 	dxr3? ( X )
 	ggi? ( X )
 	opengl? ( X )
@@ -86,7 +85,6 @@ RDEPEND+="
 	X? (
 		x11-libs/libXext
 		x11-libs/libXxf86vm
-		dga? ( x11-libs/libXxf86dga )
 		ggi? (
 			media-libs/libggi
 			media-libs/libggiwmh
@@ -116,7 +114,6 @@ RDEPEND+="
 		>=media-libs/libdvdread-4.1.3
 		dvdnav? ( >=media-libs/libdvdnav-4.1.3 )
 	)
-	esd? ( media-sound/esound )
 	enca? ( app-i18n/enca )
 	faad? ( media-libs/faad2 )
 	gif? ( media-libs/giflib )
@@ -163,7 +160,6 @@ DEPEND="${RDEPEND}
 	X? (
 		x11-proto/videoproto
 		x11-proto/xf86vidmodeproto
-		dga? ( x11-proto/xf86dgaproto )
 		dxr3? ( media-video/em8300-libraries )
 		xinerama? ( x11-proto/xineramaproto )
 		xscreensaver? ( x11-proto/scrnsaverproto )
@@ -439,7 +435,8 @@ src_configure() {
 	# Audio Output #
 	################
 	myconf+=" --disable-rsound" # media-sound/rsound is in pro-audio overlay only
-	uses="alsa esd jack ladspa nas"
+	myconf+=" --disable-esd"
+	uses="alsa jack ladspa nas"
 	for i in ${uses}; do
 		use ${i} || myconf+=" --disable-${i}"
 	done
@@ -485,20 +482,18 @@ src_configure() {
 	###########################
 	# X enabled configuration #
 	###########################
+	myconf+=" --disable-dga1 --disable-dga2"
 	if use X; then
 		uses="dxr3 ggi xinerama xv"
 		for i in ${uses}; do
 			use ${i} || myconf+=" --disable-${i}"
 		done
-		use dga || myconf+=" --disable-dga1 --disable-dga2"
 		use opengl || myconf+=" --disable-gl"
 		use vdpau || myconf+=" --disable-vdpau"
 		use video_cards_vesa || myconf+=" --disable-vesa"
 		use xscreensaver || myconf+=" --disable-xss"
 	else
 		myconf+="
-			--disable-dga1
-			--disable-dga2
 			--disable-dxr3
 			--disable-ggi
 			--disable-gl
