@@ -516,8 +516,9 @@ src_configure() {
 	fi
 
 	./configure \
-		--cc=$(tc-getCC) \
-		--host-cc=$(tc-getBUILD_CC) \
+		--cc="$(tc-getCC)" \
+		--host-cc="$(tc-getBUILD_CC)" \
+		--pkg-config="$(tc-getPKG_CONFIG)" \
 		--prefix="${EPREFIX}"/usr \
 		--bindir="${EPREFIX}"/usr/bin \
 		--libdir="${EPREFIX}"/usr/$(get_libdir) \

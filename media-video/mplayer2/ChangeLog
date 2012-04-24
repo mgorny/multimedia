@@ -2,6 +2,10 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  24 Apr 2012; Nikoli <nikoli@lavabit.com> mplayer2-2.0_p20120309.ebuild,
+  mplayer2-9999.ebuild:
+  sync with portage, remove "--disable-kai", thanks to nfk
+
 *mplayer2-2.0_p20120309 (23 Mar 2012)
 
   23 Mar 2012; Nikoli <nikoli@lavabit.com> +mplayer2-2.0_p20120309.ebuild:
