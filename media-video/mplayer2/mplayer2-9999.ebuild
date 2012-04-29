@@ -33,7 +33,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
 fi
 IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +ass bidi bindist bl
-bluray bs2b +bzip2 cddb +cdio cdparanoia cpudetection custom-cpuopts
+bluray bs2b +bzip2 cddb +cdio cpudetection custom-cpuopts
 custom-cflags debug +dirac directfb doc +dts +dv dvb +dvd +dvdnav
 dxr3 +enca +faad fbcon ftp gif ggi gsm +iconv ipv6 jack joystick
 jpeg jpeg2k kernel_linux ladspa libcaca lirc mad md5sum +mmx
@@ -52,8 +52,7 @@ done
 
 # bindist does not cope with win32codecs, which are nonfree
 REQUIRED_USE="bindist? ( !win32codecs )
-	cdio? ( !cdparanoia )
-	cddb? ( || ( cdio cdparanoia ) network )
+	cddb? ( cdio network )
 	dvdnav? ( dvd )
 	radio? ( || ( dvb v4l ) )
 	dxr3? ( X )
@@ -105,7 +104,6 @@ RDEPEND+="
 	bluray? ( media-libs/libbluray )
 	bs2b? ( media-libs/libbs2b )
 	cdio? ( dev-libs/libcdio )
-	cdparanoia? ( !cdio? ( media-sound/cdparanoia ) )
 	directfb? ( dev-libs/DirectFB )
 	dts? ( media-libs/libdca )
 	dv? ( media-libs/libdv )
@@ -283,7 +281,6 @@ src_configure() {
 	########
 	use cddb || myconf+=" --disable-cddb"
 	use cdio || myconf+=" --disable-libcdio"
-	use cdparanoia || myconf+=" --disable-cdparanoia"
 
 	################################
 	# DVD read, navigation support #
