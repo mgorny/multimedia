@@ -153,7 +153,7 @@ RDEPEND+="
 "
 ASM_DEP="dev-lang/yasm"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	dev-lang/python
 	sys-devel/gettext
 	X? (

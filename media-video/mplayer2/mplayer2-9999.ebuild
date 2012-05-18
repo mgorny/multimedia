@@ -151,7 +151,7 @@ RDEPEND+="
 "
 ASM_DEP="dev-lang/yasm"
 DEPEND="${RDEPEND}
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	dev-lang/python
 	sys-devel/gettext
 	X? (
@@ -219,7 +219,7 @@ src_prepare() {
 		${bash_scripts} || die
 
 	if [[ -n ${NAMESUF} ]]; then
-		sed -e "/elif linux ; then/a\  _exesuf=\"${NAMESUF}\"" \
+		sed -e "/^EXESUF/s,= \$_exesuf$,= ${NAMESUF}\$_exesuf," \
 			-i configure || die
 		sed -e "\, -m 644 DOCS/man/en/mplayer,i\	mv DOCS/man/en/mplayer.1 DOCS/man/en/${PN}.1" \
 			-e "\, -m 644 DOCS/man/\$(lang)/mplayer,i\	mv DOCS/man/\$(lang)/mplayer.1 DOCS/man/\$(lang)/${PN}.1" \
@@ -248,11 +248,9 @@ src_configure() {
 	#Optional features#
 	###################
 	# disable svga since we don't want it
-	# disable arts since we don't have kde3
 	# disable tremor, it needs libvorbisidec and is for FPU-less systems only
 	myconf+="
 		--disable-svga
-		--disable-arts
 		--disable-tremor
 		$(use_enable network networking)
 		$(use_enable joystick)
@@ -431,7 +429,6 @@ src_configure() {
 	# Audio Output #
 	################
 	myconf+=" --disable-rsound" # media-sound/rsound is in pro-audio overlay only
-	myconf+=" --disable-esd"
 	uses="alsa jack ladspa nas"
 	for i in ${uses}; do
 		use ${i} || myconf+=" --disable-${i}"

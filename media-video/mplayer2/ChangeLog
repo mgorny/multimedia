@@ -2,6 +2,10 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  18 May 2012; Nikoli <nikoli@lavabit.com> mplayer2-2.0_p20111126.ebuild,
+  mplayer2-2.0_p20120309.ebuild, mplayer2-9999.ebuild:
+  upstream removed ao arts and esd; migrate to virtual/pkgconfig; fix sed
+
   29 Apr 2012; Nikoli <nikoli@lavabit.com> mplayer2-9999.ebuild:
   upstream removed support for cdparanoia
 
