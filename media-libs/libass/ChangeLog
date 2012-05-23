@@ -1,6 +1,9 @@
 # ChangeLog for media-libs/libass
-# Copyright 1999-2011 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+  23 May 2012; Nikoli <nikoli@lavabit.com> libass-9999.ebuild:
+  dev-util/pkgconfig -> virtual/pkgconfig
 
   11 Oct 2011; Nikoli <nikoli@lavabit.com> libass-9999.ebuild, metadata.xml:
   update git url, harfbuzz is now optional, cosmetics
