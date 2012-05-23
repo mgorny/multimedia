@@ -2,6 +2,12 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*mplayer2-2.0_p20120517 (23 May 2012)
+
+  23 May 2012; Nikoli <nikoli@lavabit.com> +mplayer2-2.0_p20120517.ebuild,
+  mplayer2-9999.ebuild, metadata.xml:
+  new snapshot, add USE portaudio and postproc
+
   18 May 2012; Nikoli <nikoli@lavabit.com> mplayer2-2.0_p20111126.ebuild,
   mplayer2-2.0_p20120309.ebuild, mplayer2-9999.ebuild:
   upstream removed ao arts and esd; migrate to virtual/pkgconfig; fix sed
