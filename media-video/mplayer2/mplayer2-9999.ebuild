@@ -34,7 +34,7 @@ else
 fi
 IUSE="3dnow 3dnowext +a52 aalib +alsa altivec aqua +ass bidi bindist bl
 bluray bs2b +bzip2 cddb +cdio cpudetection custom-cpuopts
-custom-cflags debug +dirac directfb doc +dts +dv dvb +dvd +dvdnav
+custom-cflags debug directfb doc +dts +dv dvb +dvd +dvdnav
 dxr3 +enca +faad fbcon ftp gif ggi gsm +iconv ipv6 jack joystick
 jpeg jpeg2k kernel_linux ladspa libcaca lirc mad md5sum +mmx
 mmxext mng +mp3 nas +network nut amr +opengl oss png pnm portaudio
@@ -72,7 +72,7 @@ FONT_RDEPS="
 # Rar: althrought -gpl version is nice, it cant do most functions normal rars can
 #	nemesi? ( net-libs/libnemesi )
 # virtual/ffmpeg does not have all USE
-LIBAV_USE="[amr?,bzip2?,dirac?,gsm?,jpeg2k?,rtmp?,schroedinger?,threads?,vpx?]"
+LIBAV_USE="[amr?,bzip2?,gsm?,jpeg2k?,rtmp?,schroedinger?,threads?,vpx?]"
 RDEPEND+="
 	sys-libs/ncurses
 	sys-libs/zlib
