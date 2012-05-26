@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -40,7 +40,7 @@ RDEPEND="sys-libs/zlib
 	css? ( media-libs/libdvdcss )
 	gtk? (	x11-libs/gtk+:2
 			dev-libs/dbus-glib
-			net-libs/webkit-gtk
+			net-libs/webkit-gtk:2
 			x11-libs/libnotify
 			media-libs/gstreamer
 			media-libs/gst-plugins-base
@@ -50,7 +50,7 @@ DEPEND="sys-devel/automake:1.4
 	sys-devel/automake:1.10
 	dev-lang/yasm
 	dev-lang/python
-	|| ( net-misc/wget net-misc/curl ) 
+	|| ( net-misc/wget net-misc/curl )
 	${RDEPEND}"
 
 # Handbrake attempts to download tarballs itself in its build system,
