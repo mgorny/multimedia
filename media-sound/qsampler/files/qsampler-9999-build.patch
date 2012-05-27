@@ -1,0 +1,27 @@
+diff -burN qsampler-9999.orig/configure.ac qsampler-9999/configure.ac
+--- qsampler-9999.orig/configure.ac	2012-05-27 17:45:18.563676350 +0800
++++ qsampler-9999/configure.ac	2012-05-27 17:59:50.626774059 +0800
+@@ -309,7 +309,7 @@
+       AC_MSG_CHECKING([for gig::File::SetAutoLoad() method in libgig])
+       AC_LANG_SAVE
+       AC_LANG_CPLUSPLUS
+-      CXXFLAGS="$ac_libs"
++      CXXFLAGS="$ac_libs ${CXXFLAGS}"
+       AC_TRY_COMPILE([
+ #include <stdlib.h>
+ #include <gig.h>
+diff -burN qsampler-9999.orig/src/src.pri.in qsampler-9999/src/src.pri.in
+--- qsampler-9999.orig/src/src.pri.in	2012-05-27 17:45:18.584676089 +0800
++++ qsampler-9999/src/src.pri.in	2012-05-27 18:00:10.768522254 +0800
+@@ -4,3 +4,11 @@
+ CONFIG += @ac_debug@
+ INCLUDEPATH += @ac_incpath@
+ LIBS += @ac_libs@
++
++QMAKE_CC		= @CC@
++QMAKE_CFLAGS	= @CFLAGS@
++QMAKE_CXX		= @CXX@
++QMAKE_CXXFLAGS	= @CXXFLAGS@
++
++QMAKE_LINK		= @CXX@
++QMAKE_LFLAGS	= @LDFLAGS@
