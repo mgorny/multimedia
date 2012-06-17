@@ -32,10 +32,10 @@ if [[ ${PV} == *9999* ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
 fi
-IUSE="+a52 aalib +alsa aqua +ass bidi bindist bl bluray bs2b +bzip2 cddb
+IUSE="+a52 aalib +alsa aqua bidi bindist bl bluray bs2b +bzip2 cddb
 +cdio cpudetection debug directfb doc +dts +dv dvb +dvd +dvdnav dxr3
 +enca +faad fbcon ftp gif ggi gsm +iconv ipv6 jack joystick jpeg jpeg2k
-kernel_linux ladspa libcaca lirc mad md5sum mng +mp3 nas +network nut
+kernel_linux ladspa +libass libcaca lirc mad md5sum mng +mp3 nas +network nut
 amr +opengl oss png pnm portaudio +postproc pulseaudio pvr +quicktime
 radio +rar +real +rtc rtmp samba +schroedinger sdl +speex tga +theora
 threads +truetype +unicode v4l vdpau +vorbis vpx win32codecs +X xanim
@@ -55,7 +55,7 @@ done
 
 # bindist does not cope with win32codecs, which are nonfree
 REQUIRED_USE="
-	ass? ( truetype )
+	libass? ( truetype )
 	bindist? ( !win32codecs )
 	cddb? ( cdio network )
 	dvdnav? ( dvd )
@@ -100,7 +100,6 @@ RDEPEND+="
 	a52? ( media-libs/a52dec )
 	aalib? ( media-libs/aalib )
 	alsa? ( media-libs/alsa-lib )
-	ass? ( >=media-libs/libass-0.9.10[enca?,fontconfig] )
 	bidi? ( dev-libs/fribidi )
 	bluray? ( media-libs/libbluray )
 	bs2b? ( media-libs/libbs2b )
@@ -120,6 +119,7 @@ RDEPEND+="
 	jack? ( media-sound/jack-audio-connection-kit )
 	jpeg? ( virtual/jpeg )
 	ladspa? ( media-libs/ladspa-sdk )
+	libass? ( >=media-libs/libass-0.9.10[enca?,fontconfig] )
 	libcaca? ( media-libs/libcaca )
 	lirc? ( app-misc/lirc )
 	mad? ( media-libs/libmad )
@@ -245,12 +245,11 @@ src_configure() {
 		$(use_enable network networking)
 		$(use_enable joystick)
 	"
-	uses="bl bluray enca ftp rtc" # nemesi <- not working with in-tree ebuild
+	uses="bl bluray enca ftp libass rtc" # nemesi <- not working with in-tree ebuild
 	myconf+=" --disable-nemesi" # nemesi automagic disable
 	for i in ${uses}; do
 		use ${i} || myconf+=" --disable-${i}"
 	done
-	use ass || myconf+=" --disable-libass"
 	use bidi || myconf+=" --disable-fribidi"
 	use ipv6 || myconf+=" --disable-inet6"
 	use nut || myconf+=" --disable-libnut"

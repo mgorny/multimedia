@@ -2,6 +2,11 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  17 Jun 2012; Ben de Groot <yngwin@gentoo.org> -mplayer2-2.0_p20111126.ebuild,
+  -mplayer2-2.0_p20120309.ebuild, mplayer2-2.0_p20120517.ebuild,
+  mplayer2-9999.ebuild, metadata.xml:
+  Remove old. Move USE=ass to global libass usage.
+
   13 Jun 2012; Nikoli <nikoli@lavabit.com> mplayer2-2.0_p20120517.ebuild,
   mplayer2-9999.ebuild:
   sync with mplayer1
