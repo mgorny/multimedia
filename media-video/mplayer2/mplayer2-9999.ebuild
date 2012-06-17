@@ -1,6 +1,6 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/mplayer2/mplayer2-9999.ebuild,v 1.37 2012/06/12 09:05:10 scarabeus Exp $
+# $Header: /var/cvsroot/gentoo-x86/media-video/mplayer2/mplayer2-9999.ebuild,v 1.39 2012/06/17 05:38:52 yngwin Exp $
 
 EAPI=4
 
@@ -55,12 +55,12 @@ done
 
 # bindist does not cope with win32codecs, which are nonfree
 REQUIRED_USE="
-	libass? ( truetype )
 	bindist? ( !win32codecs )
 	cddb? ( cdio network )
 	dvdnav? ( dvd )
 	dxr3? ( X )
 	ggi? ( X )
+	libass? ( truetype )
 	opengl? ( X )
 	radio? ( || ( dvb v4l ) )
 	truetype? ( iconv )
