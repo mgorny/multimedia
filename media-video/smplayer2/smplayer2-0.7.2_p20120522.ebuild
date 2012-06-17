@@ -28,7 +28,7 @@ DEPEND="
 	download-subs? ( dev-libs/quazip )
 "
 RDEPEND="${DEPEND}
-	media-video/mplayer2[ass,png]
+	media-video/mplayer2[libass,png]
 "
 
 src_configure() {

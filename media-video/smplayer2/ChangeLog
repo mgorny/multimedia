@@ -2,6 +2,11 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  17 Jun 2012; Ben de Groot <yngwin@gentoo.org>
+  -smplayer2-0.7.0_pre20111120.ebuild, -smplayer2-0.7.1_p20120301.ebuild,
+  smplayer2-0.7.2_p20120522.ebuild, smplayer2-9999.ebuild:
+  Remove old. Move USE=ass to global libass usage.
+
 *smplayer2-0.7.2_p20120522 (23 May 2012)
 
   23 May 2012; Nikoli <nikoli@lavabit.com> +smplayer2-0.7.2_p20120522.ebuild,
