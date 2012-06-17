@@ -20,7 +20,7 @@ IUSE="debug"
 
 DEPEND="x11-libs/qt-gui:4
 	dev-libs/quazip"
-MPLAYER_USE="[ass,png,X]"
+MPLAYER_USE="[libass,png,X]"
 RDEPEND="${DEPEND}
 	|| ( media-video/mplayer${MPLAYER_USE} media-video/mplayer2${MPLAYER_USE} )"
 
