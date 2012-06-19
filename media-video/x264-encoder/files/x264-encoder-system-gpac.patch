@@ -1,22 +1,22 @@
 diff --git a/configure b/configure
-index 7aea31f..28b23cf 100755
+index 7aea31f..8eb6f4a 100755
 --- a/configure
 +++ b/configure
-@@ -103,7 +103,7 @@ icl_ldflags() {
+@@ -103,6 +103,7 @@ icl_ldflags() {
  
          arg=${arg/pthreadGC/pthreadVC}
          [ "$arg" = avifil32.lib ] && arg=vfw32.lib
--        [ "$arg" = gpac_static.lib ] && arg=libgpac_static.lib
 +        [ "$arg" = gpac.lib ] && arg=libgpac.lib
+         [ "$arg" = gpac_static.lib ] && arg=libgpac_static.lib
  
          [ -n "$arg" ] && echo -n "$arg "
-     done
-@@ -823,7 +823,7 @@ fi
+@@ -823,7 +824,8 @@ fi
  
  if [ "$gpac" = "auto" ] ; then
      gpac="no"
 -    cc_check "" -lz && GPAC_LIBS="-lgpac_static -lz" || GPAC_LIBS="-lgpac_static"
-+    cc_check "" -lz && GPAC_LIBS="-lgpac -lz" || GPAC_LIBS="-lgpac"
++    cc_check "" -lgpac && GPAC_LIBS="-lgpac" || GPAC_LIBS="-lgpac_static"
++    cc_check "" -lz && GPAC_LIBS="$GPAC_LIBS -lz"
      if [ "$SYS" = "WINDOWS" ] ; then
          GPAC_LIBS="$GPAC_LIBS -lwinmm"
      fi
