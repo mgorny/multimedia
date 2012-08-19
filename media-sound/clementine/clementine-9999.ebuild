@@ -29,7 +29,7 @@ COMMON_DEPEND="
 	>=x11-libs/qt-opengl-4.5:4
 	>=x11-libs/qt-sql-4.5:4[sqlite]
 	dev-db/sqlite[fts3]
-	>=media-libs/taglib-1.7
+	>=media-libs/taglib-1.7[mp4]
 	>=dev-libs/glib-2.24.1-r1
 	dev-libs/libxml2
 	dev-libs/qjson
@@ -62,7 +62,7 @@ COMMON_DEPEND="
 # http://code.google.com/p/clementine-player/source/browse/#svn/trunk/3rdparty/libprojectm/patches
 # r1966 "Compile with a static sqlite by default, since Qt 4.7 doesn't seem to expose the symbols we need to use FTS"
 RDEPEND="${COMMON_DEPEND}
-	dbus? ( udev? ( sys-fs/udisks ) )
+	dbus? ( udev? ( sys-fs/udisks:0 ) )
 	mms? ( media-plugins/gst-plugins-libmms:0.10 )
 	mtp? ( gnome-base/gvfs )
 	projectm? ( >=media-libs/libprojectm-1.2.0 )
@@ -73,7 +73,7 @@ RDEPEND="${COMMON_DEPEND}
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-libs/boost-1.39
-	dev-util/pkgconfig
+	virtual/pkgconfig
 	sys-devel/gettext
 	x11-libs/qt-test:4
 	kde? ( dev-util/automoc )

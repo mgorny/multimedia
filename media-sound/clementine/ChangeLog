@@ -2,6 +2,10 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  19 Aug 2012; Nikoli <nikoli@lavabit.com> clementine-9999.ebuild,
+  metadata.xml:
+  update deps, ayatana is now global use flag
+
   28 Jan 2012; Nikoli <nikoli@lavabit.com> clementine-9999.ebuild,
   metadata.xml:
   update, upstream migrated from ofa to chromaprint
