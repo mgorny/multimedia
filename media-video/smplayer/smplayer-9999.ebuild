@@ -91,8 +91,5 @@ src_install() {
 	rm -f Copying.txt docs/{cs,en,hu,it,ja,pt,ru,zh_CN}/gpl.html || die
 	rm -rf docs/{de,es,nl,ro} || die
 
-	# remove windows-only files
-	rm "${S}"/*.bat || die
-
 	emake DESTDIR="${D}" install
 }
