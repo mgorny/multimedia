@@ -40,6 +40,7 @@
 	<flag name="pnm">Add PNM video output option, to create PPM/PGM/PGMYUV images</flag>
 	<flag name="postproc">Enable image post-processing via libpostproc</flag>
 	<flag name="pvr">Enable Video4Linux2 MPEG PVR</flag>
+	<flag name="quvi">Enable support for streaming sites using <pkg>media-libs/libquvi</pkg></flag>
 	<flag name="radio">Enable V4L2 radio interface and support</flag>
 	<flag name="rar">Enable Unique RAR File Library</flag>
 	<flag name="real">Adds real audo/video support</flag>
