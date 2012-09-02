@@ -2,6 +2,10 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  02 Sep 2012; Nikoli <nikoli@lavabit.com> mplayer2-2.0_p20120828.ebuild,
+  mplayer2-9999.ebuild:
+  aqua supports opengl
+
 *mplayer2-2.0_p20120828 (01 Sep 2012)
 
   01 Sep 2012; Nikoli <nikoli@lavabit.com> +mplayer2-2.0_p20120828.ebuild,

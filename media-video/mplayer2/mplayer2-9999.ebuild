@@ -61,7 +61,7 @@ REQUIRED_USE="
 	dxr3? ( X )
 	ggi? ( X )
 	libass? ( truetype )
-	opengl? ( X )
+	opengl? ( || ( aqua X ) )
 	radio? ( || ( dvb v4l ) )
 	truetype? ( iconv )
 	vdpau? ( X )
