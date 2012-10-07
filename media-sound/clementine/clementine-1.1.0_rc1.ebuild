@@ -1,20 +1,20 @@
 # Copyright 1999-2012 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# $Header: /var/cvsroot/gentoo-x86/media-sound/clementine/clementine-1.0.1-r2.ebuild,v 1.1 2012/07/07 08:03:03 ssuominen Exp $
 
 EAPI=4
 
 LANGS=" af ar be bg bn br bs ca cs cy da de el en_CA en_GB eo es es_AR et eu fa fi fr ga gl he hi hr hu hy ia id is it ja ka kk ko lt lv mr ms nb nl oc pa pl pt pt_BR ro ru sk sl sr sr@latin sv te tr uk uz vi zh_CN zh_TW"
 
-inherit cmake-utils gnome2-utils virtualx git-2
+inherit cmake-utils gnome2-utils virtualx
 
 DESCRIPTION="A modern music player and library organizer based on Amarok 1.4 and Qt4"
 HOMEPAGE="http://www.clementine-player.org/ http://code.google.com/p/clementine-player/"
-EGIT_REPO_URI="https://code.google.com/p/clementine-player/"
+SRC_URI="http://clementine-player.googlecode.com/files/${P/_/}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE="ayatana cdda +dbus debug googledrive ios ipod lastfm mms moodbar mtp projectm test +udev wiimote"
 IUSE+="${LANGS// / linguas_}"
 
@@ -77,6 +77,8 @@ DEPEND="${COMMON_DEPEND}
 	test? ( gnome-base/gsettings-desktop-schemas )
 "
 DOCS="Changelog"
+
+S="${WORKDIR}/${P/_/}"
 
 src_prepare() {
 	# some tests fail or hang
