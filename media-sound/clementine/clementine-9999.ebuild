@@ -6,7 +6,7 @@ EAPI=4
 
 LANGS=" af ar be bg bn br bs ca cs cy da de el en_CA en_GB eo es es_AR et eu fa fi fr ga gl he hi hr hu hy ia id is it ja ka kk ko lt lv mr ms nb nl oc pa pl pt pt_BR ro ru sk sl sr sr@latin sv te tr uk uz vi zh_CN zh_TW"
 
-inherit cmake-utils gnome2-utils virtualx git-2
+inherit cmake-utils flag-o-matic gnome2-utils virtualx git-2
 
 DESCRIPTION="A modern music player and library organizer based on Amarok 1.4 and Qt4"
 HOMEPAGE="http://www.clementine-player.org/ http://code.google.com/p/clementine-player/"
