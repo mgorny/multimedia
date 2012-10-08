@@ -119,7 +119,7 @@ src_configure() {
 		-DUSE_SYSTEM_GMOCK=ON
 		)
 
-	use debug || append-cppflags -DQT_NO_DEBUG_OUTPUT
+	use !debug && append-cppflags -DQT_NO_DEBUG_OUTPUT
 
 	cmake-utils_src_configure
 }
