@@ -2,6 +2,12 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*mplayer2-2.0_p20121103 (07 Nov 2012)
+
+  07 Nov 2012; Nikoli <nikoli@lavabit.com> +mplayer2-2.0_p20121103.ebuild,
+  mplayer2-9999.ebuild, metadata.xml:
+  new snapshot, add USE lcms, vcd and yuv4mpeg
+
   28 Sep 2012; Nikoli <nikoli@lavabit.com> mplayer2-2.0_p20120828.ebuild,
   mplayer2-9999.ebuild:
   require python 2.7, not just 2.6 (bug #434356)
