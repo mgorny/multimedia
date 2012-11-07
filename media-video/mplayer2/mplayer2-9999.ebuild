@@ -139,6 +139,7 @@ ASM_DEP="dev-lang/yasm"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	>=dev-lang/python-2.7
+	dev-python/docutils
 	sys-devel/gettext
 	X? (
 		x11-proto/videoproto
