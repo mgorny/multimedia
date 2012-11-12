@@ -26,7 +26,7 @@ else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
 fi
 IUSE="+a52 +alsa aqua bindist bluray bs2b cddb +cdio cpudetection debug
-directfb doc +dts +dv dvb +dvd +dvdnav +enca +faad fbcon ftp gif ggi +iconv
+directfb doc +dts +dv dvb +dvd +dvdnav +enca +faad fbcon ftp gif +iconv
 ipv6 jack joystick jpeg kernel_linux ladspa lcms +libass libcaca lirc mad
 md5sum mng +mp3 +network nut +opengl oss png pnm portaudio +postproc
 pulseaudio pvr +quicktime quvi radio +rar +real +rtc samba sdl +speex tga
@@ -45,7 +45,6 @@ REQUIRED_USE="
 	bindist? ( !win32codecs )
 	cddb? ( cdio network )
 	dvdnav? ( dvd )
-	ggi? ( X )
 	lcms? ( opengl )
 	libass? ( iconv )
 	opengl? ( || ( aqua X ) )
@@ -68,10 +67,6 @@ RDEPEND+="
 	X? (
 		x11-libs/libXext
 		x11-libs/libXxf86vm
-		ggi? (
-			media-libs/libggi
-			media-libs/libggiwmh
-		)
 		opengl? ( virtual/opengl )
 		lcms? ( media-libs/lcms:2 )
 		vdpau? ( x11-libs/libvdpau )
@@ -113,7 +108,7 @@ RDEPEND+="
 	portaudio? ( >=media-libs/portaudio-19_pre20111121 )
 	postproc? ( || ( media-libs/libpostproc <media-video/libav-0.8.2-r1 media-video/ffmpeg ) )
 	pulseaudio? ( media-sound/pulseaudio )
-	quvi? ( media-libs/libquvi )
+	quvi? ( >=media-libs/libquvi-0.4.1 )
 	rar? (
 		|| (
 			app-arch/unrar
