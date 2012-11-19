@@ -38,6 +38,8 @@ COMMON_DEPEND="
 	>=media-libs/chromaprint-0.6
 	media-libs/gstreamer:0.10
 	media-libs/gst-plugins-base:0.10
+	virtual/glu
+	virtual/opengl
 	ayatana? ( dev-libs/libindicate-qt )
 	cdda? ( dev-libs/libcdio )
 	googledrive? ( >=media-libs/taglib-1.8[mp4] )
