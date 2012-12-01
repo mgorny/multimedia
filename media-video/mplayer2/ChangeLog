@@ -2,6 +2,13 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*mplayer2-2.0_p20121128 (01 Dec 2012)
+
+  01 Dec 2012; Nikoli <nikoli@lavabit.com> mplayer2-2.0_p20121108.ebuild,
+  +mplayer2-2.0_p20121128.ebuild, mplayer2-9999.ebuild:
+  version bump, rst2man is fixed upstream, docs work fine with -j 9 now,
+  translation were removed
+
   12 Nov 2012; Nikoli <nikoli@lavabit.com> mplayer2-2.0_p20121108.ebuild,
   mplayer2-9999.ebuild:
   set quvi dep, remove ggi

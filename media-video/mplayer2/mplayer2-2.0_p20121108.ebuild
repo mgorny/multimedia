@@ -209,9 +209,6 @@ src_configure() {
 	local myconf=""
 	local uses i
 
-	# set LINGUAS
-	[[ -n $LINGUAS ]] && LINGUAS="${LINGUAS/da/dk}"
-
 	# mplayer ebuild uses "use foo || --disable-foo" to forcibly disable
 	# compilation in almost every situation. The reason for this is
 	# because if --enable is used, it will force the build of that option,
@@ -423,7 +420,7 @@ src_configure() {
 
 src_compile() {
 	base_src_compile
-	use doc && emake -j1 -C DOCS/xml html-chunked
+	use doc && emake -C DOCS/xml html-chunked
 }
 
 src_install() {
