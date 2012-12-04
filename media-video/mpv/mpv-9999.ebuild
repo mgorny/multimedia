@@ -24,9 +24,9 @@ if [[ ${PV} == *9999* ]]; then
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
 fi
-IUSE="+alsa aqua bluray bs2b cddb +cdio debug +dts dvb +dvd +enca encode fbcon ftp gif
+IUSE="+alsa aqua bluray bs2b cddb +cdio debug +dts dvb +dvd +enca encode fbcon ftp
 +iconv ipv6 jack joystick jpeg kernel_linux ladspa lcms +libass libcaca lirc mng +mp3
-+network -openal +opengl oss png portaudio +postproc pulseaudio pvr quvi radio samba +shm
++network -openal +opengl oss portaudio +postproc pulseaudio pvr quvi radio samba +shm
 v4l vcd vdpau +X xinerama +xscreensaver +xv"
 
 REQUIRED_USE="
@@ -65,7 +65,6 @@ RDEPEND+="
 		>=media-libs/libdvdread-4.1.3
 	)
 	enca? ( app-i18n/enca )
-	gif? ( media-libs/giflib )
 	iconv? ( virtual/libiconv )
 	jack? ( media-sound/jack-audio-connection-kit )
 	jpeg? ( virtual/jpeg )
@@ -76,7 +75,6 @@ RDEPEND+="
 	mng? ( media-libs/libmng )
 	mp3? ( media-sound/mpg123 )
 	openal? ( >=media-libs/openal-1.13 )
-	png? ( media-libs/libpng )
 	portaudio? ( >=media-libs/portaudio-19_pre20111121 )
 	postproc? ( || ( media-libs/libpostproc <media-video/libav-0.8.2-r1 media-video/ffmpeg ) )
 	pulseaudio? ( media-sound/pulseaudio )
@@ -223,7 +221,7 @@ src_configure() {
 	for i in ${uses}; do
 		use ${i} || myconf+=" --disable-lib${i}"
 	done
-	uses="gif jpeg mng png"
+	uses="jpeg mng"
 	for i in ${uses}; do
 		use ${i} || myconf+=" --disable-${i}"
 	done

@@ -2,6 +2,9 @@
 # Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  04 Dec 2012; Nikoli <nikoli@lavabit.com> mpv-9999.ebuild:
+  giflib and libpng support was removed
+
 *mpv-0_p20121201 (01 Dec 2012)
 
   01 Dec 2012; Nikoli <nikoli@lavabit.com> +mpv-0_p20121201.ebuild,
