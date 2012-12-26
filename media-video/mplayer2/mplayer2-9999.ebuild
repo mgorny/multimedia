@@ -414,6 +414,8 @@ src_configure() {
 		--localedir="${EPREFIX}"/usr/share/locale \
 		--enable-translation \
 		${myconf} || die
+
+	MAKEOPTS+=" V=1"
 }
 
 src_compile() {
