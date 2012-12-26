@@ -290,4 +290,6 @@ src_configure() {
 		--mandir="${EPREFIX}"/usr/share/man \
 		--localedir="${EPREFIX}"/usr/share/locale \
 		${myconf} || die
+
+	MAKEOPTS+=" V=1"
 }
