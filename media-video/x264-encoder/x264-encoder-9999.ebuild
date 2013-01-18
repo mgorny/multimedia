@@ -1,8 +1,8 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-video/x264-encoder/x264-encoder-9999.ebuild,v 1.4 2012/05/05 08:58:56 jdhore Exp $
+# $Header: $
 
-EAPI=4
+EAPI=5
 
 if [ "${PV#9999}" != "${PV}" ]; then
 	V_ECLASS="git-2"
@@ -10,7 +10,7 @@ else
 	V_ECLASS=""
 fi
 
-inherit multilib toolchain-funcs ${V_ECLASS}
+inherit flag-o-matic multilib toolchain-funcs ${V_ECLASS}
 
 if [ "${PV#9999}" = "${PV}" ]; then
 	MY_P="x264-${PV}"
@@ -39,9 +39,9 @@ RDEPEND="
 	ffmpeg? ( virtual/ffmpeg )
 	ffmpegsource? ( media-libs/ffmpegsource )
 	mp4? ( >=media-video/gpac-0.4.1_pre20060122 )
-	system-libx264? ( ~media-libs/x264-${PV}[10bit=,interlaced=] )
+	system-libx264? ( ~media-libs/x264-${PV}:=[10bit=,interlaced=] )
 "
-ASM_DEP=">=dev-lang/yasm-1"
+ASM_DEP=">=dev-lang/yasm-1.2.0"
 DEPEND="${RDEPEND}
 	amd64? ( ${ASM_DEP} )
 	x86? ( ${ASM_DEP} )
@@ -54,6 +54,9 @@ fi
 
 src_configure() {
 	tc-export CC
+
+	# let upstream pick the optimization level
+	filter-flags -O?
 
 	local myconf=""
 	use 10bit && myconf+=" --bit-depth=10"
