@@ -1,8 +1,8 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/media-libs/x264/x264-9999.ebuild,v 1.4 2012/05/15 13:12:19 aballier Exp $
+# $Header: $
 
-EAPI=4
+EAPI=5
 
 if [ "${PV#9999}" != "${PV}" ]; then
 	V_ECLASS="git-2"
@@ -10,7 +10,7 @@ else
 	V_ECLASS=""
 fi
 
-inherit multilib toolchain-funcs ${V_ECLASS}
+inherit flag-o-matic multilib toolchain-funcs ${V_ECLASS}
 
 DESCRIPTION="A free library for encoding X264/AVC streams"
 HOMEPAGE="http://www.videolan.org/developers/x264.html"
@@ -22,16 +22,16 @@ else
 fi
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="0/129"
 if [ "${PV#9999}" != "${PV}" ]; then
 	KEYWORDS=""
 else
-	KEYWORDS="~alpha ~amd64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
+	KEYWORDS="~alpha ~amd64 ~hppa ~mips ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
 fi
 IUSE="10bit debug +interlaced pic static-libs +threads"
 
 RDEPEND=""
-ASM_DEP=">=dev-lang/yasm-1"
+ASM_DEP=">=dev-lang/yasm-1.2.0"
 DEPEND="
 	amd64? ( ${ASM_DEP} )
 	x86? ( ${ASM_DEP} )
@@ -42,6 +42,9 @@ DOCS="AUTHORS doc/*.txt"
 
 src_configure() {
 	tc-export CC
+
+	# let upstream pick the optimization level
+	filter-flags -O?
 
 	local myconf=""
 	use 10bit && myconf+=" --bit-depth=10"
