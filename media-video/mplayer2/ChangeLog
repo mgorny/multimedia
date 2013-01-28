@@ -1,6 +1,11 @@
 # ChangeLog for media-video/mplayer2
-# Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+  28 Jan 2013; Nikoli <nikoli@lavabit.com> -mplayer2-2.0_p20120517.ebuild,
+  -mplayer2-2.0_p20120815.ebuild, -mplayer2-2.0_p20121103.ebuild,
+  -mplayer2-2.0_p20121108.ebuild, mplayer2-9999.ebuild:
+  upstream cleaned configure, remove old
 
   26 Dec 2012; Nikoli <nikoli@lavabit.com> mplayer2-2.0_p20121128.ebuild,
   mplayer2-9999.ebuild:
