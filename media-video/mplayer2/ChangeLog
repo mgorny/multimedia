@@ -2,6 +2,11 @@
 # Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*mplayer2-2.0_p20130126 (31 Jan 2013)
+
+  31 Jan 2013; Nikoli <nikoli@lavabit.com> +mplayer2-2.0_p20130126.ebuild:
+  new snapshot
+
   28 Jan 2013; Nikoli <nikoli@lavabit.com> -mplayer2-2.0_p20120517.ebuild,
   -mplayer2-2.0_p20120815.ebuild, -mplayer2-2.0_p20121103.ebuild,
   -mplayer2-2.0_p20121108.ebuild, mplayer2-9999.ebuild:
