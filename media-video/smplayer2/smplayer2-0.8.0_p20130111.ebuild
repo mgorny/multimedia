@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -28,7 +28,7 @@ DEPEND="
 	download-subs? ( dev-libs/quazip )
 "
 RDEPEND="${DEPEND}
-	media-video/mplayer2[libass,png]
+	>=media-video/mplayer2-2.0_p20121128[libass,png]
 "
 
 src_configure() {
