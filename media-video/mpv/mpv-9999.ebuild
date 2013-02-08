@@ -188,7 +188,6 @@ src_configure() {
 	#####################################
 	# DVB / Video4Linux / Radio support #
 	#####################################
-	myconf+=" --disable-tv-bsdbt848"
 	if { use dvb || use v4l || use pvr || use radio; }; then
 		use dvb || myconf+=" --disable-dvb"
 		use pvr || myconf+=" --disable-pvr"
@@ -201,7 +200,6 @@ src_configure() {
 		else
 			myconf+="
 				--disable-radio-v4l2
-				--disable-radio-bsdbt848
 			"
 		fi
 	else
@@ -210,7 +208,6 @@ src_configure() {
 			--disable-tv-v4l2
 			--disable-radio
 			--disable-radio-v4l2
-			--disable-radio-bsdbt848
 			--disable-dvb
 			--disable-pvr"
 	fi
