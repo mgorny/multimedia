@@ -18,7 +18,7 @@ KEYWORDS=""
 IUSE=""
 
 DEPEND="
-	>=x11-libs/qt-gui-4.6:4
+	>=dev-qt/qtgui-4.6:4
 	>=media-video/vlc-1.1
 	media-plugins/frei0r-plugins
 	"

@@ -17,9 +17,9 @@ KEYWORDS="~amd64 ~x86"
 IUSE="lastfm mysql +sqlite"
 
 DEPEND="
-	>=x11-libs/qt-gui-4.5.0:4
-	>=x11-libs/qt-sql-4.5.0:4[mysql?,sqlite?]
-	|| ( >=x11-libs/qt-phonon-4.5.0:4 media-libs/phonon )
+	>=dev-qt/qtgui-4.5.0:4
+	>=dev-qt/qtsql-4.5.0:4[mysql?,sqlite?]
+	|| ( >=dev-qt/qtphonon-4.5.0:4 media-libs/phonon )
 	media-libs/taglib
 	lastfm? ( media-libs/lastfmlib )
 "

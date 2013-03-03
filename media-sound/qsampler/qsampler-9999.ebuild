@@ -17,8 +17,8 @@ IUSE="debug +libgig"
 DEPEND="media-libs/alsa-lib
 	>=media-libs/liblscp-0.5.5
 	x11-libs/libX11
-	x11-libs/qt-core:4
-	x11-libs/qt-gui:4
+	dev-qt/qtcore:4
+	dev-qt/qtgui:4
 	libgig? ( >=media-libs/libgig-3.2.1 )"
 RDEPEND="${DEPEND}
 	>=media-sound/linuxsampler-0.5"

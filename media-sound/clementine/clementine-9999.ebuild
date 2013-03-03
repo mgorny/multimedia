@@ -25,9 +25,9 @@ REQUIRED_USE="
 "
 
 COMMON_DEPEND="
-	>=x11-libs/qt-gui-4.5:4[dbus?]
-	>=x11-libs/qt-opengl-4.5:4
-	>=x11-libs/qt-sql-4.5:4[sqlite]
+	>=dev-qt/qtgui-4.5:4[dbus?]
+	>=dev-qt/qtopengl-4.5:4
+	>=dev-qt/qtsql-4.5:4[sqlite]
 	dev-db/sqlite[fts3]
 	>=media-libs/taglib-1.7[mp4]
 	>=dev-libs/glib-2.24.1-r1
@@ -73,7 +73,7 @@ DEPEND="${COMMON_DEPEND}
 	>=dev-libs/boost-1.39
 	virtual/pkgconfig
 	sys-devel/gettext
-	x11-libs/qt-test:4
+	dev-qt/qttest:4
 	dev-cpp/gmock
 	googledrive? ( dev-cpp/sparsehash )
 	test? ( gnome-base/gsettings-desktop-schemas )

@@ -18,7 +18,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE="debug"
 
-DEPEND="x11-libs/qt-gui:4
+DEPEND="dev-qt/qtgui:4
 	dev-libs/quazip"
 MPLAYER_USE="[libass,png,X]"
 RDEPEND="${DEPEND}

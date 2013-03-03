@@ -38,7 +38,7 @@ RDEPEND="dev-libs/libxml2
 	xv? ( x11-libs/libXv )
 	xvid? ( media-libs/xvid )
 	gtk? ( x11-libs/gtk+:2 )
-	qt4? ( >=x11-libs/qt-gui-4.5.1:4 )"
+	qt4? ( >=dev-qt/qtgui-4.5.1:4 )"
 DEPEND="${RDEPEND}
 	nls? ( sys-devel/gettext )
 	dev-util/pkgconfig
