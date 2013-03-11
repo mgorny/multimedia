@@ -147,6 +147,8 @@ src_configure() {
 	###################
 	# SDL output is fallback for platforms where nothing better is available
 	myconf+=" --disable-sdl --disable-sdl2"
+	# wayland needs xkbcommon, not in portage yet
+	myconf+=" --disable-wayland"
 	use encode || myconf+=" --disable-encoding"
 	use network || myconf+=" --disable-networking"
 	myconf+=" $(use_enable joystick)"
