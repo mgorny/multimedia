@@ -122,7 +122,7 @@ RDEPEND+="
 	vorbis? ( media-libs/libvorbis )
 	xanim? ( media-video/xanim )
 	xvid? ( media-libs/xvid )
-	>=virtual/ffmpeg-0.10.2
+	>=virtual/ffmpeg-9
 	symlink? ( !media-video/mplayer )
 "
 ASM_DEP="dev-lang/yasm"
