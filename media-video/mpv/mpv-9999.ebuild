@@ -80,7 +80,7 @@ RDEPEND+="
 	pulseaudio? ( media-sound/pulseaudio )
 	quvi? ( >=media-libs/libquvi-0.4.1 )
 	samba? ( net-fs/samba )
-	>=virtual/ffmpeg-0.10.2[encode?]
+	>=virtual/ffmpeg-9[encode?]
 "
 ASM_DEP="dev-lang/yasm"
 DEPEND="${RDEPEND}
