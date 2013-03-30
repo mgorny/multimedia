@@ -10,8 +10,8 @@ LANGSLONG="ar_SY el_GR ro_RO ru_RU sl_SI uk_UA vi_VN"
 inherit eutils qt4-r2 subversion
 
 DESCRIPTION="Great Qt4 GUI front-end for mplayer"
-HOMEPAGE="http://smplayer.sourceforge.net"
-ESVN_REPO_URI="https://smplayer.svn.sourceforge.net/svnroot/smplayer/smplayer/trunk"
+HOMEPAGE="http://smplayer.info"
+ESVN_REPO_URI="https://subversion.assembla.com/svn/smplayer/smplayer/trunk"
 
 LICENSE="GPL-2"
 SLOT="0"
