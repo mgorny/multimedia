@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -28,7 +28,7 @@ COMMON_DEPEND="
 	>=dev-qt/qtgui-4.5:4[dbus?]
 	>=dev-qt/qtopengl-4.5:4
 	>=dev-qt/qtsql-4.5:4[sqlite]
-	dev-db/sqlite[fts3]
+	dev-db/sqlite[fts3(+)]
 	>=media-libs/taglib-1.7[mp4]
 	>=dev-libs/glib-2.24.1-r1
 	dev-libs/libxml2
