@@ -7,15 +7,15 @@ EAPI="5"
 AUTOTOOLS_AUTORECONF="1"
 AUTOTOOLS_IN_SOURCE_BUILD="1"
 WX_GTK_VER="2.9"
-inherit autotools-utils wxwidgets git-2
+inherit autotools-utils wxwidgets
 
 DESCRIPTION="Advanced SSA/ASS subtitle editor"
 HOMEPAGE="http://www.aegisub.org/"
-EGIT_REPO_URI="git://github.com/Aegisub/Aegisub.git"
+SRC_URI="http://ftp.aegisub.org/pub/releases/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE="alsa debug +ffmpeg fftw lua openal oss portaudio pulseaudio spell"
 
 REQUIRED_USE="
@@ -49,8 +49,7 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 "
 
-EGIT_SOURCEDIR="${S}"
-S=${S}/${PN}
+S=${WORKDIR}/${PN}/${PN}
 
 src_configure() {
 	local myeconfargs=(

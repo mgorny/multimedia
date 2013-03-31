@@ -1,6 +1,18 @@
 # ChangeLog for media-video/aegisub
-# Copyright 1999-2012 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+*aegisub-3.0.2 (31 Mar 2013)
+
+  31 Mar 2013; Nikoli <nikoli@lavabit.com> aegisub-2.1.9.ebuild,
+  -files/aegisub-2.1.9-external-libass.patch, -aegisub-2.1.9999.ebuild,
+  -aegisub-3.0_pre4897.ebuild, +aegisub-3.0.2.ebuild,
+  -files/aegisub-3.0-Makefile-selected-po.patch,
+  -files/aegisub-3.0-pre-Makefile-LDFLAGS.patch,
+  -files/aegisub-3.0-pre-external-libass.patch,
+  -files/aegisub-3.0-pre-fix-ln-install.patch,
+  -files/aegisub-3.0-pre-include-stdint.h.patch, aegisub-9999.ebuild:
+  version bump, remove old
 
   19 Aug 2012; Nikoli <nikoli@lavabit.com> aegisub-2.1.9.ebuild,
   aegisub-2.1.9999.ebuild, aegisub-3.0_pre4897.ebuild, aegisub-9999.ebuild:

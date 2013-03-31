@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -8,7 +8,7 @@ WX_GTK_VER="2.8"
 inherit autotools wxwidgets
 
 DESCRIPTION="Advanced SSA/ASS subtitle editor"
-HOMEPAGE="http://www.aegisub.net/"
+HOMEPAGE="http://www.aegisub.org/"
 SRC_URI="http://rion-overlay.googlecode.com/files/${P}.tar.xz"
 
 LICENSE="GPL-2"
