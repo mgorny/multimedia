@@ -1,3 +1,0 @@
-# Nikoli <nikoli@lavabit.com>
-# Needs hard masked wxGTK-2.9
->=media-video/aegisub-3
