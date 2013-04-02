@@ -163,7 +163,6 @@ src_configure() {
 		myconf+="
 			--disable-lirc
 			--disable-lircc
-			--disable-apple-ir
 		"
 	fi
 
