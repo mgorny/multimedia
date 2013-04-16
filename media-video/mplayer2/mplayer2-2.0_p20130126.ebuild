@@ -80,7 +80,7 @@ RDEPEND+="
 	alsa? ( media-libs/alsa-lib )
 	bluray? ( media-libs/libbluray )
 	bs2b? ( media-libs/libbs2b )
-	cdio? ( dev-libs/libcdio )
+	cdio? ( || ( dev-libs/libcdio-paranoia <dev-libs/libcdio-0.90[-minimal] ) )
 	directfb? ( dev-libs/DirectFB )
 	dts? ( media-libs/libdca )
 	dv? ( media-libs/libdv )
