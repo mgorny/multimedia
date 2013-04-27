@@ -2,28 +2,22 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 
-[[ ${PV} = *9999* ]] && VCS_ECLASS="git-2" || VCS_ECLASS=""
+EGIT_REPO_URI="git://github.com/mpv-player/mpv.git"
 
-inherit toolchain-funcs flag-o-matic multilib base ${VCS_ECLASS}
+inherit toolchain-funcs flag-o-matic multilib base
+[[ ${PV} == *9999* ]] && inherit git-2
 
 DESCRIPTION="Video player based on MPlayer/mplayer2"
-HOMEPAGE="https://github.com/mpv-player/mpv/"
-
-if [[ ${PV} == *9999* ]]; then
-	EGIT_REPO_URI="git://github.com/mpv-player/mpv.git"
-else
-	SRC_URI="http://rion-overlay.googlecode.com/files/${P}.tar.xz"
-fi
+HOMEPAGE="http://mpv.io/"
+[[ ${PV} == *9999* ]] || \
+SRC_URI="http://rion-overlay.googlecode.com/files/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
-if [[ ${PV} == *9999* ]]; then
-	KEYWORDS=""
-else
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
-fi
+[[ ${PV} == *9999* ]] || \
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
 IUSE="+alsa aqua bluray bs2b cddb +cdio debug +dts dvb +dvd +enca encode fbcon ftp
 +iconv ipv6 jack joystick jpeg kernel_linux ladspa lcms +libass libcaca lirc mng +mp3
 +network -openal +opengl oss portaudio +postproc pulseaudio pvr quvi radio samba +shm
@@ -52,31 +46,40 @@ RDEPEND+="
 		vdpau? ( x11-libs/libvdpau )
 		xinerama? ( x11-libs/libXinerama )
 		xscreensaver? ( x11-libs/libXScrnSaver )
-		xv? (
-			x11-libs/libXv
-		)
+		xv? ( x11-libs/libXv )
 	)
 	alsa? ( media-libs/alsa-lib )
 	bluray? ( media-libs/libbluray )
 	bs2b? ( media-libs/libbs2b )
-	cdio? ( || ( dev-libs/libcdio-paranoia <dev-libs/libcdio-0.90[-minimal] ) )
-	dvb? ( virtual/linuxtv-dvb-headers )
-	dvd? (
-		>=media-libs/libdvdread-4.1.3
+	cdio? (
+		|| (
+			dev-libs/libcdio-paranoia
+			<dev-libs/libcdio-0.90[-minimal]
+		)
 	)
+	dvb? ( virtual/linuxtv-dvb-headers )
+	dvd? ( >=media-libs/libdvdread-4.1.3 )
 	enca? ( app-i18n/enca )
 	iconv? ( virtual/libiconv )
 	jack? ( media-sound/jack-audio-connection-kit )
 	jpeg? ( virtual/jpeg )
 	ladspa? ( media-libs/ladspa-sdk )
-	libass? ( >=media-libs/libass-0.9.10[enca?,fontconfig] virtual/ttf-fonts )
+	libass? (
+		>=media-libs/libass-0.9.10[enca?,fontconfig]
+		virtual/ttf-fonts
+	)
 	libcaca? ( media-libs/libcaca )
 	lirc? ( app-misc/lirc )
 	mng? ( media-libs/libmng )
 	mp3? ( media-sound/mpg123 )
 	openal? ( >=media-libs/openal-1.13 )
 	portaudio? ( >=media-libs/portaudio-19_pre20111121 )
-	postproc? ( || ( media-libs/libpostproc <media-video/libav-0.8.2-r1 media-video/ffmpeg ) )
+	postproc? (
+		|| (
+			media-libs/libpostproc
+			media-video/ffmpeg
+		)
+	)
 	pulseaudio? ( media-sound/pulseaudio )
 	quvi? ( >=media-libs/libquvi-0.4.1 )
 	samba? ( net-fs/samba )
@@ -103,7 +106,7 @@ pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then
 		elog
 		elog "This is a live ebuild which installs the latest from upstream's"
-		elog "${VCS_ECLASS} repository, and is unsupported by Gentoo."
+		elog "git repository, and is unsupported by Gentoo."
 		elog "Everything but bugs in the ebuild itself will be ignored."
 		elog
 	fi
