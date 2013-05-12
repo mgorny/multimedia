@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 
 LANGS=" af ar be bg bn br bs ca cs cy da de el en_CA en_GB eo es es_AR et eu fa fi fr ga gl he hi hr hu hy ia id is it ja ka kk ko lt lv mr ms nb nl oc pa pl pt pt_BR ro ru sk sl sr sr@latin sv te tr uk uz vi zh_CN zh_TW"
 
@@ -32,7 +32,7 @@ COMMON_DEPEND="
 	>=media-libs/taglib-1.7[mp4]
 	>=dev-libs/glib-2.24.1-r1
 	dev-libs/libxml2
-	dev-libs/protobuf
+	dev-libs/protobuf:=
 	dev-libs/qjson
 	media-libs/libechonest
 	>=media-libs/chromaprint-0.6
@@ -46,8 +46,8 @@ COMMON_DEPEND="
 	ipod? (
 		>=media-libs/libgpod-0.8.0[ios?]
 		ios? (
-			app-pda/libplist
-			>=app-pda/libimobiledevice-1.0
+			app-pda/libplist:=
+			>=app-pda/libimobiledevice-1.0:=
 			app-pda/usbmuxd
 		)
 	)
