@@ -16,13 +16,14 @@ ESVN_REPO_URI="https://subversion.assembla.com/svn/smplayer/smplayer/trunk"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS=""
-IUSE="debug"
+IUSE="debug +skins"
 
 DEPEND="dev-qt/qtgui:4
 	dev-libs/quazip"
 MPLAYER_USE="[libass,png,X]"
 RDEPEND="${DEPEND}
-	|| ( media-video/mplayer${MPLAYER_USE} media-video/mplayer2${MPLAYER_USE} )"
+	|| ( media-video/mplayer${MPLAYER_USE} media-video/mplayer2${MPLAYER_USE} )
+	skins? ( x11-themes/smplayer-skins )"
 
 src_prepare() {
 	# For Version Branding
