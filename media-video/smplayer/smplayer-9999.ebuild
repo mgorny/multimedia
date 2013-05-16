@@ -18,8 +18,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE="debug +skins"
 
-DEPEND="dev-qt/qtgui:4
-	dev-libs/quazip"
+DEPEND="dev-qt/qtgui:4"
 MPLAYER_USE="[libass,png,X]"
 RDEPEND="${DEPEND}
 	|| ( media-video/mplayer${MPLAYER_USE} media-video/mplayer2${MPLAYER_USE} )
@@ -32,10 +31,6 @@ src_prepare() {
 	mv src/svn_revision.h "${S}"/src/
 	mv svn_revision "${S}"/
 	cd "${S}"
-
-	# Unbundle dev-libs/quazip
-	rm -R src/findsubtitles/quazip/ || die
-	epatch "${FILESDIR}"/smplayer-0.8.0-quazip.patch
 
 	# Upstream Makefile sucks
 	sed -i -e "/^PREFIX=/s:/usr/local:/usr:" \
