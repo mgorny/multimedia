@@ -21,7 +21,7 @@ KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
 IUSE="+alsa aqua bluray bs2b cddb +cdio debug +dts dvb +dvd +enca encode fbcon ftp
 +iconv ipv6 jack joystick jpeg kernel_linux ladspa lcms +libass libcaca lirc mng +mp3
 +network -openal +opengl oss portaudio +postproc pulseaudio pvr quvi radio samba +shm
-v4l vcd vdpau wayland +X xinerama +xscreensaver +xv"
+v4l vcd vdpau vf-dlopen wayland +X xinerama +xscreensaver +xv"
 
 REQUIRED_USE="
 	cddb? ( cdio network )
@@ -106,7 +106,7 @@ DEPEND="${RDEPEND}
 	x86? ( ${ASM_DEP} )
 	x86-fbsd? ( ${ASM_DEP} )
 "
-DOCS=( AUTHORS Copyright README.rst etc/example.conf etc/input.conf )
+DOCS=( AUTHORS Copyright README.md etc/example.conf etc/input.conf )
 
 pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then
@@ -283,7 +283,6 @@ src_configure() {
 	############################
 	if use aqua; then
 		myconf+="
-			--enable-macosx-finder
 			--enable-macosx-bundle
 		"
 	fi
@@ -299,4 +298,22 @@ src_configure() {
 		${myconf} || die
 
 	MAKEOPTS+=" V=1"
+}
+
+src_compile() {
+	base_src_compile
+
+	if use vf-dlopen; then
+		tc-export CC
+		emake -C TOOLS/vf_dlopen
+	fi
+}
+
+src_install() {
+	base_src_install
+
+	if use vf-dlopen; then
+		exeinto /usr/$(get_libdir)/${PN}
+		doexe TOOLS/vf_dlopen/*.so
+	fi
 }

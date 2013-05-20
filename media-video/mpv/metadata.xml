@@ -23,5 +23,6 @@
 	<flag name="radio">Enable V4L2 radio interface and support</flag>
 	<flag name="shm">Enable support for shm</flag>
 	<flag name="vdpau">Enables experimental VDPAU support (requires nVidia video cards) to offload MPEG2/MPEG4/VC1/WMV CPU processing to video card</flag>
+	<flag name="vf-dlopen">Install additional video filters for using with -vf dlopen</flag>
 </use>
 </pkgmetadata>
