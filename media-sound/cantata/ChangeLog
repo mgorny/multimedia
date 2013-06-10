@@ -1,0 +1,6 @@
+*cantata-1.0.3 (10 Jun 2013)
+
+  10 Jun 2013; Nikoli <nikoli@lavabit.com> +cantata-1.0.3.ebuild,
+  +files/cantata-1.0.3-audiocd-automagic.patch,
+  +files/cantata-1.0.3-system-qjson.patch, +metadata.xml:
+  cantata: fixed ebuild
