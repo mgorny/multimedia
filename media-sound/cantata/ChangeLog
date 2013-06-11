@@ -1,5 +1,10 @@
 *cantata-1.0.3 (10 Jun 2013)
 
+*cantata-9999 (11 Jun 2013)
+
+  11 Jun 2013; Nikoli <nikoli@lavabit.com> +cantata-9999.ebuild:
+  add live ebuild
+
   10 Jun 2013; Nikoli <nikoli@lavabit.com> +cantata-1.0.3.ebuild,
   +files/cantata-1.0.3-audiocd-automagic.patch,
   +files/cantata-1.0.3-system-qjson.patch, +metadata.xml:
