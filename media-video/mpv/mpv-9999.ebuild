@@ -87,7 +87,7 @@ RDEPEND+="
 	wayland? (
 		>=dev-libs/wayland-1.0.0
 		media-libs/mesa[egl,wayland]
-		>=x11-libs/libxkbcommon-0.2.0
+		>=x11-libs/libxkbcommon-0.3.0
 	)
 	>=virtual/ffmpeg-9[encode?]
 "
