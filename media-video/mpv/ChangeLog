@@ -2,6 +2,12 @@
 # Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*mpv-0_p20130615 (15 Jun 2013)
+
+  15 Jun 2013; Nikoli <nikoli@lavabit.com> -mpv-0_p20121201.ebuild,
+  -mpv-0_p20130112.ebuild, +mpv-0_p20130615.ebuild:
+  new snapshot, rm old
+
   14 Jun 2013; Nikoli <nikoli@lavabit.com> mpv-9999.ebuild:
   update wayland deps
 

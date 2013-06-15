@@ -1,41 +1,36 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 
-[[ ${PV} = *9999* ]] && VCS_ECLASS="git-2" || VCS_ECLASS=""
+EGIT_REPO_URI="git://github.com/mpv-player/mpv.git"
 
-inherit toolchain-funcs flag-o-matic multilib base ${VCS_ECLASS}
+inherit toolchain-funcs flag-o-matic multilib base
+[[ ${PV} == *9999* ]] && inherit git-2
 
 DESCRIPTION="Video player based on MPlayer/mplayer2"
-HOMEPAGE="https://github.com/mpv-player/mpv/"
-
-if [[ ${PV} == *9999* ]]; then
-	EGIT_REPO_URI="git://github.com/mpv-player/mpv.git"
-else
-	SRC_URI="http://rion-overlay.googlecode.com/files/${P}.tar.xz"
-fi
+HOMEPAGE="http://mpv.io/"
+[[ ${PV} == *9999* ]] || \
+SRC_URI="http://rion-overlay.googlecode.com/files/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
-if [[ ${PV} == *9999* ]]; then
-	KEYWORDS=""
-else
-	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
-fi
-IUSE="+alsa aqua bluray bs2b cddb +cdio debug +dts dvb +dvd +enca encode fbcon ftp gif
+[[ ${PV} == *9999* ]] || \
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
+IUSE="+alsa aqua bluray bs2b cddb +cdio debug +dts dvb +dvd +enca encode fbcon ftp
 +iconv ipv6 jack joystick jpeg kernel_linux ladspa lcms +libass libcaca lirc mng +mp3
-+network -openal +opengl oss png portaudio +postproc pulseaudio pvr quvi radio samba +shm
-v4l vcd vdpau +X xinerama +xscreensaver +xv"
++network -openal +opengl oss portaudio +postproc pulseaudio pvr quvi radio samba +shm
+v4l vcd vdpau vf-dlopen wayland +X xinerama +xscreensaver +xv"
 
 REQUIRED_USE="
 	cddb? ( cdio network )
 	lcms? ( opengl )
 	libass? ( iconv )
-	opengl? ( || ( aqua X ) )
+	opengl? ( || ( aqua wayland X ) )
 	radio? ( || ( dvb v4l ) )
 	vdpau? ( X )
+	wayland? ( opengl )
 	xinerama? ( X )
 	xscreensaver? ( X )
 	xv? ( X )
@@ -52,37 +47,49 @@ RDEPEND+="
 		vdpau? ( x11-libs/libvdpau )
 		xinerama? ( x11-libs/libXinerama )
 		xscreensaver? ( x11-libs/libXScrnSaver )
-		xv? (
-			x11-libs/libXv
-		)
+		xv? ( x11-libs/libXv )
 	)
 	alsa? ( media-libs/alsa-lib )
 	bluray? ( media-libs/libbluray )
 	bs2b? ( media-libs/libbs2b )
-	cdio? ( dev-libs/libcdio )
-	dvb? ( virtual/linuxtv-dvb-headers )
-	dvd? (
-		>=media-libs/libdvdread-4.1.3
+	cdio? (
+		|| (
+			dev-libs/libcdio-paranoia
+			<dev-libs/libcdio-0.90[-minimal]
+		)
 	)
+	dvb? ( virtual/linuxtv-dvb-headers )
+	dvd? ( >=media-libs/libdvdread-4.1.3 )
 	enca? ( app-i18n/enca )
-	gif? ( media-libs/giflib )
 	iconv? ( virtual/libiconv )
 	jack? ( media-sound/jack-audio-connection-kit )
 	jpeg? ( virtual/jpeg )
 	ladspa? ( media-libs/ladspa-sdk )
-	libass? ( >=media-libs/libass-0.9.10[enca?,fontconfig] virtual/ttf-fonts )
+	libass? (
+		>=media-libs/libass-0.9.10[enca?,fontconfig]
+		virtual/ttf-fonts
+	)
 	libcaca? ( media-libs/libcaca )
 	lirc? ( app-misc/lirc )
 	mng? ( media-libs/libmng )
 	mp3? ( media-sound/mpg123 )
 	openal? ( >=media-libs/openal-1.13 )
-	png? ( media-libs/libpng )
 	portaudio? ( >=media-libs/portaudio-19_pre20111121 )
-	postproc? ( || ( media-libs/libpostproc <media-video/libav-0.8.2-r1 media-video/ffmpeg ) )
+	postproc? (
+		|| (
+			media-libs/libpostproc
+			media-video/ffmpeg
+		)
+	)
 	pulseaudio? ( media-sound/pulseaudio )
 	quvi? ( >=media-libs/libquvi-0.4.1 )
 	samba? ( net-fs/samba )
-	>=virtual/ffmpeg-0.10.2[encode?]
+	wayland? (
+		>=dev-libs/wayland-1.0.0
+		media-libs/mesa[egl,wayland]
+		>=x11-libs/libxkbcommon-0.3.0
+	)
+	>=virtual/ffmpeg-9[encode?]
 "
 ASM_DEP="dev-lang/yasm"
 DEPEND="${RDEPEND}
@@ -99,13 +106,13 @@ DEPEND="${RDEPEND}
 	x86? ( ${ASM_DEP} )
 	x86-fbsd? ( ${ASM_DEP} )
 "
-DOCS=( AUTHORS Copyright README etc/example.conf etc/input.conf )
+DOCS=( AUTHORS Copyright README.md etc/example.conf etc/input.conf )
 
 pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then
 		elog
 		elog "This is a live ebuild which installs the latest from upstream's"
-		elog "${VCS_ECLASS} repository, and is unsupported by Gentoo."
+		elog "git repository, and is unsupported by Gentoo."
 		elog "Everything but bugs in the ebuild itself will be ignored."
 		elog
 	fi
@@ -147,6 +154,9 @@ src_configure() {
 	###################
 	#Optional features#
 	###################
+	# SDL output is fallback for platforms where nothing better is available
+	myconf+=" --disable-sdl --disable-sdl2"
+	use wayland || myconf+=" --disable-wayland"
 	use encode || myconf+=" --disable-encoding"
 	use network || myconf+=" --disable-networking"
 	myconf+=" $(use_enable joystick)"
@@ -161,7 +171,6 @@ src_configure() {
 		myconf+="
 			--disable-lirc
 			--disable-lircc
-			--disable-apple-ir
 		"
 	fi
 
@@ -188,7 +197,6 @@ src_configure() {
 	#####################################
 	# DVB / Video4Linux / Radio support #
 	#####################################
-	myconf+=" --disable-tv-bsdbt848"
 	if { use dvb || use v4l || use pvr || use radio; }; then
 		use dvb || myconf+=" --disable-dvb"
 		use pvr || myconf+=" --disable-pvr"
@@ -201,7 +209,6 @@ src_configure() {
 		else
 			myconf+="
 				--disable-radio-v4l2
-				--disable-radio-bsdbt848
 			"
 		fi
 	else
@@ -210,7 +217,6 @@ src_configure() {
 			--disable-tv-v4l2
 			--disable-radio
 			--disable-radio-v4l2
-			--disable-radio-bsdbt848
 			--disable-dvb
 			--disable-pvr"
 	fi
@@ -223,7 +229,7 @@ src_configure() {
 	for i in ${uses}; do
 		use ${i} || myconf+=" --disable-lib${i}"
 	done
-	uses="gif jpeg mng png"
+	uses="jpeg mng"
 	for i in ${uses}; do
 		use ${i} || myconf+=" --disable-${i}"
 	done
@@ -277,7 +283,6 @@ src_configure() {
 	############################
 	if use aqua; then
 		myconf+="
-			--enable-macosx-finder
 			--enable-macosx-bundle
 		"
 	fi
@@ -288,10 +293,27 @@ src_configure() {
 		--prefix="${EPREFIX}"/usr \
 		--bindir="${EPREFIX}"/usr/bin \
 		--confdir="${EPREFIX}"/etc/${PN} \
-		--datadir="${EPREFIX}"/usr/share/${PN} \
 		--mandir="${EPREFIX}"/usr/share/man \
 		--localedir="${EPREFIX}"/usr/share/locale \
 		${myconf} || die
 
 	MAKEOPTS+=" V=1"
+}
+
+src_compile() {
+	base_src_compile
+
+	if use vf-dlopen; then
+		tc-export CC
+		emake -C TOOLS/vf_dlopen
+	fi
+}
+
+src_install() {
+	base_src_install
+
+	if use vf-dlopen; then
+		exeinto /usr/$(get_libdir)/${PN}
+		doexe TOOLS/vf_dlopen/*.so
+	fi
 }
