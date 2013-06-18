@@ -31,7 +31,7 @@ if [ "${PV#9999}" != "${PV}" ]; then
 else
 	KEYWORDS="~alpha ~amd64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 fi
-IUSE="10bit avs debug ffmpeg ffmpegsource +interlaced mp4 opencl pic +system-libx264 +threads"
+IUSE="10bit avs debug ffmpeg ffmpegsource +interlaced mp4 pic +system-libx264 +threads"
 
 REQUIRED_USE="ffmpegsource? ( ffmpeg )"
 
@@ -39,14 +39,13 @@ RDEPEND="
 	ffmpeg? ( virtual/ffmpeg )
 	ffmpegsource? ( media-libs/ffmpegsource )
 	mp4? ( >=media-video/gpac-0.4.1_pre20060122 )
-	system-libx264? ( ~media-libs/x264-${PV}:=[10bit=,debug=,interlaced=,opencl=,pic=,threads=] )
+	system-libx264? ( ~media-libs/x264-${PV}:=[10bit=,debug=,interlaced=,pic=,threads=] )
 "
 ASM_DEP=">=dev-lang/yasm-1.2.0"
 DEPEND="${RDEPEND}
 	amd64? ( ${ASM_DEP} )
 	x86? ( ${ASM_DEP} )
 	x86-fbsd? ( ${ASM_DEP} )
-	opencl? ( dev-lang/perl )
 	virtual/pkgconfig
 "
 if [ "${PV#9999}" = "${PV}" ]; then
@@ -67,7 +66,6 @@ src_configure() {
 	use ffmpegsource || myconf+=" --disable-ffms"
 	use interlaced || myconf+=" --disable-interlaced"
 	use mp4 || myconf+=" --disable-gpac"
-	use opencl || myconf+=" --disable-opencl"
 	use system-libx264 && myconf+=" --system-libx264"
 	use threads || myconf+=" --disable-thread"
 
