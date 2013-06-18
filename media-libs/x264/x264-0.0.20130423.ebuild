@@ -22,13 +22,13 @@ else
 fi
 
 LICENSE="GPL-2"
-SLOT="0/133"
+SLOT="0/130"
 if [ "${PV#9999}" != "${PV}" ]; then
 	KEYWORDS=""
 else
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
 fi
-IUSE="10bit debug +interlaced opencl pic static-libs +threads"
+IUSE="10bit debug +interlaced pic static-libs +threads"
 
 RDEPEND=""
 ASM_DEP=">=dev-lang/yasm-1.2.0"
@@ -36,10 +36,14 @@ DEPEND="
 	amd64? ( ${ASM_DEP} )
 	x86? ( ${ASM_DEP} )
 	x86-fbsd? ( ${ASM_DEP} )
-	opencl? ( dev-lang/perl )
 "
 
 DOCS="AUTHORS doc/*.txt"
+
+src_prepare() {
+	# Initial support for x32 ABI, bug #420241
+	epatch "${FILESDIR}"/x264-x32.patch
+}
 
 src_configure() {
 	tc-export CC
@@ -51,11 +55,10 @@ src_configure() {
 	use 10bit && myconf+=" --bit-depth=10"
 	use debug && myconf+=" --enable-debug"
 	use interlaced || myconf+=" --disable-interlaced"
-	use opencl || myconf+=" --disable-opencl"
 	use static-libs && myconf+=" --enable-static"
 	use threads || myconf+=" --disable-thread"
 
-	if use x86 && use pic; then
+	if use x86 && use pic || [[ ${ABI} == "x32" ]]; then
 		myconf+=" --disable-asm"
 	fi
 
