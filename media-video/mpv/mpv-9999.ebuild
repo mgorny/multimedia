@@ -19,7 +19,7 @@ SLOT="0"
 [[ ${PV} == *9999* ]] || \
 KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
 IUSE="+alsa aqua bluray bs2b cddb +cdio debug +dts dvb +dvd +enca encode fbcon ftp
-+iconv ipv6 jack joystick jpeg kernel_linux ladspa lcms +libass libcaca lirc mng +mp3
++iconv ipv6 jack joystick jpeg kernel_linux ladspa lcms +libass libcaca libguess lirc mng +mp3
 +network -openal +opengl oss portaudio +postproc pulseaudio pvr quvi radio samba +shm
 v4l vcd vdpau vf-dlopen wayland +X xinerama +xscreensaver +xv"
 
@@ -70,6 +70,7 @@ RDEPEND+="
 		virtual/ttf-fonts
 	)
 	libcaca? ( media-libs/libcaca )
+	libguess? ( >=app-i18n/libguess-1.0 )
 	lirc? ( app-misc/lirc )
 	mng? ( media-libs/libmng )
 	mp3? ( media-sound/mpg123 )
@@ -160,7 +161,7 @@ src_configure() {
 	use encode || myconf+=" --disable-encoding"
 	use network || myconf+=" --disable-networking"
 	myconf+=" $(use_enable joystick)"
-	uses="bluray enca ftp libass vcd"
+	uses="bluray enca ftp libass libguess vcd"
 	for i in ${uses}; do
 		use ${i} || myconf+=" --disable-${i}"
 	done
