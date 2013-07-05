@@ -2,6 +2,9 @@
 # Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  05 Jul 2013; Nikoli <nikoli@lavabit.com> mpv-9999.ebuild:
+  fix USE quvi
+
   04 Jul 2013; Nikoli <nikoli@lavabit.com> mpv-9999.ebuild, metadata.xml:
   upstream added libguess support
 

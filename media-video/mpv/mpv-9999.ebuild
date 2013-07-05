@@ -83,7 +83,7 @@ RDEPEND+="
 		)
 	)
 	pulseaudio? ( media-sound/pulseaudio )
-	quvi? ( >=media-libs/libquvi-0.4.1 )
+	quvi? ( >=media-libs/libquvi-0.4.1:= )
 	samba? ( net-fs/samba )
 	wayland? (
 		>=dev-libs/wayland-1.0.0
@@ -166,7 +166,7 @@ src_configure() {
 		use ${i} || myconf+=" --disable-${i}"
 	done
 	use ipv6 || myconf+=" --disable-inet6"
-	use quvi || myconf+=" --disable-libquvi"
+	use quvi || myconf+=" --disable-libquvi4 --disable-libquvi9"
 	use samba || myconf+=" --disable-smb"
 	if ! use lirc; then
 		myconf+="
