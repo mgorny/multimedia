@@ -35,6 +35,7 @@ ASM_DEP=">=dev-lang/yasm-1.2.0"
 DEPEND="
 	amd64? ( ${ASM_DEP} )
 	x86? ( ${ASM_DEP} )
+	amd64-fbsd? ( ${ASM_DEP} )
 	x86-fbsd? ( ${ASM_DEP} )
 	opencl? ( dev-lang/perl )
 "
