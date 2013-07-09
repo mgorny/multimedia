@@ -2,6 +2,9 @@
 # Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  09 Jul 2013; Nikoli <nikoli@lavabit.com> mplayer2-9999.ebuild, metadata.xml:
+  sync with mpv, fix docs
+
   21 May 2013; Nikoli <nikoli@lavabit.com> mplayer2-9999.ebuild:
   rm win32codecs USE flag, bug 468406
 
