@@ -3,6 +3,9 @@
 # $Header: $
 
   09 Jul 2013; Nikoli <nikoli@lavabit.com> mpv-9999.ebuild:
+  do not add -g to CFLAGS
+
+  09 Jul 2013; Nikoli <nikoli@lavabit.com> mpv-9999.ebuild:
   fix USE threads, install more DOCS, rm obsolete USE fbcon
 
   08 Jul 2013; Nikoli <nikoli@lavabit.com> mpv-9999.ebuild:

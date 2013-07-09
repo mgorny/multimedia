@@ -233,6 +233,8 @@ src_configure() {
 	####################
 	# Advanced Options #
 	####################
+	# do not add -g to CFLAGS
+	myconf+=" --disable-debug"
 	use threads || myconf+=" --disable-pthreads"
 
 	# Platform specific flags, hardcoded on amd64 (see below)
