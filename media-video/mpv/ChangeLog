@@ -2,6 +2,9 @@
 # Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  09 Jul 2013; Nikoli <nikoli@lavabit.com> mpv-9999.ebuild:
+  fix USE threads, install more DOCS, rm obsolete USE fbcon
+
   08 Jul 2013; Nikoli <nikoli@lavabit.com> mpv-9999.ebuild:
   upstream removed several configure options, fix USE deps, add USE threads,
   hide upstream CFLAGS warning, radio builds fine without oss, remove USE debug
