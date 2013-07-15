@@ -2,6 +2,11 @@
 # Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*mpv-0_p20130715 (15 Jul 2013)
+
+  15 Jul 2013; Nikoli <nikoli@lavabit.com> +mpv-0_p20130715.ebuild:
+  new snapshot
+
   11 Jul 2013; Nikoli <nikoli@lavabit.com> mpv-9999.ebuild:
   keep build reproducible
 
