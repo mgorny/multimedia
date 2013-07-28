@@ -24,7 +24,8 @@ for x in ${LANGSLONG}; do
 done
 
 DEPEND="
-	dev-qt/qtgui:4[dbus?]
+	dev-qt/qtgui:4
+	dbus? ( dev-qt/qtdbus:4 )
 	download-subs? ( dev-libs/quazip )
 "
 RDEPEND="${DEPEND}

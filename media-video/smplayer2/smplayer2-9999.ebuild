@@ -1,4 +1,4 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -24,7 +24,8 @@ for x in ${LANGSLONG}; do
 done
 
 DEPEND="
-	dev-qt/qtgui:4[dbus?]
+	dev-qt/qtgui:4
+	dbus? ( dev-qt/qtdbus:4 )
 	download-subs? ( dev-libs/quazip )
 "
 RDEPEND="${DEPEND}

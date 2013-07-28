@@ -2,6 +2,10 @@
 # Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  28 Jul 2013; Nikoli <nikoli@lavabit.com> smplayer2-0.8.0_p20121214.ebuild,
+  smplayer2-0.8.0_p20130111.ebuild, smplayer2-9999.ebuild:
+  fix USE dbus
+
 *smplayer2-0.8.0_p20130111 (01 Feb 2013)
 
   01 Feb 2013; Nikoli <nikoli@lavabit.com> -smplayer2-0.7.2_p20120522.ebuild,
