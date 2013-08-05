@@ -25,7 +25,8 @@ REQUIRED_USE="
 "
 
 COMMON_DEPEND="
-	>=dev-qt/qtgui-4.5:4[dbus?]
+	>=dev-qt/qtgui-4.5:4
+	dbus? ( >=dev-qt/qtdbus-4.5:4 )
 	>=dev-qt/qtopengl-4.5:4
 	>=dev-qt/qtsql-4.5:4[sqlite]
 	dev-db/sqlite[fts3(+)]
@@ -34,7 +35,7 @@ COMMON_DEPEND="
 	dev-libs/libxml2
 	dev-libs/protobuf:=
 	dev-libs/qjson
-	media-libs/libechonest
+	media-libs/libechonest:=
 	>=media-libs/chromaprint-0.6
 	media-libs/gstreamer:0.10
 	media-libs/gst-plugins-base:0.10
