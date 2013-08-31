@@ -17,13 +17,12 @@
 	<flag name="libguess">Enables support for charset discovery and conversion using <pkg>app-i18n/libguess</pkg></flag>
 	<flag name="mng">MNG input support</flag>
 	<flag name="mp3">Enable support for mp3 decoding over <pkg>media-sound/mpg123</pkg> instead of relying on ffmpeg support.</flag>
-	<flag name="network">Enables network streaming support</flag>
 	<flag name="postproc">Enable image post-processing via libpostproc</flag>
 	<flag name="pvr">Enable Video4Linux2 MPEG PVR</flag>
 	<flag name="quvi">Enable support for streaming sites using <pkg>media-libs/libquvi</pkg></flag>
 	<flag name="radio">Enable V4L2 radio interface and support</flag>
 	<flag name="shm">Enable support for shm</flag>
-	<flag name="vdpau">Enables experimental VDPAU support (requires nVidia video cards) to offload MPEG2/MPEG4/VC1/WMV CPU processing to video card</flag>
+	<flag name="vaapi">Enable VAAPI (Video Acceleration API) for hardware decoding</flag>
 	<flag name="vf-dlopen">Install additional video filters for using with -vf dlopen</flag>
 </use>
 </pkgmetadata>

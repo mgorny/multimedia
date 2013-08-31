@@ -12,12 +12,12 @@ inherit toolchain-funcs flag-o-matic multilib base
 DESCRIPTION="Video player based on MPlayer/mplayer2"
 HOMEPAGE="http://mpv.io/"
 [[ ${PV} == *9999* ]] || \
-SRC_URI="http://rion-overlay.googlecode.com/files/${P}.tar.xz"
+SRC_URI="https://github.com/mpv-player/mpv/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
 [[ ${PV} == *9999* ]] || \
-KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
+KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
 IUSE="+alsa aqua bluray bs2b +cdio dvb +dvd +enca encode +iconv jack joystick
 jpeg ladspa lcms +libass libcaca libguess lirc mng +mp3 -openal +opengl oss
 portaudio +postproc pulseaudio pvr +quvi radio samba +shm +threads v4l vcd
@@ -42,7 +42,7 @@ REQUIRED_USE="
 RDEPEND+="
 	|| (
 		>=media-video/libav-9:=[encode?,threads?,vdpau?]
-		>=media-video/ffmpeg-1.2[encode?,threads?,vdpau?]
+		>=media-video/ffmpeg-1.2:0=[encode?,threads?,vdpau?]
 	)
 	sys-libs/ncurses
 	sys-libs/zlib
@@ -86,7 +86,7 @@ RDEPEND+="
 	postproc? (
 		|| (
 			media-libs/libpostproc
-			media-video/ffmpeg
+			>=media-video/ffmpeg-1.2:0[encode?,threads?,vdpau?]
 		)
 	)
 	pulseaudio? ( media-sound/pulseaudio )
@@ -136,7 +136,8 @@ pkg_setup() {
 		ewarn "and makes them fail silently."
 	fi
 
-	einfo "For various format support you need to enable the support on your ffmpeg package:"
+	einfo "For additional format support you need to enable the support on your"
+	einfo "libavcodec/libavformat provider:"
 	einfo "    media-video/libav or media-video/ffmpeg"
 }
 
