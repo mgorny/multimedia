@@ -2,6 +2,13 @@
 # Copyright 1999-2013 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*mpv-0.1.7 (22 Sep 2013)
+
+  22 Sep 2013; Nikoli <nikoli@gmx.us> -mpv-0.1.4.ebuild, +mpv-0.1.7.ebuild,
+  mpv-9999.ebuild, metadata.xml:
+  version bump, add USE doc-pdf, macosx options were removed from configure,
+  fix libva dep
+
 *mpv-0.1.4 (31 Aug 2013)
 
   31 Aug 2013; Nikoli <nikoli@lavabit.com> -mpv-0_p20130615.ebuild,
