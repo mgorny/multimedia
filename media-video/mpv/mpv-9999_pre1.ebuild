@@ -7,7 +7,7 @@ EAPI=5
 EGIT_REPO_URI="git://github.com/mpv-player/mpv.git"
 EGIT_BRANCH="waf"
 
-inherit toolchain-funcs flag-o-matic multilib base waf-utils pax-utils
+inherit flag-o-matic base waf-utils pax-utils
 [[ ${PV} == *9999* ]] && inherit git-2
 
 DESCRIPTION="Video player based on MPlayer/mplayer2"
@@ -133,6 +133,7 @@ DEPEND="${RDEPEND}
 	x86? ( ${ASM_DEP} )
 	x86-fbsd? ( ${ASM_DEP} )
 "
+DOCS=( Copyright README.md etc/example.conf etc/input.conf etc/encoding-example-profiles.conf )
 
 pkg_setup() {
 	if [[ ${PV} == *9999* ]]; then
@@ -165,9 +166,6 @@ src_prepare() {
 }
 
 src_configure() {
-# TODO upstream
-#		$(use_enable doc-pdf pdf) \
-
 	if use x86 && gcc-specs-pie; then
 		filter-flags -fPIC -fPIE
 		append-ldflags -nopie
@@ -176,7 +174,6 @@ src_configure() {
 	# keep build reproducible
 	# SDL output is fallback for platforms where nothing better is available
 	# media-sound/rsound is in pro-audio overlay only
-	NO_WAF_LIBDIR=1 \
 	waf-utils_src_configure \
 		--disable-build-date \
 		--disable-sdl \
@@ -193,6 +190,7 @@ src_configure() {
 		$(use_enable lirc lircc) \
 		$(use_enable lua) \
 		$(usex luajit '--lua=luajit' '') \
+		$(use_enable doc-pdf pdf-build) \
 		$(use_enable cdio cdda) \
 		$(use_enable dvd dvdread) \
 		$(use_enable enca) \
@@ -217,7 +215,7 @@ src_configure() {
 		$(use_enable portaudio) \
 		$(use_enable bs2b libbs2b) \
 		$(use_enable openal) \
-		$(use_enable oss oss_audio) \
+		$(use_enable oss oss-audio) \
 		$(use_enable pulseaudio pulse) \
 		$(use_enable threads pthreads) \
 		$(use_enable shm) \
@@ -231,30 +229,14 @@ src_configure() {
 		$(use_enable lcms lcms2) \
 		$(use_enable xscreensaver xss) \
 		--confdir="${EPREFIX}"/etc/${PN} \
-		--mandir="${EPREFIX}"/usr/share/man
-}
-
-src_compile() {
-	waf-utils_src_compile
-
-	if use vf-dlopen; then
-		tc-export CC
-		emake -C TOOLS/vf_dlopen
-	fi
+		--mandir="${EPREFIX}"/usr/share/man \
+		--docdir="${EPREFIX}"/usr/share/doc/${PF}
 }
 
 src_install() {
-	dobin build/mpv
+	waf-utils_src_install
 
 	if use luajit; then
 		pax-mark -m "${ED}"usr/bin/mpv
 	fi
-
-	if use vf-dlopen; then
-		exeinto /usr/$(get_libdir)/${PN}
-		doexe TOOLS/vf_dlopen/*.so
-	fi
-
-	domenu etc/mpv.desktop
-	dodoc Copyright README.md etc/{encoding-example-profiles.conf,example.conf,input.conf}
 }
