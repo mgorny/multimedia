@@ -18,9 +18,9 @@ LICENSE="GPL-2"
 SLOT="0"
 [[ ${PV} == *9999* ]] || \
 KEYWORDS="~alpha ~amd64 ~arm ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
-IUSE="+alsa bluray bs2b +cdio doc-pdf dvb +dvd +enca encode +iconv jack joystick
-jpeg ladspa lcms +libass libcaca libguess lirc lua luajit mng +mp3 -openal +opengl oss
-portaudio +postproc pulseaudio pvr +quvi radio samba +shm +threads v4l vaapi
+IUSE="+alsa bluray bs2b +cdio doc-pdf dvb +dvd +enca encode +iconv jack -joystick
+jpeg ladspa lcms +libass libcaca libguess lirc lua luajit +mpg123 -openal +opengl oss
+portaudio +postproc pulseaudio pvr +quvi -radio samba +shm +threads v4l vaapi
 vcd vdpau vf-dlopen wayland +X xinerama +xscreensaver +xv"
 
 REQUIRED_USE="
@@ -86,8 +86,7 @@ RDEPEND+="
 		!luajit? ( >=dev-lang/lua-5.1 )
 		luajit? ( dev-lang/luajit:2 )
 	)
-	mng? ( media-libs/libmng )
-	mp3? ( media-sound/mpg123 )
+	mpg123? ( >=media-sound/mpg123-1.14.0 )
 	openal? ( >=media-libs/openal-1.13 )
 	portaudio? ( >=media-libs/portaudio-19_pre20111121 )
 	postproc? (
@@ -105,6 +104,7 @@ RDEPEND+="
 		)
 	)
 	samba? ( net-fs/samba )
+	v4l? ( media-libs/libv4l )
 	wayland? (
 		>=dev-libs/wayland-1.0.0
 		media-libs/mesa[egl,wayland]
@@ -218,7 +218,7 @@ src_configure() {
 	#####################################
 	use dvb || myconf+=" --disable-dvb"
 	use pvr || myconf+=" --disable-pvr"
-	use v4l || myconf+=" --disable-tv --disable-tv-v4l2"
+	use v4l || myconf+=" --disable-libv4l2 --disable-tv --disable-tv-v4l2"
 	if use radio; then
 		myconf+=" --enable-radio --enable-radio-capture"
 	else
@@ -228,8 +228,7 @@ src_configure() {
 	##########
 	# Codecs #
 	##########
-	use mp3 || myconf+=" --disable-mpg123"
-	uses="jpeg mng"
+	uses="jpeg mpg123"
 	for i in ${uses}; do
 		use ${i} || myconf+=" --disable-${i}"
 	done
