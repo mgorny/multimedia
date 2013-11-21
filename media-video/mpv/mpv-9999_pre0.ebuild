@@ -5,9 +5,8 @@
 EAPI=5
 
 EGIT_REPO_URI="git://github.com/mpv-player/mpv.git"
-EGIT_BRANCH="waf"
 
-inherit flag-o-matic base waf-utils pax-utils
+inherit toolchain-funcs flag-o-matic multilib base pax-utils
 [[ ${PV} == *9999* ]] && inherit git-2
 
 DESCRIPTION="Video player based on MPlayer/mplayer2"
@@ -19,9 +18,9 @@ LICENSE="GPL-2"
 SLOT="0"
 [[ ${PV} == *9999* ]] || \
 KEYWORDS="~alpha ~amd64 ~arm ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
-IUSE="+alsa bluray bs2b +cdio doc-pdf dvb +dvd +enca encode +iconv jack joystick
-jpeg ladspa lcms +libass libcaca libguess lirc lua luajit mng +mp3 -openal +opengl oss
-portaudio +postproc pulseaudio pvr +quvi radio samba +shm +threads v4l vaapi
+IUSE="+alsa bluray bs2b +cdio doc-pdf dvb +dvd +enca encode +iconv jack -joystick
+jpeg ladspa lcms +libass libcaca libguess lirc lua luajit +mpg123 -openal +opengl oss
+portaudio +postproc pulseaudio pvr +quvi -radio samba +shm +threads v4l vaapi
 vcd vdpau vf-dlopen wayland +X xinerama +xscreensaver +xv"
 
 REQUIRED_USE="
@@ -87,8 +86,7 @@ RDEPEND+="
 		!luajit? ( >=dev-lang/lua-5.1 )
 		luajit? ( dev-lang/luajit:2 )
 	)
-	mng? ( media-libs/libmng )
-	mp3? ( media-sound/mpg123 )
+	mpg123? ( >=media-sound/mpg123-1.14.0 )
 	openal? ( >=media-libs/openal-1.13 )
 	portaudio? ( >=media-libs/portaudio-19_pre20111121 )
 	postproc? (
@@ -106,6 +104,7 @@ RDEPEND+="
 		)
 	)
 	samba? ( net-fs/samba )
+	v4l? ( media-libs/libv4l )
 	wayland? (
 		>=dev-libs/wayland-1.0.0
 		media-libs/mesa[egl,wayland]
@@ -162,81 +161,159 @@ pkg_setup() {
 }
 
 src_prepare() {
+	# fix path to bash executable in configure scripts
+	sed -i -e "1c\#!${EPREFIX}/bin/bash" \
+		old-configure version.sh || die
+
 	base_src_prepare
 }
 
 src_configure() {
+	local myconf=""
+	local uses i
+
+	# ebuild uses "use foo || --disable-foo" to forcibly disable
+	# compilation in almost every situation. The reason for this is
+	# because if --enable is used, it will force the build of that option,
+	# regardless of whether the dependency is available or not.
+
+	#####################
+	# Optional features #
+	#####################
+	# SDL output is fallback for platforms where nothing better is available
+	myconf+=" --disable-sdl --disable-sdl2"
+	use encode || myconf+=" --disable-encoding"
+	myconf+=" $(use_enable joystick)"
+	uses="bluray vcd"
+	for i in ${uses}; do
+		use ${i} || myconf+=" --disable-${i}"
+	done
+	use quvi || myconf+=" --disable-libquvi4 --disable-libquvi9"
+	use samba || myconf+=" --disable-smb"
+	use lirc || myconf+=" --disable-lirc --disable-lircc"
+	use lua || myconf+=" --disable-lua"
+	use luajit && myconf+=" --lua=luajit"
+	use doc-pdf || myconf+=" --disable-pdf"
+
+	########
+	# CDDA #
+	########
+	use cdio || myconf+=" --disable-libcdio"
+
+	############
+	# DVD read #
+	############
+	use dvd || myconf+=" --disable-dvdread"
+
+	#############
+	# Subtitles #
+	#############
+	uses="enca iconv libass libguess"
+	for i in ${uses}; do
+		use ${i} || myconf+=" --disable-${i}"
+	done
+
+	#####################################
+	# DVB / Video4Linux / Radio support #
+	#####################################
+	use dvb || myconf+=" --disable-dvb"
+	use pvr || myconf+=" --disable-pvr"
+	use v4l || myconf+=" --disable-libv4l2 --disable-tv --disable-tv-v4l2"
+	if use radio; then
+		myconf+=" --enable-radio --enable-radio-capture"
+	else
+		myconf+=" --disable-radio-v4l2"
+	fi
+
+	##########
+	# Codecs #
+	##########
+	uses="jpeg mpg123"
+	for i in ${uses}; do
+		use ${i} || myconf+=" --disable-${i}"
+	done
+
+	################
+	# Video Output #
+	################
+	use libcaca || myconf+=" --disable-caca"
+	use postproc || myconf+=" --disable-libpostproc"
+
+	################
+	# Audio Output #
+	################
+	myconf+=" --disable-rsound" # media-sound/rsound is in pro-audio overlay only
+	uses="alsa jack ladspa portaudio"
+	for i in ${uses}; do
+		use ${i} || myconf+=" --disable-${i}"
+	done
+	use bs2b || myconf+=" --disable-libbs2b"
+	use openal && myconf+=" --enable-openal"
+	use oss || myconf+=" --disable-ossaudio"
+	use pulseaudio || myconf+=" --disable-pulse"
+
+	####################
+	# Advanced Options #
+	####################
+	# keep build reproducible
+	myconf+=" --disable-build-date"
+	# do not add -g to CFLAGS
+	myconf+=" --disable-debug"
+	use threads || myconf+=" --disable-pthreads"
+
+	# Platform specific flags, hardcoded on amd64 (see below)
+	use shm || myconf+=" --disable-shm"
+
 	if use x86 && gcc-specs-pie; then
 		filter-flags -fPIC -fPIE
 		append-ldflags -nopie
 	fi
 
-	# keep build reproducible
-	# SDL output is fallback for platforms where nothing better is available
-	# media-sound/rsound is in pro-audio overlay only
-	waf-utils_src_configure \
-		--disable-build-date \
-		--disable-sdl \
-		--disable-sdl2 \
-		--disable-rsound \
-		$(use_enable encode encoding) \
-		$(use_enable joystick) \
-		$(use_enable bluray libbluray) \
-		$(use_enable vcd) \
-		$(use_enable quvi libquvi4) \
-		--disable-libquvi9 \
-		$(use_enable samba libsmbclient) \
-		$(use_enable lirc) \
-		$(use_enable lirc lircc) \
-		$(use_enable lua) \
-		$(usex luajit '--lua=luajit' '') \
-		$(use_enable doc-pdf pdf-build) \
-		$(use_enable cdio cdda) \
-		$(use_enable dvd dvdread) \
-		$(use_enable enca) \
-		$(use_enable iconv) \
-		$(use_enable libass) \
-		$(use_enable libguess) \
-		$(use_enable dvb) \
-		$(use_enable pvr) \
-		$(use_enable v4l tv) \
-		$(use_enable v4l tv-v4l2) \
-		$(use_enable radio) \
-		$(use_enable radio radio-capture) \
-		$(use_enable radio radio-v4l2) \
-		$(use_enable mp3 mpg123) \
-		$(use_enable jpeg) \
-		$(use_enable mng) \
-		$(use_enable libcaca caca) \
-		$(use_enable postproc libpostproc) \
-		$(use_enable alsa) \
-		$(use_enable jack) \
-		$(use_enable ladspa) \
-		$(use_enable portaudio) \
-		$(use_enable bs2b libbs2b) \
-		$(use_enable openal) \
-		$(use_enable oss oss-audio) \
-		$(use_enable pulseaudio pulse) \
-		$(use_enable threads pthreads) \
-		$(use_enable shm) \
-		$(use_enable X x11) \
-		$(use_enable vaapi) \
-		$(use_enable vdpau) \
-		$(use_enable wayland) \
-		$(use_enable xinerama) \
-		$(use_enable xv) \
-		$(use_enable opengl gl) \
-		$(use_enable lcms lcms2) \
-		$(use_enable xscreensaver xss) \
+	###########################
+	# X enabled configuration #
+	###########################
+	use X || myconf+=" --disable-x11"
+	uses="vaapi vdpau wayland xinerama xv"
+	for i in ${uses}; do
+		use ${i} || myconf+=" --disable-${i}"
+	done
+	use opengl || myconf+=" --disable-gl"
+	use lcms || myconf+=" --disable-lcms2"
+	use xscreensaver || myconf+=" --disable-xss"
+
+	CFLAGS= LDFLAGS= ./old-configure \
+		--cc="$(tc-getCC)" \
+		--extra-cflags="${CFLAGS}" \
+		--extra-ldflags="${LDFLAGS}" \
+		--pkg-config="$(tc-getPKG_CONFIG)" \
+		--prefix="${EPREFIX}"/usr \
+		--bindir="${EPREFIX}"/usr/bin \
 		--confdir="${EPREFIX}"/etc/${PN} \
 		--mandir="${EPREFIX}"/usr/share/man \
-		--docdir="${EPREFIX}"/usr/share/doc/${PF}
+		--docdir="${EPREFIX}"/usr/share/doc/${PF} \
+		${myconf} || die
+
+	MAKEOPTS+=" V=1"
+}
+
+src_compile() {
+	base_src_compile
+
+	if use vf-dlopen; then
+		tc-export CC
+		emake -C TOOLS/vf_dlopen
+	fi
 }
 
 src_install() {
-	waf-utils_src_install
+	base_src_install
 
 	if use luajit; then
 		pax-mark -m "${ED}"usr/bin/mpv
+	fi
+
+	if use vf-dlopen; then
+		exeinto /usr/$(get_libdir)/${PN}
+		doexe TOOLS/vf_dlopen/*.so
 	fi
 }
