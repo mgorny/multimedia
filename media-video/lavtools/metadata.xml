@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer>
+		<email>nikoli@gmx.us</email>
+		<name>Nikoli</name>
+	</maintainer>
+	<use>
+		<flag name="libav-bitrate">Install libav-bitrate tool</flag>
+		<flag name="yuv2jpeg">Install yuv2jpeg tool</flag>
+		<flag name="yuvaddetect">Install yuvaddetect tool</flag>
+		<flag name="yuvadjust">Install yuvadjust tool</flag>
+		<flag name="yuvaifps">Install yuvaifps tool</flag>
+		<flag name="yuvbilateral">Install yuvbilateral tool</flag>
+		<flag name="yuvconvolve">Install yuvconvolve tool</flag>
+		<flag name="yuvcrop">Install yuvcrop tool</flag>
+		<flag name="yuvdiag">Install yuvdiag tool</flag>
+		<flag name="yuvdiff">Install yuvdiff tool</flag>
+		<flag name="yuvfade">Install yuvfade tool</flag>
+		<flag name="yuvfieldrev">Install yuvfieldrev tool</flag>
+		<flag name="yuvfieldseperate">Install yuvfieldseperate tool</flag>
+		<flag name="yuvhsync">Install yuvhsync tool</flag>
+		<flag name="yuvilace">Install yuvilace tool</flag>
+		<flag name="yuvmdeinterlace">Install yuvmdeinterlace tool</flag>
+		<flag name="yuvnlmeans">Install yuvnlmeans tool</flag>
+		<flag name="yuvopencv">Install yuvopencv tool</flag>
+		<flag name="yuvpixelgraph">Install yuvpixelgraph tool</flag>
+		<flag name="yuvrfps">Install yuvrfps tool</flag>
+		<flag name="yuvsubtitle">Install yuvsubtitle tool</flag>
+		<flag name="yuvtbilateral">Install yuvtbilateral tool</flag>
+		<flag name="yuvtout">Install yuvtout tool</flag>
+		<flag name="yuvtshot">Install yuvtshot tool</flag>
+		<flag name="yuvvalues">Install yuvvalues tool</flag>
+		<flag name="yuvwater">Install yuvwater tool</flag>
+		<flag name="yuvyadif">Install yuvyadif tool</flag>
+	</use>
+</pkgmetadata>
