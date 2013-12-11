@@ -4,7 +4,7 @@
 
 EAPI=5
 
-EGIT_REPO_URI="git://github.com/mpv-player/mpv.git"
+EGIT_REPO_URI="https://github.com/mpv-player/mpv.git"
 
 inherit toolchain-funcs flag-o-matic multilib base pax-utils
 [[ ${PV} == *9999* ]] && inherit git-2
@@ -18,10 +18,10 @@ LICENSE="GPL-2"
 SLOT="0"
 [[ ${PV} == *9999* ]] || \
 KEYWORDS="~alpha ~amd64 ~arm ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
-IUSE="+alsa bluray bs2b +cdio doc-pdf dvb +dvd +enca encode +iconv jack -joystick
-jpeg ladspa lcms +libass libcaca libguess lirc lua luajit +mpg123 -openal +opengl oss
-portaudio +postproc pulseaudio pvr +quvi -radio samba +shm +threads v4l vaapi
-vcd vdpau vf-dlopen wayland +X xinerama +xscreensaver +xv"
+IUSE="+alsa bluray bs2b +cdio -doc-pdf dvb +dvd +enca encode +iconv jack -joystick
+jpeg ladspa lcms +libass libcaca libguess lirc lua luajit +mpg123 -openal +opengl
+oss portaudio +postproc pulseaudio pvr +quvi -radio samba +shm v4l vaapi vcd vdpau
+vf-dlopen wayland +X xinerama +xscreensaver +xv"
 
 REQUIRED_USE="
 	enca? ( iconv )
@@ -29,10 +29,8 @@ REQUIRED_USE="
 	libguess? ( iconv )
 	luajit? ( lua )
 	opengl? ( || ( wayland X ) )
-	portaudio? ( threads )
 	pvr? ( v4l )
 	radio? ( v4l || ( alsa oss ) )
-	v4l? ( threads )
 	vaapi? ( X )
 	vdpau? ( X )
 	wayland? ( opengl )
@@ -43,8 +41,8 @@ REQUIRED_USE="
 
 RDEPEND+="
 	|| (
-		>=media-video/libav-9:=[encode?,threads?,vaapi?,vdpau?]
-		>=media-video/ffmpeg-1.2:0=[encode?,threads?,vaapi?,vdpau?]
+		>=media-video/libav-9:=[encode?,threads,vaapi?,vdpau?]
+		>=media-video/ffmpeg-1.2:0=[encode?,threads,vaapi?,vdpau?]
 	)
 	sys-libs/ncurses
 	sys-libs/zlib
@@ -92,7 +90,7 @@ RDEPEND+="
 	postproc? (
 		|| (
 			media-libs/libpostproc
-			>=media-video/ffmpeg-1.2:0[encode?,threads?,vaapi?,vdpau?]
+			>=media-video/ffmpeg-1.2:0[encode?,threads,vaapi?,vdpau?]
 		)
 	)
 	pulseaudio? ( media-sound/pulseaudio )
@@ -259,7 +257,6 @@ src_configure() {
 	myconf+=" --disable-build-date"
 	# do not add -g to CFLAGS
 	myconf+=" --disable-debug"
-	use threads || myconf+=" --disable-pthreads"
 
 	# Platform specific flags, hardcoded on amd64 (see below)
 	use shm || myconf+=" --disable-shm"

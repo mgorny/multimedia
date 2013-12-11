@@ -6,7 +6,7 @@ EAPI=5
 
 EGIT_REPO_URI="https://github.com/mpv-player/mpv.git"
 
-inherit flag-o-matic base waf-utils pax-utils
+inherit base waf-utils pax-utils
 [[ ${PV} == *9999* ]] && inherit git-r3
 
 DESCRIPTION="Video player based on MPlayer/mplayer2"
@@ -21,9 +21,9 @@ SLOT="0"
 [[ ${PV} == *9999* ]] || \
 KEYWORDS="~alpha ~amd64 ~arm ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
 IUSE="+alsa bluray bs2b +cdio -doc-pdf dvb +dvd +enca encode +iconv jack -joystick
-jpeg ladspa lcms +libass libcaca libguess lirc lua luajit +mpg123 -openal +opengl oss
-portaudio +postproc pulseaudio pvr +quvi -radio samba +shm +threads v4l vaapi
-vcd vdpau vf-dlopen wayland +X xinerama +xscreensaver +xv"
+jpeg ladspa lcms +libass libcaca libguess lirc lua luajit +mpg123 -openal +opengl
+oss portaudio +postproc pulseaudio pvr +quvi -radio samba +shm v4l vaapi vcd vdpau
+vf-dlopen wayland +X xinerama +xscreensaver +xv"
 
 REQUIRED_USE="
 	enca? ( iconv )
@@ -31,10 +31,8 @@ REQUIRED_USE="
 	libguess? ( iconv )
 	luajit? ( lua )
 	opengl? ( || ( wayland X ) )
-	portaudio? ( threads )
 	pvr? ( v4l )
 	radio? ( v4l || ( alsa oss ) )
-	v4l? ( threads )
 	vaapi? ( X )
 	vdpau? ( X )
 	wayland? ( opengl )
@@ -45,8 +43,8 @@ REQUIRED_USE="
 
 RDEPEND+="
 	|| (
-		>=media-video/libav-9:=[encode?,threads?,vaapi?,vdpau?]
-		>=media-video/ffmpeg-1.2:0=[encode?,threads?,vaapi?,vdpau?]
+		>=media-video/libav-9:=[encode?,threads,vaapi?,vdpau?]
+		>=media-video/ffmpeg-1.2:0=[encode?,threads,vaapi?,vdpau?]
 	)
 	sys-libs/ncurses
 	sys-libs/zlib
@@ -94,7 +92,7 @@ RDEPEND+="
 	postproc? (
 		|| (
 			media-libs/libpostproc
-			>=media-video/ffmpeg-1.2:0[encode?,threads?,vaapi?,vdpau?]
+			>=media-video/ffmpeg-1.2:0[encode?,threads,vaapi?,vdpau?]
 		)
 	)
 	pulseaudio? ( media-sound/pulseaudio )
@@ -163,11 +161,6 @@ src_prepare() {
 }
 
 src_configure() {
-	if use x86 && gcc-specs-pie; then
-		filter-flags -fPIC -fPIE
-		append-ldflags -nopie
-	fi
-
 	# keep build reproducible
 	# do not add -g to CFLAGS
 	# SDL output is fallback for platforms where nothing better is available
@@ -182,8 +175,7 @@ src_configure() {
 		$(use_enable joystick) \
 		$(use_enable bluray libbluray) \
 		$(use_enable vcd) \
-		$(use_enable quvi libquvi4) \
-		--disable-libquvi9 \
+		$(use_enable quvi libquvi) \
 		$(use_enable samba libsmbclient) \
 		$(use_enable lirc) \
 		$(use_enable lirc lircc) \
@@ -217,7 +209,6 @@ src_configure() {
 		$(use_enable openal) \
 		$(use_enable oss oss-audio) \
 		$(use_enable pulseaudio pulse) \
-		$(use_enable threads pthreads) \
 		$(use_enable shm) \
 		$(use_enable X x11) \
 		$(use_enable vaapi) \
