@@ -83,7 +83,7 @@ RDEPEND+="
 		>=media-libs/libass-0.9.10[enca?,fontconfig]
 		virtual/ttf-fonts
 	)
-	libcaca? ( media-libs/libcaca )
+	libcaca? ( >=media-libs/libcaca-0.99_beta18 )
 	libguess? ( >=app-i18n/libguess-1.0 )
 	lirc? ( app-misc/lirc )
 	lua? (
@@ -136,7 +136,7 @@ DEPEND="${RDEPEND}
 	x86? ( ${ASM_DEP} )
 	x86-fbsd? ( ${ASM_DEP} )
 "
-DOCS=( Copyright README.md etc/example.conf etc/input.conf etc/encoding-example-profiles.conf )
+DOCS=( Copyright README.md etc/example.conf etc/input.conf )
 
 pkg_setup() {
 	if use !libass; then
