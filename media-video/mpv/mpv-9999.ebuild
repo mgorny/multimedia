@@ -1,4 +1,4 @@
-# Copyright 1999-2013 Gentoo Foundation
+# Copyright 1999-2014 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -53,14 +53,14 @@ RDEPEND+="
 		x11-libs/libXxf86vm
 		opengl? ( virtual/opengl )
 		lcms? ( media-libs/lcms:2 )
-		vaapi? ( x11-libs/libva[X(+)] )
-		vdpau? ( x11-libs/libvdpau )
+		vaapi? ( >=x11-libs/libva-0.34.0[X(+)] )
+		vdpau? ( >=x11-libs/libvdpau-0.2 )
 		xinerama? ( x11-libs/libXinerama )
 		xscreensaver? ( x11-libs/libXScrnSaver )
 		xv? ( x11-libs/libXv )
 	)
 	alsa? ( media-libs/alsa-lib )
-	bluray? ( media-libs/libbluray )
+	bluray? ( >=media-libs/libbluray-0.2.1 )
 	bs2b? ( media-libs/libbs2b )
 	cdio? (
 		|| (
@@ -79,7 +79,7 @@ RDEPEND+="
 	jpeg? ( virtual/jpeg )
 	ladspa? ( media-libs/ladspa-sdk )
 	libass? (
-		>=media-libs/libass-0.9.10[enca?,fontconfig]
+		>=media-libs/libass-0.9.10:=[enca?,fontconfig]
 		virtual/ttf-fonts
 	)
 	libcaca? ( >=media-libs/libcaca-0.99_beta18 )
@@ -109,7 +109,7 @@ RDEPEND+="
 	samba? ( net-fs/samba )
 	v4l? ( media-libs/libv4l )
 	wayland? (
-		>=dev-libs/wayland-1.0.0
+		>=dev-libs/wayland-1.2.0
 		media-libs/mesa[egl,wayland]
 		>=x11-libs/libxkbcommon-0.3.0
 	)
@@ -119,12 +119,7 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	>=dev-lang/perl-5.8
 	dev-python/docutils
-	doc-pdf? (
-		dev-texlive/texlive-latex
-		dev-texlive/texlive-latexrecommended
-		dev-texlive/texlive-latexextra
-		dev-tex/xcolor
-	)
+	doc-pdf? ( dev-python/rst2pdf )
 	X? (
 		x11-proto/videoproto
 		x11-proto/xf86vidmodeproto
@@ -171,7 +166,7 @@ src_configure() {
 	waf-utils_src_configure \
 		--disable-build-date \
 		--disable-debug-build \
-		--disable-sdl \
+		--disable-sdl1 \
 		--disable-sdl2 \
 		--disable-rsound \
 		$(use_enable encode encoding) \
