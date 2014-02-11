@@ -4,8 +4,8 @@
 
 EAPI=5
 KDE_REQUIRED="optional"
-KDE_LINGUAS="cs de en_GB es hu ko pl ru zh_CN"
-inherit kde4-base
+PLOCALES="cs de en_GB es hu ko pl ru zh_CN"
+inherit kde4-base l10n
 
 DESCRIPTION="A featureful and configurable Qt4 client for the music player daemon (MPD)"
 HOMEPAGE="https://code.google.com/p/cantata/"
@@ -69,10 +69,15 @@ src_prepare() {
 
 	rm -rf 3rdparty/{qjson,qtsingleapplication}/ || die
 	use kde && { rm -rf 3rdparty/solid-lite/ || die ;}
+
+	l10n_find_plocales_changes 'po' '' '.po'
 }
 
 src_configure() {
+	local langs="$(l10n_get_locales)"
+
 	local mycmakeargs=(
+		-DCANTATA_TRANSLATIONS="${langs// /;}"
 		$(cmake-utils_use_enable cdda CDPARANOIA)
 		$(cmake-utils_use_enable cddb)
 		$(cmake-utils_use_enable kde)

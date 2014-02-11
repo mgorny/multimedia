@@ -4,8 +4,8 @@
 
 EAPI=5
 KDE_REQUIRED="optional"
-KDE_LINGUAS="cs de en_GB es hu ko pl ru zh_CN"
-inherit kde4-base subversion
+PLOCALES="cs de en_GB es hu ko pl ru zh_CN"
+inherit kde4-base l10n subversion
 
 DESCRIPTION="A featureful and configurable Qt4 client for the music player daemon (MPD)"
 HOMEPAGE="https://code.google.com/p/cantata/"
@@ -36,6 +36,7 @@ DEPEND="
 	qt5? (
 		dev-qt/qtconcurrent:5
 		dev-qt/qtnetwork:5
+		dev-qt/qtsvg:5
 		dev-qt/qtwidgets:5
 		dev-qt/qtxml:5
 	)
@@ -68,12 +69,19 @@ RESTRICT="test"
 src_prepare() {
 	kde4-base_src_prepare
 
-	rm -rf 3rdparty/{qjson,qtsingleapplication}/ || die
+	rm -rf 3rdparty/qtsingleapplication/ || die
+	# qjson ebuild does not support Qt5 yet
+	use qt5 || { rm -rf 3rdparty/qjson/ || die ;}
 	use kde && { rm -rf 3rdparty/solid-lite/ || die ;}
+
+	l10n_find_plocales_changes 'po' '' '.po'
 }
 
 src_configure() {
+	local langs="$(l10n_get_locales)"
+
 	local mycmakeargs=(
+		-DCANTATA_TRANSLATIONS="${langs// /;}"
 		$(cmake-utils_use_enable cdda CDPARANOIA)
 		$(cmake-utils_use_enable cddb)
 		$(cmake-utils_use_enable devices DEVICES_SUPPORT)
@@ -96,6 +104,7 @@ src_configure() {
 		-DENABLE_HTTP_STREAM_PLAYBACK=OFF
 		-DENABLE_REMOTE_DEVICES=OFF
 		-DENABLE_UDISKS2=ON
+		-DUSE_SYSTEM_MENU_ICON=OFF
 	)
 	kde4-base_src_configure
 }
