@@ -44,6 +44,7 @@ DEPEND="
 		dev-qt/qtcore:4
 		dev-qt/qtdbus:4
 		dev-qt/qtgui:4
+		dev-qt/qtsvg:4
 	)
 	replaygain? (
 		media-libs/speex
