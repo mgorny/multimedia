@@ -21,6 +21,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 RDEPEND="
+	dev-libs/popt
 	virtual/ffmpeg
 	media-libs/freeimage
 "
