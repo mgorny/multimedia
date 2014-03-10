@@ -19,9 +19,9 @@ KEYWORDS=""
 IUSE="debug +skins"
 
 DEPEND="dev-qt/qtgui:4"
-MPLAYER_USE="[libass,png,X]"
+MPLAYER_USE="libass,png,X"
 RDEPEND="${DEPEND}
-	|| ( media-video/mplayer${MPLAYER_USE} media-video/mplayer2${MPLAYER_USE} )
+	|| ( media-video/mplayer[bidi,${MPLAYER_USE}] media-video/mplayer2[${MPLAYER_USE}] )
 	skins? ( x11-themes/smplayer-skins )"
 
 src_prepare() {
