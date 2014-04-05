@@ -5,15 +5,15 @@
 EAPI=5
 KDE_REQUIRED="optional"
 PLOCALES="cs de en_GB es hu ko pl ru zh_CN"
-inherit kde4-base l10n subversion
+inherit kde4-base l10n
 
 DESCRIPTION="A featureful and configurable Qt4 client for the music player daemon (MPD)"
 HOMEPAGE="https://code.google.com/p/cantata/"
-ESVN_REPO_URI="http://cantata.googlecode.com/svn/trunk/"
+SRC_URI="https://drive.google.com/uc?export=download&id=0Bzghs6gQWi60ZUN1NThacGFrdFE -> ${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="4"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE="cddb cdda devices dynamic http-server kde lame mtp musicbrainz online-services qt5 replaygain streams taglib"
 REQUIRED_USE="
 	cddb? ( cdda taglib )
