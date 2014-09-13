@@ -6,7 +6,7 @@ EAPI=4
 
 DESCRIPTION="Icon themes for smplayer"
 HOMEPAGE="http://smplayer.sourceforge.net/"
-SRC_URI="mirror://sourceforge/smplayer/${P}.tar.gz"
+SRC_URI="mirror://sourceforge/smplayer/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
