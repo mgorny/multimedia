@@ -9,7 +9,7 @@ HOMEPAGE="http://smplayer.info"
 SRC_URI="mirror://sourceforge/smplayer/${P}.tar.bz2"
 
 LICENSE="GPL-2"
-SLOT="0"
+SLOT="1"
 KEYWORDS="~amd64 ~hppa ~ppc ~ppc64 ~x86 ~x86-fbsd"
 IUSE=""
 DEPEND=""
