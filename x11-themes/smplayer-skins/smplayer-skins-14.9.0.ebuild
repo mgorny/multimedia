@@ -16,11 +16,6 @@ IUSE=""
 DEPEND=""
 RDEPEND="media-video/smplayer"
 
-# Override it as default will call make that will catch the install target...
-src_compile() {
-	:
-}
-
 src_install() {
 	insinto /usr/share/smplayer
 	doins -r themes
