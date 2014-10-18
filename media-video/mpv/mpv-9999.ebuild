@@ -9,7 +9,7 @@ EGIT_REPO_URI="https://github.com/mpv-player/mpv.git"
 inherit eutils waf-utils pax-utils fdo-mime gnome2-utils
 [[ ${PV} == *9999* ]] && inherit git-r3
 
-WAF_V="1.7.16"
+WAF_V="1.8.1"
 
 DESCRIPTION="Video player based on MPlayer/mplayer2"
 HOMEPAGE="http://mpv.io/"
@@ -22,7 +22,7 @@ SLOT="0"
 [[ ${PV} == *9999* ]] || \
 KEYWORDS="~alpha ~amd64 ~arm ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux"
 IUSE="+alsa bluray bs2b cdio -doc-pdf dvb +dvd dvdnav +enca encode +iconv jack -joystick
-jpeg ladspa lcms +libass libcaca libguess lirc lua luajit +mpg123 -openal +opengl
+jpeg ladspa lcms +libass libcaca libguess libmpv lirc lua luajit +mpg123 -openal +opengl
 oss portaudio postproc pulseaudio pvr +quvi samba sdl selinux +shm v4l vaapi vdpau
 vf-dlopen wayland +X xinerama +xscreensaver +xv"
 
@@ -47,12 +47,11 @@ RDEPEND+="
 		>=media-video/libav-10:=[encode?,threads,vaapi?,vdpau?]
 		>=media-video/ffmpeg-2.1.4:0=[encode?,threads,vaapi?,vdpau?]
 	)
-	sys-libs/ncurses
 	sys-libs/zlib
 	X? (
 		x11-libs/libX11
 		x11-libs/libXext
-		x11-libs/libXxf86vm
+		>=x11-libs/libXrandr-1.2.0
 		opengl? ( virtual/opengl )
 		lcms? ( >=media-libs/lcms-2.6:2 )
 		vaapi? ( >=x11-libs/libva-0.34.0[X(+)] )
@@ -111,7 +110,7 @@ RDEPEND+="
 	selinux? ( sec-policy/selinux-mplayer )
 	v4l? ( media-libs/libv4l )
 	wayland? (
-		>=dev-libs/wayland-1.3.0
+		>=dev-libs/wayland-1.6.0
 		media-libs/mesa[egl,wayland]
 		>=x11-libs/libxkbcommon-0.3.0
 	)
@@ -123,7 +122,6 @@ DEPEND="${RDEPEND}
 	doc-pdf? ( dev-python/rst2pdf )
 	X? (
 		x11-proto/videoproto
-		x11-proto/xf86vidmodeproto
 		xinerama? ( x11-proto/xineramaproto )
 		xscreensaver? ( x11-proto/scrnsaverproto )
 	)
@@ -164,6 +162,7 @@ src_configure() {
 	# vapoursynth is not packaged
 	waf-utils_src_configure \
 		--disable-build-date \
+		--disable-optimize \
 		--disable-debug-build \
 		--disable-sdl1 \
 		$(use_enable sdl sdl2) \
@@ -186,6 +185,7 @@ src_configure() {
 		$(use_enable iconv) \
 		$(use_enable libass) \
 		$(use_enable libguess) \
+		$(use_enable libmpv libmpv-shared) \
 		$(use_enable dvb) \
 		$(use_enable pvr) \
 		$(use_enable v4l libv4l2) \
@@ -205,6 +205,8 @@ src_configure() {
 		$(use_enable pulseaudio pulse) \
 		$(use_enable shm) \
 		$(use_enable X x11) \
+		$(use_enable X xext) \
+		$(use_enable X xrandr) \
 		$(use_enable vaapi) \
 		$(use_enable vdpau) \
 		$(use_enable wayland) \
@@ -215,7 +217,9 @@ src_configure() {
 		$(use_enable xscreensaver xss) \
 		--confdir="${EPREFIX}"/etc/${PN} \
 		--mandir="${EPREFIX}"/usr/share/man \
-		--docdir="${EPREFIX}"/usr/share/doc/${PF}
+		--docdir="${EPREFIX}"/usr/share/doc/${PF} \
+		--enable-zsh-comp \
+		--zshdir="${EPREFIX}"/usr/share/zsh/site-functions
 }
 
 src_install() {
