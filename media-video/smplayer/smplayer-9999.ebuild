@@ -9,7 +9,7 @@ LANGSLONG="ar_SY el_GR ro_RO ru_RU sl_SI uk_UA vi_VN"
 
 inherit eutils qt4-r2 subversion
 
-DESCRIPTION="Great Qt4 GUI front-end for mplayer"
+DESCRIPTION="Great Qt4 GUI front-end for mplayer and mpv"
 HOMEPAGE="http://smplayer.info"
 ESVN_REPO_URI="https://subversion.assembla.com/svn/smplayer/smplayer/trunk"
 
@@ -21,7 +21,7 @@ IUSE="debug +skins"
 DEPEND="dev-qt/qtgui:4"
 MPLAYER_USE="libass,png,X"
 RDEPEND="${DEPEND}
-	|| ( media-video/mplayer[bidi,${MPLAYER_USE}] media-video/mplayer2[${MPLAYER_USE}] )
+	|| ( media-video/mplayer[bidi,${MPLAYER_USE}] media-video/mplayer2[${MPLAYER_USE}] media-video/mpv[${MPLAYER_USE}] )
 	skins? ( x11-themes/smplayer-skins )"
 
 src_prepare() {
