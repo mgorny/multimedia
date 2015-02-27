@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -9,7 +9,7 @@ EGIT_REPO_URI="https://github.com/silicontrip/lavtools.git"
 inherit toolchain-funcs eutils
 [[ ${PV} == *9999* ]] && inherit git-r3
 
-DESCRIPTION="Video player based on MPlayer/mplayer2"
+DESCRIPTION="mjpeg utils and avcodec frame based video editing tools and ffmpeg filters"
 HOMEPAGE="http://silicontrip.net/~mark/lavtools https://github.com/silicontrip/lavtools"
 [[ ${PV} == *9999* ]] || \
 SRC_URI="http://dev.gentoo.org/~maksbotan/${P}.tar.xz"
@@ -19,14 +19,17 @@ SLOT="0"
 [[ ${PV} == *9999* ]] || \
 KEYWORDS="~amd64 ~x86"
 LAV_TOOLS="+libav-bitrate yuv2jpeg yuvaddetect yuvadjust yuvaifps yuvbilateral yuvconvolve yuvcrop yuvdiag yuvdiff yuvfade yuvfieldrev yuvfieldseperate yuvhsync yuvilace yuvmdeinterlace yuvnlmeans yuvopencv yuvpixelgraph yuvrfps yuvsubtitle yuvtbilateral yuvtout yuvtshot yuvvalues yuvwater yuvyadif"
-IUSE="${LAV_TOOLS} +gnuplot"
+IUSE="${LAV_TOOLS} +gnuplot libav"
 REQUIRED_USE="
 	|| ( ${LAV_TOOLS//+/} )
 	gnuplot? ( libav-bitrate )
 "
 
 DEPEND="
-	libav-bitrate? ( virtual/ffmpeg )
+	libav-bitrate? (
+		libav? ( media-video/libav:0= )
+		!libav? ( media-video/ffmpeg:0= )
+	)
 	yuv2jpeg? ( media-video/mjpegtools virtual/jpeg )
 	yuvaddetect? ( media-video/mjpegtools )
 	yuvadjust? ( media-video/mjpegtools )
