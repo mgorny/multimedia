@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
-<pkgmetadata>
-<herd>sound</herd>
-<use>
-	<flag name="g15">Enable support for the Logitech G15 LCD (and compatible devices)</flag>
-</use>
-</pkgmetadata>
