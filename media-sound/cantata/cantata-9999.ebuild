@@ -5,7 +5,8 @@
 EAPI=5
 KDE_REQUIRED="optional"
 PLOCALES="cs de en_GB es hu ko pl ru zh_CN"
-inherit kde4-base l10n subversion
+KDE_SCM="svn"
+inherit kde4-base l10n
 
 DESCRIPTION="A featureful and configurable Qt4 client for the music player daemon (MPD)"
 HOMEPAGE="https://code.google.com/p/cantata/"
