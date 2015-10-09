@@ -1,0 +1,12 @@
+=== modified file 'CMakeLists.txt'
+--- CMakeLists.txt	2015-10-08 23:14:43.383152218 +0600
++++ CMakeLists.txt	2015-10-08 23:29:47.723286578 +0600
+@@ -139,7 +139,7 @@
+     ENDIF (PKG_CONFIG_FOUND)
+ ENDIF (NOT WIN32)
+
+-set(MYGPO_QT_TARGET_NAME mygpo-qt${MYGPO_QT_VERSION_SUFFIX} CACHE INTERNAL "" FORCE )
++set(MYGPO_QT_TARGET_NAME libmygpo-qt${MYGPO_QT_VERSION_SUFFIX} CACHE INTERNAL "" FORCE )
+
+ add_subdirectory( src )
+ if(MYGPO_BUILD_TESTS)
